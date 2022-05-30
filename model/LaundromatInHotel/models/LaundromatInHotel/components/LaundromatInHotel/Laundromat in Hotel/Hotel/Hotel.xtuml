@@ -1,0 +1,73 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("3e65f26a-9914-4cef-9642-0e88511cfe0b",
+	'Hotel',
+	4,
+	'Hotel',
+	'?R?C???????h???[?????????z?e??',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("890bb319-5024-43a4-9a99-766a5ad4c9af",
+	"3e65f26a-9914-4cef-9642-0e88511cfe0b");
+INSERT INTO O_BATTR
+	VALUES ("890bb319-5024-43a4-9a99-766a5ad4c9af",
+	"3e65f26a-9914-4cef-9642-0e88511cfe0b");
+INSERT INTO O_ATTR
+	VALUES ("890bb319-5024-43a4-9a99-766a5ad4c9af",
+	"3e65f26a-9914-4cef-9642-0e88511cfe0b",
+	"00000000-0000-0000-0000-000000000000",
+	'HotelID',
+	'?z?e?????????????????q',
+	'',
+	'HotelID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("632112aa-06b7-48d3-9f78-7be0f89227b7",
+	"3e65f26a-9914-4cef-9642-0e88511cfe0b");
+INSERT INTO O_BATTR
+	VALUES ("632112aa-06b7-48d3-9f78-7be0f89227b7",
+	"3e65f26a-9914-4cef-9642-0e88511cfe0b");
+INSERT INTO O_ATTR
+	VALUES ("632112aa-06b7-48d3-9f78-7be0f89227b7",
+	"3e65f26a-9914-4cef-9642-0e88511cfe0b",
+	"890bb319-5024-43a4-9a99-766a5ad4c9af",
+	'Name',
+	'?z?e??????O',
+	'',
+	'Name',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"3e65f26a-9914-4cef-9642-0e88511cfe0b");
+INSERT INTO O_OIDA
+	VALUES ("890bb319-5024-43a4-9a99-766a5ad4c9af",
+	"3e65f26a-9914-4cef-9642-0e88511cfe0b",
+	0,
+	'HotelID');
+INSERT INTO O_ID
+	VALUES (1,
+	"3e65f26a-9914-4cef-9642-0e88511cfe0b");
+INSERT INTO O_ID
+	VALUES (2,
+	"3e65f26a-9914-4cef-9642-0e88511cfe0b");
+INSERT INTO PE_PE
+	VALUES ("3e65f26a-9914-4cef-9642-0e88511cfe0b",
+	1,
+	"96279451-ffe8-4c77-821e-852bd5647383",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("96279451-ffe8-4c77-821e-852bd5647383",
+	"00000000-0000-0000-0000-000000000000",
+	"e0866a78-d832-447b-b301-bbe9cfe74e05",
+	'Laundromat in Hotel',
+	'',
+	0,
+	'../Laundromat in Hotel.xtuml');

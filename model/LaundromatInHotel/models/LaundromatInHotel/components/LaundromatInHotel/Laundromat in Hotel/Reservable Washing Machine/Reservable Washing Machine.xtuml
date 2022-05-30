@@ -1,0 +1,88 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("cffb3de7-fca7-45f8-9297-c83f883efb5b",
+	'Reservable Washing Machine',
+	15,
+	'ReservableWashingMachine',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_REF
+	VALUES ("cffb3de7-fca7-45f8-9297-c83f883efb5b",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
+	0,
+	"98a4c69d-d073-4c78-94e5-bdf208d2901f",
+	"222d0b55-4119-4f7e-b446-107645b98f05",
+	"b0af605d-7162-4e31-be9d-43d28e47da9d",
+	"85beb00a-fb7c-44c1-9f5f-e34470c74a24",
+	"f34368d2-6c56-44b0-869a-6ae4403510c8",
+	"8200088f-799c-4bbd-8fc6-7f0c484a6bad",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Washing Machine',
+	'MachineID',
+	'R15');
+INSERT INTO R_RGO_PROXY
+	VALUES ("cffb3de7-fca7-45f8-9297-c83f883efb5b",
+	"222d0b55-4119-4f7e-b446-107645b98f05",
+	"b0af605d-7162-4e31-be9d-43d28e47da9d",
+	'../Laundromat in Hotel.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("98a4c69d-d073-4c78-94e5-bdf208d2901f",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
+	0,
+	"222d0b55-4119-4f7e-b446-107645b98f05",
+	"85beb00a-fb7c-44c1-9f5f-e34470c74a24",
+	'../Laundromat in Hotel.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("f34368d2-6c56-44b0-869a-6ae4403510c8",
+	"cffb3de7-fca7-45f8-9297-c83f883efb5b",
+	"98a4c69d-d073-4c78-94e5-bdf208d2901f",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
+	1,
+	'MachineID');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("98a4c69d-d073-4c78-94e5-bdf208d2901f",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
+	'../Washing Machine/Washing Machine.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("f34368d2-6c56-44b0-869a-6ae4403510c8",
+	"cffb3de7-fca7-45f8-9297-c83f883efb5b",
+	"00000000-0000-0000-0000-000000000000",
+	'MachineID',
+	'',
+	'',
+	'MachineID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"cffb3de7-fca7-45f8-9297-c83f883efb5b");
+INSERT INTO O_OIDA
+	VALUES ("f34368d2-6c56-44b0-869a-6ae4403510c8",
+	"cffb3de7-fca7-45f8-9297-c83f883efb5b",
+	0,
+	'MachineID');
+INSERT INTO O_ID
+	VALUES (1,
+	"cffb3de7-fca7-45f8-9297-c83f883efb5b");
+INSERT INTO O_ID
+	VALUES (2,
+	"cffb3de7-fca7-45f8-9297-c83f883efb5b");
+INSERT INTO PE_PE
+	VALUES ("cffb3de7-fca7-45f8-9297-c83f883efb5b",
+	1,
+	"96279451-ffe8-4c77-821e-852bd5647383",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("96279451-ffe8-4c77-821e-852bd5647383",
+	"00000000-0000-0000-0000-000000000000",
+	"e0866a78-d832-447b-b301-bbe9cfe74e05",
+	'Laundromat in Hotel',
+	'',
+	0,
+	'../Laundromat in Hotel.xtuml');

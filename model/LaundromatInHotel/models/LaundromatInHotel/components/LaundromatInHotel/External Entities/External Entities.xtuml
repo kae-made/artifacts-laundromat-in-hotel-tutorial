@@ -1,0 +1,58 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("bdeb45fe-e1e0-4434-9a16-c2a3dce89e8f",
+	"00000000-0000-0000-0000-000000000000",
+	"e0866a78-d832-447b-b301-bbe9cfe74e05",
+	'External Entities',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("504bb744-798c-4d52-b72b-f1a63bef9439",
+	112,
+	"bdeb45fe-e1e0-4434-9a16-c2a3dce89e8f",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'LaundromatInHotel::components::LaundromatInHotel::External Entities');
+INSERT INTO DIM_DIA
+	VALUES ("504bb744-798c-4d52-b72b-f1a63bef9439",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO PE_PE
+	VALUES ("bdeb45fe-e1e0-4434-9a16-c2a3dce89e8f",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"9bdee346-9ff3-44a4-bc0f-b13e9cfe2161",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("9bdee346-9ff3-44a4-bc0f-b13e9cfe2161",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'LaundromatInHotel',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'',
+	'../LaundromatInHotel.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("e0866a78-d832-447b-b301-bbe9cfe74e05",
+	'LaundromatInHotel',
+	1,
+	'../../../LaundromatInHotel.xtuml');

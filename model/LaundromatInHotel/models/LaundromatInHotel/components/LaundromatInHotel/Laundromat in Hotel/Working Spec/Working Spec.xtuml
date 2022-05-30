@@ -1,0 +1,132 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("c6014c23-df4e-40da-a6f9-492507666857",
+	'Working Spec',
+	9,
+	'WorkingSpec',
+	'?I????????A????????????A?y?ÑÉA????????????z',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("ddcd7777-f97f-45d8-99a4-ef6336e1db13",
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO O_BATTR
+	VALUES ("ddcd7777-f97f-45d8-99a4-ef6336e1db13",
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO O_ATTR
+	VALUES ("ddcd7777-f97f-45d8-99a4-ef6336e1db13",
+	"c6014c23-df4e-40da-a6f9-492507666857",
+	"00000000-0000-0000-0000-000000000000",
+	'WorkingSpecId',
+	'',
+	'',
+	'WorkingSpecId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("4b0ef58f-6844-4d5f-b0dd-b915de67cfbe",
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO O_BATTR
+	VALUES ("4b0ef58f-6844-4d5f-b0dd-b915de67cfbe",
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO O_ATTR
+	VALUES ("4b0ef58f-6844-4d5f-b0dd-b915de67cfbe",
+	"c6014c23-df4e-40da-a6f9-492507666857",
+	"ddcd7777-f97f-45d8-99a4-ef6336e1db13",
+	'WashingTIme',
+	'??A???????????B
+?P????
+',
+	'',
+	'WashingTIme',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("1a14ed50-832e-470b-a63c-32fb3c711ab1",
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO O_BATTR
+	VALUES ("1a14ed50-832e-470b-a63c-32fb3c711ab1",
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO O_ATTR
+	VALUES ("1a14ed50-832e-470b-a63c-32fb3c711ab1",
+	"c6014c23-df4e-40da-a6f9-492507666857",
+	"4b0ef58f-6844-4d5f-b0dd-b915de67cfbe",
+	'DryingTime',
+	'?????????????B
+?P????
+?N?[???_?E???????????',
+	'',
+	'DryingTime',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("af700d72-48d1-486c-a788-b0fb1b37e2ab",
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO O_BATTR
+	VALUES ("af700d72-48d1-486c-a788-b0fb1b37e2ab",
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO O_ATTR
+	VALUES ("af700d72-48d1-486c-a788-b0fb1b37e2ab",
+	"c6014c23-df4e-40da-a6f9-492507666857",
+	"1a14ed50-832e-470b-a63c-32fb3c711ab1",
+	'StandardWeight',
+	'????????d??
+?P???Kg',
+	'',
+	'StandardWeight',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("fd500eca-7150-4a29-8160-a4bd7503f5b8",
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO O_BATTR
+	VALUES ("fd500eca-7150-4a29-8160-a4bd7503f5b8",
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO O_ATTR
+	VALUES ("fd500eca-7150-4a29-8160-a4bd7503f5b8",
+	"c6014c23-df4e-40da-a6f9-492507666857",
+	"af700d72-48d1-486c-a788-b0fb1b37e2ab",
+	'Price',
+	'???p???z',
+	'',
+	'Price',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO O_OIDA
+	VALUES ("ddcd7777-f97f-45d8-99a4-ef6336e1db13",
+	"c6014c23-df4e-40da-a6f9-492507666857",
+	0,
+	'WorkingSpecId');
+INSERT INTO O_ID
+	VALUES (1,
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO O_ID
+	VALUES (2,
+	"c6014c23-df4e-40da-a6f9-492507666857");
+INSERT INTO PE_PE
+	VALUES ("c6014c23-df4e-40da-a6f9-492507666857",
+	1,
+	"96279451-ffe8-4c77-821e-852bd5647383",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("96279451-ffe8-4c77-821e-852bd5647383",
+	"00000000-0000-0000-0000-000000000000",
+	"e0866a78-d832-447b-b301-bbe9cfe74e05",
+	'Laundromat in Hotel',
+	'',
+	0,
+	'../Laundromat in Hotel.xtuml');

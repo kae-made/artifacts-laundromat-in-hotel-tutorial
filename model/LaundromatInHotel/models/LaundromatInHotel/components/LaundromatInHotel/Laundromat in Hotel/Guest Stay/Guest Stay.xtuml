@@ -1,0 +1,162 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("733a8bb9-0054-4bef-8db5-04af677f0c04",
+	'Guest Stay',
+	8,
+	'GuestStay',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("a0bb4884-6658-4750-8649-bf98128cc1a1",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04");
+INSERT INTO O_BATTR
+	VALUES ("a0bb4884-6658-4750-8649-bf98128cc1a1",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04");
+INSERT INTO O_ATTR
+	VALUES ("a0bb4884-6658-4750-8649-bf98128cc1a1",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04",
+	"00000000-0000-0000-0000-000000000000",
+	'GuestStayId',
+	'',
+	'',
+	'GuestStayId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("72e275db-aea2-4f63-bb2a-02e5a7699ba2",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04");
+INSERT INTO O_BATTR
+	VALUES ("72e275db-aea2-4f63-bb2a-02e5a7699ba2",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04");
+INSERT INTO O_ATTR
+	VALUES ("72e275db-aea2-4f63-bb2a-02e5a7699ba2",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04",
+	"a0bb4884-6658-4750-8649-bf98128cc1a1",
+	'StartTime',
+	'',
+	'',
+	'StartTime',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000010",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("d84496f0-df43-4aaf-998e-757e9829bbbd",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04");
+INSERT INTO O_BATTR
+	VALUES ("d84496f0-df43-4aaf-998e-757e9829bbbd",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04");
+INSERT INTO O_ATTR
+	VALUES ("d84496f0-df43-4aaf-998e-757e9829bbbd",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04",
+	"72e275db-aea2-4f63-bb2a-02e5a7699ba2",
+	'EndTimeOfValidity',
+	'',
+	'',
+	'EndTimeOfValidity',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000010",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("733a8bb9-0054-4bef-8db5-04af677f0c04",
+	"5db6135a-b3a6-4675-89a1-16eff16a9f9a",
+	0,
+	"605f0f25-c144-49e6-8882-53507dd9cf58",
+	"45e28e67-f62c-492a-919a-87a89224f106",
+	"64f330cb-4b4f-40c0-bcaa-362d47da404f",
+	"bdbf4d9e-c960-4eb8-a925-c8d4eac6e510",
+	"afe95221-a9a8-4982-ae66-fb7fa8b21364",
+	"2ea87003-4a27-4582-9aa7-88bcd3a17847",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Guest Room',
+	'RoomID',
+	'R4.''is assigned for''');
+INSERT INTO R_RGO_PROXY
+	VALUES ("733a8bb9-0054-4bef-8db5-04af677f0c04",
+	"45e28e67-f62c-492a-919a-87a89224f106",
+	"64f330cb-4b4f-40c0-bcaa-362d47da404f",
+	'../Laundromat in Hotel.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("605f0f25-c144-49e6-8882-53507dd9cf58",
+	"5db6135a-b3a6-4675-89a1-16eff16a9f9a",
+	0,
+	"45e28e67-f62c-492a-919a-87a89224f106",
+	"bdbf4d9e-c960-4eb8-a925-c8d4eac6e510",
+	'../Laundromat in Hotel.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("afe95221-a9a8-4982-ae66-fb7fa8b21364",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04",
+	"605f0f25-c144-49e6-8882-53507dd9cf58",
+	"5db6135a-b3a6-4675-89a1-16eff16a9f9a",
+	1,
+	'RoomID');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("605f0f25-c144-49e6-8882-53507dd9cf58",
+	"5db6135a-b3a6-4675-89a1-16eff16a9f9a",
+	'../Guest Room/Guest Room.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("afe95221-a9a8-4982-ae66-fb7fa8b21364",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04",
+	"d84496f0-df43-4aaf-998e-757e9829bbbd",
+	'RoomID',
+	'',
+	'',
+	'RoomID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("a00d6f9d-7a1a-4d3f-bcd8-4600192f63ca",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04");
+INSERT INTO O_BATTR
+	VALUES ("a00d6f9d-7a1a-4d3f-bcd8-4600192f63ca",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04");
+INSERT INTO O_ATTR
+	VALUES ("a00d6f9d-7a1a-4d3f-bcd8-4600192f63ca",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04",
+	"afe95221-a9a8-4982-ae66-fb7fa8b21364",
+	'Charge',
+	'コインランドリー利用金額
+洗濯機を使い始めるときに課金。予約時点ではない。
+',
+	'',
+	'Charge',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'0');
+INSERT INTO O_ID
+	VALUES (0,
+	"733a8bb9-0054-4bef-8db5-04af677f0c04");
+INSERT INTO O_OIDA
+	VALUES ("a0bb4884-6658-4750-8649-bf98128cc1a1",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04",
+	0,
+	'GuestStayId');
+INSERT INTO O_ID
+	VALUES (1,
+	"733a8bb9-0054-4bef-8db5-04af677f0c04");
+INSERT INTO O_ID
+	VALUES (2,
+	"733a8bb9-0054-4bef-8db5-04af677f0c04");
+INSERT INTO PE_PE
+	VALUES ("733a8bb9-0054-4bef-8db5-04af677f0c04",
+	1,
+	"96279451-ffe8-4c77-821e-852bd5647383",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("96279451-ffe8-4c77-821e-852bd5647383",
+	"00000000-0000-0000-0000-000000000000",
+	"e0866a78-d832-447b-b301-bbe9cfe74e05",
+	'Laundromat in Hotel',
+	'',
+	0,
+	'../Laundromat in Hotel.xtuml');
