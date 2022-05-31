@@ -7,6 +7,58 @@ INSERT INTO O_OBJ
 	'WashingMachine',
 	'',
 	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("1fe084bd-b8ef-4b7e-9f33-e598607c628b",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
+	'IsAvailable',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	1);
+INSERT INTO O_TFR
+	VALUES ("4e3f6d56-df6c-4e4f-8365-d29f051939cc",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
+	'StartWashing',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	3,
+	'',
+	"1fe084bd-b8ef-4b7e-9f33-e598607c628b",
+	0,
+	2);
+INSERT INTO O_TFR
+	VALUES ("5900d9e8-c6c7-44ba-a8b4-5536db1b9724",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
+	'StartDrying',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	3,
+	'',
+	"4e3f6d56-df6c-4e4f-8365-d29f051939cc",
+	0,
+	3);
+INSERT INTO O_TFR
+	VALUES ("084a2ab3-1396-4a32-a818-fd37e5d4ce08",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
+	'StopExecution',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	3,
+	'',
+	"5900d9e8-c6c7-44ba-a8b4-5536db1b9724",
+	0,
+	4);
 INSERT INTO O_NBATTR
 	VALUES ("98a4c69d-d073-4c78-94e5-bdf208d2901f",
 	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4");
@@ -191,6 +243,24 @@ INSERT INTO S_DT_PROXY
 	'',
 	'',
 	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("e5062c9c-acdd-4be6-b08c-73c8a97890ad",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4");
+INSERT INTO O_BATTR
+	VALUES ("e5062c9c-acdd-4be6-b08c-73c8a97890ad",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4");
+INSERT INTO O_ATTR
+	VALUES ("e5062c9c-acdd-4be6-b08c-73c8a97890ad",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
+	"3449c5d8-164a-4316-a48c-f208f6981b69",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
 INSERT INTO O_ID
 	VALUES (0,
 	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4");

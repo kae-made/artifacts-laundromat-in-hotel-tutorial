@@ -7,6 +7,35 @@ INSERT INTO O_OBJ
 	'GuestStay',
 	'',
 	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("8fe5c536-627b-48ee-9099-cb47c87decb5",
+	"733a8bb9-0054-4bef-8db5-04af677f0c04",
+	'Notify',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("556cb9f5-4b17-4b74-b554-2e85aa245503",
+	"8fe5c536-627b-48ee-9099-cb47c87decb5",
+	'topic',
+	"aa5b60df-b894-41cb-97b0-4558a61dbcea",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("aa5b60df-b894-41cb-97b0-4558a61dbcea",
+	"00000000-0000-0000-0000-000000000000",
+	'NotificationForGuestStay',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
 INSERT INTO O_NBATTR
 	VALUES ("a0bb4884-6658-4750-8649-bf98128cc1a1",
 	"733a8bb9-0054-4bef-8db5-04af677f0c04");

@@ -94,6 +94,24 @@ INSERT INTO O_ATTR
 	"ba5eda7a-def5-0000-0000-000000000007",
 	'',
 	'');
+INSERT INTO O_NBATTR
+	VALUES ("4503851e-e1e4-4696-aedd-cb8e7662e50e",
+	"8b9a77b9-869d-41b0-ad6b-b58ef8b59db3");
+INSERT INTO O_BATTR
+	VALUES ("4503851e-e1e4-4696-aedd-cb8e7662e50e",
+	"8b9a77b9-869d-41b0-ad6b-b58ef8b59db3");
+INSERT INTO O_ATTR
+	VALUES ("4503851e-e1e4-4696-aedd-cb8e7662e50e",
+	"8b9a77b9-869d-41b0-ad6b-b58ef8b59db3",
+	"577bedec-ca91-42ed-91c0-da386d1c3ae2",
+	'MailAddress',
+	'',
+	'',
+	'MailAddress',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
 INSERT INTO O_ID
 	VALUES (0,
 	"8b9a77b9-869d-41b0-ad6b-b58ef8b59db3");
