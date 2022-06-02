@@ -21,12 +21,21 @@ INSERT INTO SM_EVTDI
 INSERT INTO SM_EVTDI
 	VALUES ("995ac509-48f4-4bef-88d0-f7da6f7706a0",
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
-	'gusetStayId',
+	'guestStayId',
 	'',
 	"ba5eda7a-def5-0000-0000-000000000005",
 	'',
 	"c6ce1712-44c5-454f-ac8f-7ae756a108cd",
 	"76700c72-a044-4bab-8026-2c48cef481cb");
+INSERT INTO SM_EVTDI
+	VALUES ("c8a81dc7-b910-4041-8aff-0b40832e55f6",
+	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
+	'reservationTime',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000010",
+	'',
+	"c6ce1712-44c5-454f-ac8f-7ae756a108cd",
+	"995ac509-48f4-4bef-88d0-f7da6f7706a0");
 INSERT INTO SM_LEVT
 	VALUES ("c6ce1712-44c5-454f-ac8f-7ae756a108cd",
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
@@ -391,7 +400,7 @@ INSERT INTO SM_STATE
 	"00000000-0000-0000-0000-000000000000",
 	'Canceled',
 	5,
-	0);
+	1);
 INSERT INTO SM_CH
 	VALUES ("8cd2673e-e455-49e4-8435-adff8a610da6",
 	"c6ce1712-44c5-454f-ac8f-7ae756a108cd",
@@ -629,7 +638,18 @@ INSERT INTO SM_ACT
 	VALUES ("f3f1702b-d513-4e6d-a450-bc617e54bb57",
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
 	1,
-	'// Request check to assigner.',
+	'// Request check to assigner.
+SELECT ANY guestStay FROM INSTANCES OF GuestStay WHERE SELECTED.GuestStayID == rcvd_evt.guestStayId;
+RELATE SELF TO guestStay ACROSS R12;
+
+SELECT ANY workingSpec FROM INSTANCES OF AvailableWorkingSpec WHERE SELECTED.WorkingSpecID == rcvd_evt.specId;
+SELECT ONE machineAssigner RELATED BY workingSpec->WashingMachineAssigner[R11];
+SELECT ONE spec RELATED BY workingSpec->WorkingSpec[R8.''available spec''];
+
+SELF.ReservationTime = rcvd_evt.reservationTime;
+SELF.EstimatedEndTime = TIM::time_add(time:SELF.ReservationTime, days:0, hours:0, minutes:(spec.WashingTIme+spec.DryingTime), seconds:0);
+
+GENERATE WashingMachineAssigner1:''Request reservation''(specId:rcvd_evt.specId, guestStayId:rcvd_evt.guestStayId) TO machineAssigner;',
 	'',
 	0);
 INSERT INTO SM_MOAH
@@ -644,7 +664,13 @@ INSERT INTO SM_ACT
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
 	1,
 	'// Timer activation for pre-alarm
-// and available notification.',
+// and available notification.
+CREATE EVENT INSTANCE preAlarm OF WashingMachineReservation3 TO SELF;
+SELECT ONE workingSpec RELATED BY SELF->AvailableWorkingSpec[R13.''target''];
+ASSIGN preAlarmTime = TIM::time_add( days:0, hours:0, minutes:0, seconds: - workingSpec.PreAlarmSec, time:SELF.ReservationTime );
+ASSIGN preAlarmDuration = TIM::time_duration( timestamp1:preAlarmTime, timestamp2:SELF.ReservationTime );
+SELF.AlarmTimer = TIM::timer_start( event_inst:preAlarm, microseconds:preAlarmDuration * 1000000 );
+',
 	'',
 	0);
 INSERT INTO SM_MOAH
@@ -659,6 +685,12 @@ INSERT INTO SM_ACT
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
 	1,
 	'// Remind the guest stay of pre-alarm.
+SELECT ONE guestStay RELATED BY SELF->GuestStay[R12.''reservation owner''];
+guestStay.Notify( topic:NotificationForGuestStay::PreAlarm );
+
+SELECT ONE workingSpec RELATED BY SELF->AvailableWorkingSpec[R13.''target''];
+CREATE EVENT INSTANCE timeIsUp OF WashingMachineReservation4 TO SELF;
+SELF.AlarmTimer = TIM::timer_start( event_inst:timeIsUp, microseconds: workingSpec.PreAlarmSec * 1000000 );
 ',
 	'',
 	0);
@@ -674,7 +706,11 @@ INSERT INTO SM_ACT
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
 	1,
 	'// Remind the guest stay that the washing machine becomes available.
-',
+SELECT ONE guestStay RELATED BY SELF->GuestStay[R12.''reservation owner''];
+guestStay.Notify( topic:NotificationForGuestStay::TimeHasCome );
+
+SELECT ONE machine RELATED BY SELF->AvailableWorkingSpec[R13.''target'']->WashingMachine[R8]->ReservableWashingMachine[R15];
+GENERATE ReservableWashingMachine2:Reserved TO machine;',
 	'',
 	0);
 INSERT INTO SM_TAH
@@ -702,7 +738,19 @@ INSERT INTO SM_ACT
 	VALUES ("a107d0b4-cfd3-4579-af28-5b0b0d0af051",
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
 	1,
-	'// Notify guest stay of cancellation completion.',
+	'// Notify guest stay of cancellation completion.
+// Request situation checking for assigner and machine.
+SELECT ONE guestStay RELATED BY SELF->GuestStay[R12.''reservation owner''];
+UNRELATE SELF FROM guestStay ACROSS R12;
+
+ASSIGN cancel_result = TIM::timer_cancel( timer_inst_ref:SELF.AlarmTimer );
+
+SELECT ONE machineAssigner RELATED BY SELF->AvailableWorkingSpec[R13.''target'']->WashingMachineAssigner[R11];
+GENERATE WashingMachineAssigner2(reservationId:SELF.ReservationID) TO machineAssigner;
+
+SELECT ONE machine RELATED BY SELF->AvailableWorkingSpec[R13.''target'']->WashingMachine[R8]->ReservableWashingMachine[R15];
+GENERATE ReservableWashingMachine1:Check TO machine;
+',
 	'',
 	0);
 INSERT INTO SM_TAH
@@ -802,6 +850,8 @@ INSERT INTO SM_ACT
 	1,
 	'// This reservation request has been rejected.
 // Delete self.
+SELECT ONE guestStay RELATED BY SELF->GuestStay[R12.''reservation owner''];
+UNRELATE SELF FROM guestStay ACROSS R12;
 ',
 	'',
 	0);
@@ -995,7 +1045,7 @@ INSERT INTO GD_GE
 	"7863a606-aa20-482a-8a22-331807410a77",
 	49,
 	0,
-	'WashingMachineReservation1: Try to reserve(specId, gusetStayId)');
+	'WashingMachineReservation1: Try to reserve(specId, guestStayId, reservationTime)');
 INSERT INTO GD_CON
 	VALUES ("8916b8be-23c6-47ff-8d28-e281020125e3",
 	"00000000-0000-0000-0000-000000000000");
@@ -1101,7 +1151,7 @@ INSERT INTO GD_SHP
 INSERT INTO GD_NCS
 	VALUES ("c18b48cc-d12a-4502-86d2-c1e4983b4a37");
 INSERT INTO DIM_ND
-	VALUES (277.000000,
+	VALUES (337.000000,
 	150.000000,
 	"c18b48cc-d12a-4502-86d2-c1e4983b4a37");
 INSERT INTO DIM_GE

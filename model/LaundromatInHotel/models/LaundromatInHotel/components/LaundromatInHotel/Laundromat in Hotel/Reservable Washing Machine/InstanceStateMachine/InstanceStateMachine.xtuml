@@ -130,7 +130,12 @@ INSERT INTO SM_ACT
 	"6d03afc6-aaf0-43d3-871e-ff236a02478d",
 	1,
 	'// If there is an applicable reservation in the current time slot,
-// it will transition to the reserved state.',
+// it will transition to the reserved state.
+SELECT ONE reservation RELATED BY SELF->WashingMachineReservation[R19.''next reservation''];
+IF ( reservation.ReservationTime <= TIM::current_clock() )
+	GENERATE ReservableWashingMachine2:Reserved TO SELF;
+END IF;
+',
 	'',
 	0);
 INSERT INTO SM_MOAH

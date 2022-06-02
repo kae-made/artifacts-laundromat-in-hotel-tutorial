@@ -46,10 +46,10 @@ INSERT INTO O_ATTR
 	VALUES ("a0bb4884-6658-4750-8649-bf98128cc1a1",
 	"733a8bb9-0054-4bef-8db5-04af677f0c04",
 	"00000000-0000-0000-0000-000000000000",
-	'GuestStayId',
+	'GuestStayID',
 	'',
 	'',
-	'GuestStayId',
+	'GuestStayID',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000005",
 	'',
@@ -168,7 +168,7 @@ INSERT INTO O_OIDA
 	VALUES ("a0bb4884-6658-4750-8649-bf98128cc1a1",
 	"733a8bb9-0054-4bef-8db5-04af677f0c04",
 	0,
-	'GuestStayId');
+	'GuestStayID');
 INSERT INTO O_ID
 	VALUES (1,
 	"733a8bb9-0054-4bef-8db5-04af677f0c04");

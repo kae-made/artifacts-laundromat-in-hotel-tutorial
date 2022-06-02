@@ -201,6 +201,12 @@ INSERT INTO S_ENUM
 	'',
 	"aa5b60df-b894-41cb-97b0-4558a61dbcea",
 	"0d058acb-d7ed-4949-b2de-1b6f33414ec7");
+INSERT INTO S_ENUM
+	VALUES ("615ff769-4af8-420d-8152-5c51ab0fb644",
+	'LaundryCompleted',
+	'',
+	"aa5b60df-b894-41cb-97b0-4558a61dbcea",
+	"2763c104-6ba7-498a-a2cd-25211e947854");
 INSERT INTO PE_PE
 	VALUES ("aa5b60df-b894-41cb-97b0-4558a61dbcea",
 	1,

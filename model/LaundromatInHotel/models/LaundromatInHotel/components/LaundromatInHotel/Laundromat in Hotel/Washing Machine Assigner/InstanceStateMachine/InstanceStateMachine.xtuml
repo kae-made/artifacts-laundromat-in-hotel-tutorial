@@ -164,7 +164,50 @@ INSERT INTO SM_ACT
 	'// Check if the requested time slot is available,
 // add it to the reservation list if it is available,
 // and notify you if it is not available.
-// Then waiting for new request.',
+// Then waiting for new request.
+SELECT ANY guestStay FROM INSTANCES OF GuestStay WHERE selected.GuestStayID == rcvd_evt.guestStayId;
+SELECT ANY workingSpec FROM INSTANCES OF AvailableWorkingSpec WHERE selected.WorkingSpecID == rcvd_evt.specId;
+
+SELECT ONE requestingReservation RELATED BY guestStay->WashingMachineReservation[R12.''request of reservation''];
+
+SELECT MANY existingReservations FROM INSTANCES OF WashingMachineReservation
+  WHERE ( selected.ReservationTime >= requestingReservation.ReservationTime AND selected.ReservationTime <= requestingReservation.EstimatedEndTime )
+    OR ( selected.EstimatedEndTime <= requestingReservation.ReservationTime AND selected.EstimatedEndTime <= requestingReservation.EstimatedEndTime );
+
+IF ( NOT_EMPTY existingReservations )
+	GENERATE WashingMachineReservation6:Rejected TO requestingReservation;
+ELSE
+	SELECT ONE washingMachine RELATED BY workingSpec->WashingMachine[R8]->ReservableWashingMachine[R15];
+	SELECT ONE nextReservation RELATED by washingMachine->WashingMachineReservation[R19.''next reservation''];
+	IF ( empty nextReservation )
+		RELATE requestingReservation TO washingMachine ACROSS R19;
+	ELSE
+		IF ( nextReservation.ReservationTime >= requestingReservation.ReservationTime )
+			UNRELATE nextReservation FROM washingMachine ACROSS R19;
+			RELATE requestingReservation TO washingMachine ACROSS R19;
+			RELATE requestingReservation TO nextReservation ACROSS R17.''successor'';
+		ELSE
+			ASSIGN unlinked = TRUE;
+			ASSIGN prevReservation = nextReservation;
+			WHILE ( unlinked )
+				SELECT ONE nextReservation RELATED BY nextReservation->WashingMachineReservation[R17.''successor''];
+				IF ( NOT_EMPTY nextReservation )
+					IF ( nextReservation.ReservationTime >= requestingReservation.ReservationTime )
+						UNRELATE prevReservation FROM nextReservation ACROSS R17.''successor'';
+						RELATE prevReservation TO requestingReservation ACROSS R17.''successor'';
+						RELATE nextReservation TO requestingReservation ACROSS R17.''predecessor'';
+						unlinked = FALSE;
+					END IF;
+				END IF;	
+				ASSIGN prevReservation = nextReservation;
+			END WHILE;
+			IF ( unlinked )
+				RELATE requestingReservation TO prevReservation ACROSS R17.''predecessor'';
+			END IF;
+		END IF;
+		GENERATE WashingMachineReservation2:Assigned TO requestingReservation;
+	END IF;
+END IF;',
 	'',
 	0);
 INSERT INTO SM_MOAH
@@ -180,7 +223,29 @@ INSERT INTO SM_ACT
 	1,
 	'// When a cancellation request comes,
 // remove the reservation from the chain.
-// Then wait for new request.',
+// Then wait for new request.
+SELECT ANY cancelingReservation FROM INSTANCES OF WashingMachineReservation WHERE SELECTED.ReservationID == rcvd_evt.reservationId;
+SELECT ONE prevReservation RELATED BY cancelingReservation->WashingMachineReservation[R17.''predecessor''];
+SELECT ONE nextReservation RELATED BY cancelingReservation->WashingMachineReservation[R17.''successor''];
+
+IF ( EMPTY prevReservation )
+	SELECT ONE washingMachine RELATED BY cancelingReservation->ReservableWashingMachine[R19];
+	UNRELATE cancelingReservation FROM washingMachine ACROSS R19;
+	IF ( NOT_EMPTY nextReservation )
+		RELATE nextReservation TO washingMachine ACROSS R19;
+	END IF;
+ELSE
+	UNRELATE cancelingReservation FROM prevReservation ACROSS R17.''predecessor'';
+END IF;
+IF ( NOT_EMPTY nextReservation )
+	UNRELATE cancelingReservation FROM nextReservation ACROSS R17.''successor'';
+	IF ( NOT_EMPTY prevReservation )
+		RELATE prevReservation TO nextReservation ACROSS R17.''successor'';
+	END IF;
+END IF;
+
+GENERATE WashingMachineReservation5:Canceled TO cancelingReservation;
+',
 	'',
 	0);
 INSERT INTO SM_TAH

@@ -17,10 +17,10 @@ INSERT INTO O_ATTR
 	VALUES ("ddcd7777-f97f-45d8-99a4-ef6336e1db13",
 	"c6014c23-df4e-40da-a6f9-492507666857",
 	"00000000-0000-0000-0000-000000000000",
-	'WorkingSpecId',
+	'WorkingSpecID',
 	'',
 	'',
-	'WorkingSpecId',
+	'WorkingSpecID',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000005",
 	'',
@@ -35,12 +35,12 @@ INSERT INTO O_ATTR
 	VALUES ("4b0ef58f-6844-4d5f-b0dd-b915de67cfbe",
 	"c6014c23-df4e-40da-a6f9-492507666857",
 	"ddcd7777-f97f-45d8-99a4-ef6336e1db13",
-	'WashingTIme',
+	'WashingTime',
 	'??A???????????B
 ?P????
 ',
 	'',
-	'WashingTIme',
+	'WashingTime',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
@@ -109,7 +109,7 @@ INSERT INTO O_OIDA
 	VALUES ("ddcd7777-f97f-45d8-99a4-ef6336e1db13",
 	"c6014c23-df4e-40da-a6f9-492507666857",
 	0,
-	'WorkingSpecId');
+	'WorkingSpecID');
 INSERT INTO O_ID
 	VALUES (1,
 	"c6014c23-df4e-40da-a6f9-492507666857");

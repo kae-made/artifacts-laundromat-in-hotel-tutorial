@@ -21,32 +21,6 @@ INSERT INTO O_TFR
 	0,
 	1);
 INSERT INTO O_TFR
-	VALUES ("4e3f6d56-df6c-4e4f-8365-d29f051939cc",
-	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
-	'StartWashing',
-	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'',
-	3,
-	'',
-	"1fe084bd-b8ef-4b7e-9f33-e598607c628b",
-	0,
-	2);
-INSERT INTO O_TFR
-	VALUES ("5900d9e8-c6c7-44ba-a8b4-5536db1b9724",
-	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
-	'StartDrying',
-	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'',
-	3,
-	'',
-	"4e3f6d56-df6c-4e4f-8365-d29f051939cc",
-	0,
-	3);
-INSERT INTO O_TFR
 	VALUES ("084a2ab3-1396-4a32-a818-fd37e5d4ce08",
 	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
 	'StopExecution',
@@ -56,9 +30,53 @@ INSERT INTO O_TFR
 	'',
 	3,
 	'',
-	"5900d9e8-c6c7-44ba-a8b4-5536db1b9724",
+	"1fe084bd-b8ef-4b7e-9f33-e598607c628b",
 	0,
 	4);
+INSERT INTO O_TFR
+	VALUES ("117ab99d-77c6-4960-abf7-10f38339d6de",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
+	'StartWashing',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	3,
+	'',
+	"084a2ab3-1396-4a32-a818-fd37e5d4ce08",
+	0,
+	5);
+INSERT INTO O_TPARM
+	VALUES ("55de16ee-bb5b-4973-8418-c0f455fccc87",
+	"117ab99d-77c6-4960-abf7-10f38339d6de",
+	'timeInMinutes',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("b8d158bf-a969-41eb-a53c-4508e71cd2fe",
+	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4",
+	'StartDrying',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	3,
+	'',
+	"117ab99d-77c6-4960-abf7-10f38339d6de",
+	0,
+	6);
+INSERT INTO O_TPARM
+	VALUES ("2d6c797d-5376-4b66-aef6-49ccf6491a26",
+	"b8d158bf-a969-41eb-a53c-4508e71cd2fe",
+	'timeInMinutes',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
 INSERT INTO O_NBATTR
 	VALUES ("98a4c69d-d073-4c78-94e5-bdf208d2901f",
 	"fa2c0f5b-025f-425a-b7c2-a664c2dd18a4");

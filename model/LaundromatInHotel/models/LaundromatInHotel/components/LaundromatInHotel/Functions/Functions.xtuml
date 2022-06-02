@@ -33,6 +33,694 @@ INSERT INTO DIM_DIA
 	0.000000,
 	0.000000,
 	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("de6a0647-2082-4d89-9e19-38788c6e219b",
+	"00000000-0000-0000-0000-000000000000",
+	'CreateHotel',
+	'',
+	'CREATE OBJECT INSTANCE hotel OF Hotel;
+hotel.Name = param.name;
+
+CREATE OBJECT INSTANCE machineAssigner OF WashingMachineAssigner;
+RELATE hotel TO machineAssigner ACROSS R10;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	1);
+INSERT INTO S_SPARM
+	VALUES ("17dceff1-eb19-4655-80d3-1d4b2dc8a750",
+	"de6a0647-2082-4d89-9e19-38788c6e219b",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("de6a0647-2082-4d89-9e19-38788c6e219b",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("27043eb9-e6e7-449d-961e-59b92b1871d4",
+	"00000000-0000-0000-0000-000000000000",
+	'CreateLaundromantRoom',
+	'',
+	'CREATE OBJECT INSTANCE room OF LaundromatRoom;
+room.Floor = param.floor;
+room.RoomNumber = param.roomNumber;
+
+SELECT ANY hotel FROM INSTANCES OF Hotel WHERE SELECTED.HotelID == param.hotelId;
+RELATE room TO hotel ACROSS R1;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	2);
+INSERT INTO S_SPARM
+	VALUES ("df52093d-30a6-432a-acb0-6e33c231d183",
+	"27043eb9-e6e7-449d-961e-59b92b1871d4",
+	'floor',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("61fec62d-19be-490c-9685-432b7ea4c5da",
+	"27043eb9-e6e7-449d-961e-59b92b1871d4",
+	'roomNumber',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"df52093d-30a6-432a-acb0-6e33c231d183",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("bb719680-7569-4cf5-bfd3-3ad06aa19e3d",
+	"27043eb9-e6e7-449d-961e-59b92b1871d4",
+	'hotelId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"61fec62d-19be-490c-9685-432b7ea4c5da",
+	'');
+INSERT INTO PE_PE
+	VALUES ("27043eb9-e6e7-449d-961e-59b92b1871d4",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("d59dde97-e3ad-4da0-9b69-58854655cf2c",
+	"00000000-0000-0000-0000-000000000000",
+	'CreateWashingMachine',
+	'',
+	'CREATE OBJECT INSTANCE machine OF WashingMachine;
+SELECT ANY room FROM INSTANCES OF LaundromatRoom WHERE SELECTED.RoomID == PARAM.roomId;
+RELATE machine TO room ACROSS R2;
+
+CREATE OBJECT INSTANCE door OF DoorwithLock;
+RELATE machine TO door ACROSS R14;
+
+IF ( PARAM.isReservable )
+	CREATE OBJECT INSTANCE reservable OF ReservableWashingMachine;
+	RELATE reservable TO machine ACROSS R15;
+ELSE
+	CREATE OBJECT INSTANCE nonReservable OF NonReservationWashingMachine;
+	RELATE nonReservable TO machine ACROSS R15;
+END IF;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	3);
+INSERT INTO S_SPARM
+	VALUES ("f51a4519-ac0d-4bf3-b672-9e4331756c70",
+	"d59dde97-e3ad-4da0-9b69-58854655cf2c",
+	'roomId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("e17ada24-e4bc-4409-9b6e-9208f567a9ae",
+	"d59dde97-e3ad-4da0-9b69-58854655cf2c",
+	'isReservable',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"f51a4519-ac0d-4bf3-b672-9e4331756c70",
+	'');
+INSERT INTO PE_PE
+	VALUES ("d59dde97-e3ad-4da0-9b69-58854655cf2c",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("614afe57-30e9-418d-84f0-84ee562db1e0",
+	"00000000-0000-0000-0000-000000000000",
+	'CreateWorkingSpec',
+	'',
+	'ASSIGN created = FALSE;
+SELECT ANY specs FROM INSTANCES OF WorkingSpec
+  WHERE SELECTED.WashingTime == PARAM.washingTime AND SELECTED.DryingTime == PARAM.dryingTime
+    AND SELECTED.StandardWeight == PARAM.standardWaight AND SELECTED.Price == PARAM.price;
+IF ( EMPTY specs )
+	CREATE OBJECT INSTANCE newSpec OF WorkingSpec;
+	newSpec.WashingTime = PARAM.washingTime;
+	newSpec.DryingTime = PARAM.dryingTime;
+	newSpec.StandardWeight = PARAM.standardWaight;
+	newSpec.Price = PARAM.price;
+	created = TRUE;
+END IF;
+RETURN created;',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0,
+	4);
+INSERT INTO S_SPARM
+	VALUES ("070fe6e9-d135-4771-9e78-23f182150738",
+	"614afe57-30e9-418d-84f0-84ee562db1e0",
+	'washingTime',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("7bf7b0d3-8820-4357-9a8a-9becb24972bf",
+	"614afe57-30e9-418d-84f0-84ee562db1e0",
+	'dryingTime',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"070fe6e9-d135-4771-9e78-23f182150738",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("54bcefb1-2f82-4d95-80fd-05f88c83d244",
+	"614afe57-30e9-418d-84f0-84ee562db1e0",
+	'standardWaight',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"7bf7b0d3-8820-4357-9a8a-9becb24972bf",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("37d6c89d-0175-4818-acb6-58ebd2d080b4",
+	"614afe57-30e9-418d-84f0-84ee562db1e0",
+	'price',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"54bcefb1-2f82-4d95-80fd-05f88c83d244",
+	'');
+INSERT INTO PE_PE
+	VALUES ("614afe57-30e9-418d-84f0-84ee562db1e0",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("9ab084cb-5132-4ffe-8404-7388091c7205",
+	"00000000-0000-0000-0000-000000000000",
+	'AssignAvailableWorkingSpec',
+	'',
+	'SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+SELECT ANY spec FROM INSTANCES OF WorkingSpec WHERE SELECTED.WorkingSpecID == PARAM.specId;
+CREATE OBJECT INSTANCE availableSpec OF AvailableWorkingSpec;
+RELATE machine TO spec ACROSS R8 USING availableSpec;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	5);
+INSERT INTO S_SPARM
+	VALUES ("07d4ab3e-9aca-4591-8231-31e1138a4597",
+	"9ab084cb-5132-4ffe-8404-7388091c7205",
+	'machineId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("fd9fd348-38b6-4ba4-a963-f83eefe13bd3",
+	"9ab084cb-5132-4ffe-8404-7388091c7205",
+	'specId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"07d4ab3e-9aca-4591-8231-31e1138a4597",
+	'');
+INSERT INTO PE_PE
+	VALUES ("9ab084cb-5132-4ffe-8404-7388091c7205",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("da80807e-d1d1-4c4d-b141-189df2bac7ea",
+	"00000000-0000-0000-0000-000000000000",
+	'CreateGuestRoom',
+	'',
+	'SELECT ANY hotel FROM INSTANCES OF Hotel WHERE SELECTED.HotelID == PARAM.hotelId;
+CREATE OBJECT INSTANCE room OF GuestRoom;
+RELATE room TO hotel ACROSS R3;
+room.Floor = PARAM.floor;
+room.RoomNumber = PARAM.roomNumber;
+room.Name = PARAM.name;
+room.Capacity = PARAM.capacity;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	6);
+INSERT INTO S_SPARM
+	VALUES ("867cac8a-0ef9-424e-8ed6-e372df60e37b",
+	"da80807e-d1d1-4c4d-b141-189df2bac7ea",
+	'hotelId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("fd46da4b-99bc-4e6a-b377-7e3809ac3669",
+	"da80807e-d1d1-4c4d-b141-189df2bac7ea",
+	'floor',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"867cac8a-0ef9-424e-8ed6-e372df60e37b",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("8170c307-93fb-4d3b-8b30-27a7f1966bde",
+	"da80807e-d1d1-4c4d-b141-189df2bac7ea",
+	'roomNumber',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"fd46da4b-99bc-4e6a-b377-7e3809ac3669",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("1e3205d6-9e83-4fd7-b953-b2893925d182",
+	"da80807e-d1d1-4c4d-b141-189df2bac7ea",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"8170c307-93fb-4d3b-8b30-27a7f1966bde",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("05664618-af01-4663-8748-4b01d9a96d75",
+	"da80807e-d1d1-4c4d-b141-189df2bac7ea",
+	'capacity',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"1e3205d6-9e83-4fd7-b953-b2893925d182",
+	'');
+INSERT INTO PE_PE
+	VALUES ("da80807e-d1d1-4c4d-b141-189df2bac7ea",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("f90dc039-3a74-464d-999d-5e1d1f8be8eb",
+	"00000000-0000-0000-0000-000000000000",
+	'CreateGuestStay',
+	'',
+	'SELECT ANY room FROM INSTANCES OF GuestRoom WHERE SELECTED.RoomID == PARAM.roomId;
+CREATE OBJECT INSTANCE stay OF GuestStay;
+RELATE stay TO room ACROSS R4;
+stay.StartTime = PARAM.startTime;
+stay.EndTimeOfValidity = PARAM.endTime;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	7);
+INSERT INTO S_SPARM
+	VALUES ("246f1460-b5b9-46dc-a34e-abc5799d1bcc",
+	"f90dc039-3a74-464d-999d-5e1d1f8be8eb",
+	'roomId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("adf6d76c-e0e6-4677-ae85-8873a3babb65",
+	"f90dc039-3a74-464d-999d-5e1d1f8be8eb",
+	'startTime',
+	"ba5eda7a-def5-0000-0000-000000000010",
+	0,
+	'',
+	"246f1460-b5b9-46dc-a34e-abc5799d1bcc",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("a26187a5-d103-4271-bdb8-24b431c14750",
+	"f90dc039-3a74-464d-999d-5e1d1f8be8eb",
+	'endTime',
+	"ba5eda7a-def5-0000-0000-000000000010",
+	0,
+	'',
+	"adf6d76c-e0e6-4677-ae85-8873a3babb65",
+	'');
+INSERT INTO PE_PE
+	VALUES ("f90dc039-3a74-464d-999d-5e1d1f8be8eb",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("e25287fd-ad30-44c5-a03f-27fc5e97b127",
+	"00000000-0000-0000-0000-000000000000",
+	'AssignGuest',
+	'',
+	'ASSIGN created = FALSE;
+SELECT ANY guestStay FROM INSTANCES OF GuestStay WHERE SELECTED.GuestStayID == PARAM.guestStayId;
+SELECT MANY guests RELATED BY guestStay->Guest[R5];
+SELECT ONE room RELATED BY guestStay->GuestRoom[R4.''is assigned for''];
+IF (CARDINALITY guests < room.Capacity )
+	CREATE OBJECT INSTANCE guest OF Guest;
+	guest.Name = PARAM.name;
+	guest.MailAddress = PARAM.mailAddress;
+	RELATE guest TO guestStay ACROSS R5;
+	created = TRUE;
+END IF;
+
+RETURN created;
+',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0,
+	8);
+INSERT INTO S_SPARM
+	VALUES ("2a352de4-3034-49ea-8b32-4a272542acbf",
+	"e25287fd-ad30-44c5-a03f-27fc5e97b127",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("c1a7d52e-8064-4dcf-aada-b5fcb9a4fe2b",
+	"e25287fd-ad30-44c5-a03f-27fc5e97b127",
+	'mailAddress',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"2a352de4-3034-49ea-8b32-4a272542acbf",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("89662940-ff21-4991-8bfb-5069772f89d0",
+	"e25287fd-ad30-44c5-a03f-27fc5e97b127",
+	'guestStayId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"c1a7d52e-8064-4dcf-aada-b5fcb9a4fe2b",
+	'');
+INSERT INTO PE_PE
+	VALUES ("e25287fd-ad30-44c5-a03f-27fc5e97b127",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("42c05594-c2c0-4bab-a145-f61040fe7adb",
+	"00000000-0000-0000-0000-000000000000",
+	'TouchCardKey',
+	'',
+	'SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+GENERATE WashingMachine7 TO machine;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	9);
+INSERT INTO S_SPARM
+	VALUES ("9c5d7409-6f01-413f-9707-0b6f754d29db",
+	"42c05594-c2c0-4bab-a145-f61040fe7adb",
+	'machineId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("8aa50223-68b1-436a-b1af-717071d99604",
+	"42c05594-c2c0-4bab-a145-f61040fe7adb",
+	'cardKeyId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"9c5d7409-6f01-413f-9707-0b6f754d29db",
+	'');
+INSERT INTO PE_PE
+	VALUES ("42c05594-c2c0-4bab-a145-f61040fe7adb",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("7d0bfdae-8fd5-4fc3-8a7d-a27b0f14d511",
+	"00000000-0000-0000-0000-000000000000",
+	'EnterPINCode',
+	'',
+	'SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+SELECT ONE door RELATED BY machine->DoorwithLock[R14.''front door''];
+GENERATE DoorwithLock4(pinCode:PARAM.pinCode) TO door;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	10);
+INSERT INTO S_SPARM
+	VALUES ("07ef928e-e59d-426f-819d-29b5dc01e705",
+	"7d0bfdae-8fd5-4fc3-8a7d-a27b0f14d511",
+	'machineId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("3cac25cc-4233-4a39-a470-94b6cb9829aa",
+	"7d0bfdae-8fd5-4fc3-8a7d-a27b0f14d511",
+	'pinCode',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"07ef928e-e59d-426f-819d-29b5dc01e705",
+	'');
+INSERT INTO PE_PE
+	VALUES ("7d0bfdae-8fd5-4fc3-8a7d-a27b0f14d511",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("f9a8a3ea-77e8-41a1-a517-091d8f2dee10",
+	"00000000-0000-0000-0000-000000000000",
+	'DoorOpened',
+	'',
+	'SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+SELECT ONE door RELATED BY machine->DoorwithLock[R14.''front door''];
+GENERATE DoorwithLock3 TO door;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	11);
+INSERT INTO S_SPARM
+	VALUES ("d0a5c4bd-14b9-43a7-ae8d-5ba5c3daa8b9",
+	"f9a8a3ea-77e8-41a1-a517-091d8f2dee10",
+	'machineId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("f9a8a3ea-77e8-41a1-a517-091d8f2dee10",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("335a534a-8881-4a82-956e-2726670876f0",
+	"00000000-0000-0000-0000-000000000000",
+	'DoorClosed',
+	'',
+	'SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+SELECT ONE door RELATED BY machine->DoorwithLock[R14.''front door''];
+GENERATE DoorwithLock2 TO door;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	12);
+INSERT INTO S_SPARM
+	VALUES ("1b2d7b62-a25d-49f7-9734-ffa3baa9d7f7",
+	"335a534a-8881-4a82-956e-2726670876f0",
+	'machineId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("335a534a-8881-4a82-956e-2726670876f0",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("f2e176e2-e5c7-4a6b-8192-da79fadf1120",
+	"00000000-0000-0000-0000-000000000000",
+	'TakenOut',
+	'',
+	'SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+GENERATE ',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	13);
+INSERT INTO S_SPARM
+	VALUES ("af1bdea7-cfa2-4602-a555-ed8e31432f8e",
+	"f2e176e2-e5c7-4a6b-8192-da79fadf1120",
+	'machineId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("f2e176e2-e5c7-4a6b-8192-da79fadf1120",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("61ee4c51-4210-4c77-b79a-2e0e79c1b2dd",
+	"00000000-0000-0000-0000-000000000000",
+	'CreateCardKey',
+	'',
+	'ASSIGN created = FALSE;
+SELECT ANY guestStay FROM INSTANCES OF GuestStay WHERE SELECTED.GuestStayID == PARAM.guestStayId;
+SELECT ONE cardKey RELATED BY guestStay->CardKey[R6];
+IF ( EMPTY cardKey )
+	CREATE OBJECT INSTANCE cardKey OF CardKey;
+	RELATE cardKey TO guestStay ACROSS R6;
+	created = TRUE;
+END IF;
+
+RETURN created;
+',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0,
+	14);
+INSERT INTO S_SPARM
+	VALUES ("52fc5608-eaa1-48c2-b79d-29aff9c1aecc",
+	"61ee4c51-4210-4c77-b79a-2e0e79c1b2dd",
+	'guestStayId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("61ee4c51-4210-4c77-b79a-2e0e79c1b2dd",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b0f7b2df-a927-414d-80d6-c16083a7079d",
+	"00000000-0000-0000-0000-000000000000",
+	'WashingMachineDoneWashing',
+	'',
+	'SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+GENERATE WashingMachine3 TO machine;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	15);
+INSERT INTO S_SPARM
+	VALUES ("677d1da2-c24f-4b6e-adba-6e22353772ec",
+	"b0f7b2df-a927-414d-80d6-c16083a7079d",
+	'machineId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("b0f7b2df-a927-414d-80d6-c16083a7079d",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("a77320c8-5ced-4f0e-996b-88d35aa41558",
+	"00000000-0000-0000-0000-000000000000",
+	'WashingMachineDoneDrying',
+	'',
+	'SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+GENERATE WashingMachine5 TO machine;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	16);
+INSERT INTO S_SPARM
+	VALUES ("a5ebd60c-f27f-43e4-befb-2aca26aed1c5",
+	"a77320c8-5ced-4f0e-996b-88d35aa41558",
+	'machineId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("a77320c8-5ced-4f0e-996b-88d35aa41558",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("775d8108-7a7f-4c25-850e-a72aae5b6770",
+	"00000000-0000-0000-0000-000000000000",
+	'WashingMachineDoneInterupt',
+	'',
+	'SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+GENERATE WashingMachine9 TO machine;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	17);
+INSERT INTO S_SPARM
+	VALUES ("bbb9e957-2530-4ea0-8c2d-778cf9932449",
+	"775d8108-7a7f-4c25-850e-a72aae5b6770",
+	'machineId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("775d8108-7a7f-4c25-850e-a72aae5b6770",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
 INSERT INTO PE_PE
 	VALUES ("66cf385b-20fa-4e6a-8bbe-317597704737",
 	1,

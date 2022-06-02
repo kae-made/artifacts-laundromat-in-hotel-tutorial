@@ -17,10 +17,10 @@ INSERT INTO O_ATTR
 	VALUES ("d1e048a5-e3e6-4d47-8da0-323459e5f61e",
 	"c974e5aa-cb21-4fe4-ac93-50e047df8805",
 	"00000000-0000-0000-0000-000000000000",
-	'CardKeyId',
+	'CardKeyID',
 	'',
 	'',
-	'CardKeyId',
+	'CardKeyID',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000005",
 	'',
@@ -39,7 +39,7 @@ INSERT INTO O_REF
 	0,
 	'',
 	'Guest Stay',
-	'GuestStayId',
+	'GuestStayID',
 	'R6.''is assigned as key for''');
 INSERT INTO R_RGO_PROXY
 	VALUES ("c974e5aa-cb21-4fe4-ac93-50e047df8805",
@@ -59,7 +59,7 @@ INSERT INTO O_RATTR
 	"a0bb4884-6658-4750-8649-bf98128cc1a1",
 	"733a8bb9-0054-4bef-8db5-04af677f0c04",
 	1,
-	'GuestStayId');
+	'GuestStayID');
 INSERT INTO O_BATTR_PROXY
 	VALUES ("a0bb4884-6658-4750-8649-bf98128cc1a1",
 	"733a8bb9-0054-4bef-8db5-04af677f0c04",
@@ -68,7 +68,7 @@ INSERT INTO O_ATTR
 	VALUES ("ce79ade3-773c-45ab-bd8d-9239e22019fa",
 	"c974e5aa-cb21-4fe4-ac93-50e047df8805",
 	"d1e048a5-e3e6-4d47-8da0-323459e5f61e",
-	'GuestStayId',
+	'GuestStayID',
 	'',
 	'',
 	'GuestStayId',
@@ -83,7 +83,7 @@ INSERT INTO O_OIDA
 	VALUES ("d1e048a5-e3e6-4d47-8da0-323459e5f61e",
 	"c974e5aa-cb21-4fe4-ac93-50e047df8805",
 	0,
-	'CardKeyId');
+	'CardKeyID');
 INSERT INTO O_ID
 	VALUES (1,
 	"c974e5aa-cb21-4fe4-ac93-50e047df8805");
