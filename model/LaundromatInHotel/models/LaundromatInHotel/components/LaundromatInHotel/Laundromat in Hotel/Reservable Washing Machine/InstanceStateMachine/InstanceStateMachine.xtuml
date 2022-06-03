@@ -149,7 +149,9 @@ INSERT INTO SM_ACT
 	VALUES ("762fd3e0-6093-48f7-a60f-6fe6efc08433",
 	"6d03afc6-aaf0-43d3-871e-ff236a02478d",
 	1,
-	'// Current state is reserved for specific guest stay.',
+	'// Current state is reserved for specific guest stay.
+SELECT ONE machine RELATED BY SELF->WashingMachine[R15];
+machine.Status = WashingMachineStatus::Reserved;',
 	'',
 	0);
 INSERT INTO SM_TAH

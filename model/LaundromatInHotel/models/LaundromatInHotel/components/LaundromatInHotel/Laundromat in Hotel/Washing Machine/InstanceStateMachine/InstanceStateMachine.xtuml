@@ -785,7 +785,8 @@ SELECT ONE inUse RELATED BY SELF->WashingMachineinUse[R18];
 SELECT ONE guestStay RELATED BY inUse->GuestStay[R18.''is used by''];
 UNRELATE guestStay FROM SELF ACROSS R18 USING inUse;
 DELETE OBJECT INSTANCE inUse;
-',
+
+SELF.Status = WashingMachineStatus::Ready;',
 	'',
 	0);
 INSERT INTO SM_MOAH
@@ -806,6 +807,7 @@ SELECT ONE inUse RELATED BY SELF->WashingMachineinUse[R18];
 SELECT ONE workingSpec RELATED BY inUse->AvailableWorkingSpec[R9.''current spec'']->WorkingSpec[R8.''available spec''];
 IF ( workingSpec.WashingTime > 0 )
 	SELF.StartWashing( timeInMinutes: workingSpec.WashingTime );
+	SELF.Status = WashingMachineStatus::Washing;
 ELSE
 	GENERATE WashingMachine3 TO SELF;
 END IF;
@@ -842,6 +844,7 @@ SELECT ONE inUse RELATED BY SELF->WashingMachineinUse[R18];
 SELECT ONE workingSpec RELATED BY inUse->AvailableWorkingSpec[R9.''current spec'']->WorkingSpec[R8.''available spec''];
 IF ( workingSpec.DryingTime > 0 )
 	SELF.StartDrying( timeInMinutes: workingSpec.WashingTime );
+	SELF.Status = WashingMachineStatus::Drying;
 ELSE
 	GENERATE WashingMachine6 TO SELF;
 END IF;
@@ -862,7 +865,8 @@ INSERT INTO SM_ACT
 	'// Notify now is that door unlock become available.
 SELECT ONE door RELATED BY SELF->DoorwithLock[R14.''front door''];
 GENERATE DoorwithLock8 TO door;
-',
+
+SELF.Status = WashingMachineStatus::WaitForTaking;',
 	'',
 	0);
 INSERT INTO SM_MOAH
@@ -993,7 +997,8 @@ INSERT INTO SM_ACT
 	'// Notify now is that door unlock become available.
 SELECT ONE door RELATED BY SELF->DoorwithLock[R14.''front door''];
 GENERATE DoorwithLock8 TO door;
-',
+
+SELF.Status = WashingMachineStatus::Interupted;',
 	'',
 	0);
 INSERT INTO SM_TAH

@@ -2943,7 +2943,7 @@ INSERT INTO O_OBJ_PROXY
 	'Laundromat Room',
 	3,
 	'LaundromatRoom',
-	'����@���ݒu���ꂽ����',
+	'洗濯機が設置された部屋',
 	"00000000-0000-0000-0000-000000000000",
 	'./Laundromat Room/Laundromat Room.xtuml');
 INSERT INTO PE_PE
@@ -3360,7 +3360,7 @@ INSERT INTO O_OBJ_PROXY
 	'Working Spec',
 	9,
 	'WorkingSpec',
-	'?I????????A????????????A?y?��A????????????z',
+	'?I????????A????????????A?y?сA????????????z',
 	"00000000-0000-0000-0000-000000000000",
 	'./Working Spec/Working Spec.xtuml');
 INSERT INTO R_ASSR
@@ -3758,8 +3758,8 @@ INSERT INTO O_OBJ_PROXY
 	'Door with Lock',
 	14,
 	'DoorwithLock',
-	'����@�̃��b�N�t���h�A
-����P�̂ŏ��X�������Ƃ�z�肷��̂ŁAUnique ID�����Ă���',
+	'洗濯機のロック付きドア
+これ単体で諸々扱うことを想定するので、Unique IDをつけておく',
 	"00000000-0000-0000-0000-000000000000",
 	'./Door with Lock/Door with Lock.xtuml');
 INSERT INTO R_FORM

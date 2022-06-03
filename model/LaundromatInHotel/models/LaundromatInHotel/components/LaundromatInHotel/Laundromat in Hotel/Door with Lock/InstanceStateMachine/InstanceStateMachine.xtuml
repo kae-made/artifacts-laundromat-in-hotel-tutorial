@@ -1422,7 +1422,8 @@ INSERT INTO SM_ACT
 	1,
 	'// Door is locked in unused situation.
 // Waiting for a card key to be touched.
-SELF.RequestCardKey();',
+SELF.RequestCardKey();
+SELF.Status = DoorStatus::Locked;',
 	'',
 	0);
 INSERT INTO SM_MOAH
@@ -1447,8 +1448,10 @@ IF ( NOT_EMPTY reservableMachine )
 	IF ( NOT_EMPTY nextReservation )
 		SELECT ONE guestStay RELATED BY nextReservation->GuestStay[R12.''reservation owner''];
 		IF ( guestStay.GuestStayID == cardKey.GuestStayID )
+			SELF.Unlock();
+			SELF.Status = DoorStatus::Unlocked;
 			SELECT ONE workingSpec RELATED BY nextReservation->AvailableWorkingSpec[R13.''target''];
-			GENERATE DoorwithLock7(specId:workingSpec.WorkingSpecID) TO SELF;
+			GENERATE DoorwithLock7(specId:workingSpec.WorkingSpecID, guestStayId:guestStay.GuestStayID) TO SELF;
 			isValid = TRUE;
 		END IF;
 	END IF;
@@ -1495,7 +1498,8 @@ INSERT INTO SM_ACT
 Self.Lock();
 SELECT ONE machine RELATED BY SELF->WashingMachine[R14];
 GENERATE WashingMachine1:''Assigned guest'' TO machine;
-',
+
+SELF.Status = DoorStatus::Locked;',
 	'',
 	0);
 INSERT INTO SM_MOAH
@@ -1556,7 +1560,8 @@ INSERT INTO SM_ACT
 // Wait for the door to close.
 SELECT ONE machine RELATED BY SELF->WashingMachine[R14];
 GENERATE WashingMachine6:''Start taking'' TO machine;
-',
+
+SELF.Status = DoorStatus::Unlocked;',
 	'',
 	0);
 INSERT INTO SM_TAH
@@ -1569,7 +1574,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("901cb9f2-9076-4c07-98bc-7713196abc03",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1583,7 +1588,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("4aa0a37f-8fd0-4111-bf46-ecd4da27c0e5",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1597,7 +1602,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("09e74447-481b-4eb2-8f32-2f069efdb099",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1611,7 +1616,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("4c97bc2d-39c1-45a0-aa2a-377e1d973764",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1625,7 +1630,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("d4369fc9-0f8c-4d96-adec-8eac1f682f5e",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1656,7 +1661,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("3af0172b-5f07-4e61-a818-38bba0dfe204",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1670,7 +1675,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("6858d783-ffca-4091-a88f-c0300d420764",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1686,7 +1691,7 @@ INSERT INTO SM_ACT
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
 	1,
 	'// Wait for the door actually to open. 
-SELF.Open();
+SELF.Unlock();
 ',
 	'',
 	0);
@@ -1700,7 +1705,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("a3f2e349-73e7-4d7c-bf66-e768d4b16900",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1714,7 +1719,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("439bf75b-683e-474d-a45e-6eee5104d114",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1737,7 +1742,8 @@ CREATE OBJECT INSTANCE inUse OF WashingMachineinUse;
 RELATE guestStay TO washingMachine ACROSS R18 USING inUse;
 RELATE inUse TO workingSpec ACROSS R9;
 
-SELF.Open();',
+SELF.Unlock();
+SELF.Status = DoorStatus::Unlocked;',
 	'',
 	0);
 INSERT INTO SM_TAH
@@ -1750,7 +1756,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("a05ba242-5052-420b-9d00-78d44af452e4",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1764,7 +1770,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("22ce004d-f6c9-4820-b59f-1196c8d9e692",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1778,7 +1784,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("c9bad870-da57-4866-a8b6-37a511c553e1",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1808,7 +1814,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("b751a416-409c-4677-94eb-1db4be5a3411",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1854,7 +1860,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("0f14fd39-77fb-482c-8e0d-39316fe4548e",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -1868,7 +1874,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("2792ee8c-9645-4551-9706-7567640896f9",
 	"c7fd49d3-51b9-44c1-921e-4819c1174f98",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -4096,7 +4102,7 @@ INSERT INTO O_OBJ_PROXY
 	'Door with Lock',
 	14,
 	'DoorwithLock',
-	'洗濯機のロック付きドア
-これ単体で諸々扱うことを想定するので、Unique IDをつけておく',
+	'????@????b?N?t???h?A
+????P?????X?????????z??????AUnique ID??????????',
 	"00000000-0000-0000-0000-000000000000",
 	'../Door with Lock.xtuml');

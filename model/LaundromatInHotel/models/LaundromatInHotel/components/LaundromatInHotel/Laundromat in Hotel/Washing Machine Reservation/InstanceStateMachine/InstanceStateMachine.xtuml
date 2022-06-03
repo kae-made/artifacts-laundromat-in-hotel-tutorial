@@ -647,7 +647,7 @@ SELECT ONE machineAssigner RELATED BY workingSpec->WashingMachineAssigner[R11];
 SELECT ONE spec RELATED BY workingSpec->WorkingSpec[R8.''available spec''];
 
 SELF.ReservationTime = rcvd_evt.reservationTime;
-SELF.EstimatedEndTime = TIM::time_add(time:SELF.ReservationTime, days:0, hours:0, minutes:(spec.WashingTIme+spec.DryingTime), seconds:0);
+SELF.EstimatedEndTime = TIM::time_add(time:SELF.ReservationTime, days:0, hours:0, minutes:(spec.WashingTime+spec.DryingTime), seconds:0);
 
 GENERATE WashingMachineAssigner1:''Request reservation''(specId:rcvd_evt.specId, guestStayId:rcvd_evt.guestStayId) TO machineAssigner;',
 	'',
@@ -723,7 +723,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("db659662-3ee2-4170-ab0a-3e9556ed28c8",
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -763,7 +763,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("36653f0a-089c-41f9-871c-76af52b27eae",
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -777,7 +777,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("00b78bd3-dc3b-4659-8a00-3835ad998a04",
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -791,7 +791,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("02737b2a-4c25-4762-910e-0cb00c6e32c1",
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -805,7 +805,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("2fc71fef-ab88-4f48-877a-58442c817b57",
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -819,7 +819,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("cb7a1122-e283-46be-bd51-037840716a53",
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -833,7 +833,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("9795c165-85da-40f3-bf56-63dcafff61d8",
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -865,7 +865,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("d4aabd6f-d927-43ec-b231-3183d1601246",
 	"0a97d4f2-61d1-46b1-9219-b28ebc230757",
-	3,
+	1,
 	'',
 	'',
 	0);

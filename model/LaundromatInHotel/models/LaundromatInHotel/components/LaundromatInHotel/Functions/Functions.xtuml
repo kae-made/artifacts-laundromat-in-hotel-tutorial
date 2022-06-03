@@ -580,7 +580,7 @@ INSERT INTO S_SYNC
 	'TakenOut',
 	'',
 	'SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
-GENERATE ',
+GENERATE WashingMachine7 TO machine;',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
@@ -717,6 +717,77 @@ INSERT INTO S_SPARM
 	'');
 INSERT INTO PE_PE
 	VALUES ("775d8108-7a7f-4c25-850e-a72aae5b6770",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("574bcfc9-1f4e-4a76-a51c-40a2f997e8f6",
+	"00000000-0000-0000-0000-000000000000",
+	'ReservationCreate',
+	'',
+	'GENERATE WashingMachineReservation1:''Try to reserve''(specId:PARAM.specId, guestStayId:PARAM.guestStayId, reservationTime:PARAM.reservationTime) TO WashingMachineReservation Creator;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	18);
+INSERT INTO S_SPARM
+	VALUES ("7f8a9cc4-8f3d-4b6b-9177-cf987ceabdda",
+	"574bcfc9-1f4e-4a76-a51c-40a2f997e8f6",
+	'specId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("706e8f2a-4dd5-4bf4-abd4-667f5a52af7d",
+	"574bcfc9-1f4e-4a76-a51c-40a2f997e8f6",
+	'guestStayId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"7f8a9cc4-8f3d-4b6b-9177-cf987ceabdda",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("b996147c-245e-412d-910d-d32ca5d810ef",
+	"574bcfc9-1f4e-4a76-a51c-40a2f997e8f6",
+	'reservationTime',
+	"ba5eda7a-def5-0000-0000-000000000010",
+	0,
+	'',
+	"706e8f2a-4dd5-4bf4-abd4-667f5a52af7d",
+	'');
+INSERT INTO PE_PE
+	VALUES ("574bcfc9-1f4e-4a76-a51c-40a2f997e8f6",
+	1,
+	"66cf385b-20fa-4e6a-8bbe-317597704737",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("8c19e4ab-a431-49f5-a241-9bac5356adb9",
+	"00000000-0000-0000-0000-000000000000",
+	'ReservationCancel',
+	'',
+	'SELECT ANY reservation FROM INSTANCES OF WashingMachineReservation WHERE SELECTED.ReservationID == PARAM.reservationId;
+GENERATE WashingMachineReservation5:Canceled TO reservation;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	19);
+INSERT INTO S_SPARM
+	VALUES ("9da1890f-b3fd-4126-a026-d001db6b2070",
+	"8c19e4ab-a431-49f5-a241-9bac5356adb9",
+	'reservationId',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("8c19e4ab-a431-49f5-a241-9bac5356adb9",
 	1,
 	"66cf385b-20fa-4e6a-8bbe-317597704737",
 	"00000000-0000-0000-0000-000000000000",
