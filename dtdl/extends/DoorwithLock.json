@@ -1,0 +1,192 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:DoorwithLock;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Door with Lock",
+  "description": "Please see description of class:'Door with Lock'",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "DoorID",
+      "schema": "string",
+      "comment": "@I0"
+    },
+    {
+      "@type": "Property",
+      "name": "PIN_Number",
+      "schema": "string",
+      "description": "Please see description of attribute:'PIN_Number' of class:'Door with Lock'"
+    },
+    {
+      "@type": "Property",
+      "name": "NumberOfDigits",
+      "schema": "integer"
+    },
+    {
+      "@type": "Property",
+      "name": "Status",
+      "schema": {
+        "@type": "Enum",
+        "valueSchema": "string",
+        "displayName": "DoorStatus",
+        "enumValues": [
+          {
+            "name": "Unlocked",
+            "enumValue": "Unlocked"
+          },
+          {
+            "name": "Locked",
+            "enumValue": "Locked"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Property",
+      "name": "current_state",
+      "schema": "string"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "TouchCardKey",
+      "displayName": "DoorwithLock1:Touch card key",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          {
+            "name": "cardKeyId",
+            "schema": "string"
+          },
+          {
+            "name": "TouchCardKey_occurred",
+            "description": "The timestamp when this telemetry occurres",
+            "schema": "dateTime"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Telemetry",
+      "name": "DoorClosed",
+      "displayName": "DoorwithLock2:Door Closed",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "DoorOpened",
+      "displayName": "DoorwithLock3:Door Opened",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "SetPINCode",
+      "displayName": "DoorwithLock4:Set PIN code",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          {
+            "name": "pinCode",
+            "schema": "string"
+          },
+          {
+            "name": "SetPINCode_occurred",
+            "description": "The timestamp when this telemetry occurres",
+            "schema": "dateTime"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Telemetry",
+      "name": "ValidatedUser",
+      "displayName": "DoorwithLock5:Validated user",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "JudgedAsImproper",
+      "displayName": "DoorwithLock6:Judged as improper",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "EnterSpec",
+      "displayName": "DoorwithLock7:Enter Spec",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          {
+            "name": "specId",
+            "schema": "string"
+          },
+          {
+            "name": "guestStayId",
+            "schema": "string"
+          },
+          {
+            "name": "EnterSpec_occurred",
+            "description": "The timestamp when this telemetry occurres",
+            "schema": "dateTime"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Telemetry",
+      "name": "UnlockedAllowed",
+      "displayName": "DoorwithLock8:Unlocked Allowed",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Command",
+      "name": "Unlock",
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "Unlock"
+    },
+    {
+      "@type": "Command",
+      "name": "Close",
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "Close"
+    },
+    {
+      "@type": "Command",
+      "name": "Lock",
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "Lock"
+    },
+    {
+      "@type": "Command",
+      "name": "RequestPINCode",
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "RequestPINCode"
+    },
+    {
+      "@type": "Command",
+      "name": "RequestCardKey",
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "RequestCardKey"
+    }
+  ]
+}

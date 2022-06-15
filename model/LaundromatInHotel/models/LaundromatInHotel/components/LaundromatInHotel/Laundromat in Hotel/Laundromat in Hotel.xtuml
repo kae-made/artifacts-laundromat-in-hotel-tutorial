@@ -2943,7 +2943,7 @@ INSERT INTO O_OBJ_PROXY
 	'Laundromat Room',
 	3,
 	'LaundromatRoom',
-	'洗濯機が設置された部屋',
+	'????@????u????????',
 	"00000000-0000-0000-0000-000000000000",
 	'./Laundromat Room/Laundromat Room.xtuml');
 INSERT INTO PE_PE
@@ -3360,7 +3360,7 @@ INSERT INTO O_OBJ_PROXY
 	'Working Spec',
 	9,
 	'WorkingSpec',
-	'?I????????A????????????A?y?сA????????????z',
+	'?I????????A????????????A?y???A????????????z',
 	"00000000-0000-0000-0000-000000000000",
 	'./Working Spec/Working Spec.xtuml');
 INSERT INTO R_ASSR
@@ -3758,8 +3758,8 @@ INSERT INTO O_OBJ_PROXY
 	'Door with Lock',
 	14,
 	'DoorwithLock',
-	'洗濯機のロック付きドア
-これ単体で諸々扱うことを想定するので、Unique IDをつけておく',
+	'????@????b?N?t???h?A
+????P?????X?????????z??????AUnique ID??????????',
 	"00000000-0000-0000-0000-000000000000",
 	'./Door with Lock/Door with Lock.xtuml');
 INSERT INTO R_FORM
@@ -4001,50 +4001,40 @@ INSERT INTO R_REL
 	19,
 	'',
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO R_FORM
+INSERT INTO R_PART
 	VALUES ("3a845d41-c860-4abc-bad5-79ee4fcbd730",
 	"8ef46445-9e53-4a55-bf19-6172c4e85b3f",
 	"eded0bab-04a1-4c0f-bdec-183671f78738",
 	0,
 	1,
 	'next reservation');
-INSERT INTO R_RGO
-	VALUES ("3a845d41-c860-4abc-bad5-79ee4fcbd730",
+INSERT INTO O_RTIDA
+	VALUES ("01960fb3-8bad-4bfd-b8e6-ae0fd415799a",
+	"3a845d41-c860-4abc-bad5-79ee4fcbd730",
+	0,
 	"8ef46445-9e53-4a55-bf19-6172c4e85b3f",
 	"eded0bab-04a1-4c0f-bdec-183671f78738");
+INSERT INTO R_RTO
+	VALUES ("3a845d41-c860-4abc-bad5-79ee4fcbd730",
+	"8ef46445-9e53-4a55-bf19-6172c4e85b3f",
+	"eded0bab-04a1-4c0f-bdec-183671f78738",
+	0);
 INSERT INTO R_OIR
 	VALUES ("3a845d41-c860-4abc-bad5-79ee4fcbd730",
 	"8ef46445-9e53-4a55-bf19-6172c4e85b3f",
 	"eded0bab-04a1-4c0f-bdec-183671f78738",
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO R_PART
+INSERT INTO R_FORM
 	VALUES ("cffb3de7-fca7-45f8-9297-c83f883efb5b",
 	"8ef46445-9e53-4a55-bf19-6172c4e85b3f",
 	"b353c4cb-bba8-4ae0-a2df-87c40eca26b2",
 	0,
 	1,
 	'');
-INSERT INTO O_RTIDA
-	VALUES ("f34368d2-6c56-44b0-869a-6ae4403510c8",
-	"cffb3de7-fca7-45f8-9297-c83f883efb5b",
-	0,
-	"8ef46445-9e53-4a55-bf19-6172c4e85b3f",
-	"b353c4cb-bba8-4ae0-a2df-87c40eca26b2");
-INSERT INTO O_OIDA_PROXY
-	VALUES ("f34368d2-6c56-44b0-869a-6ae4403510c8",
-	"cffb3de7-fca7-45f8-9297-c83f883efb5b",
-	0,
-	'MachineID',
-	'./Reservable Washing Machine/Reservable Washing Machine.xtuml');
-INSERT INTO R_RTO
+INSERT INTO R_RGO
 	VALUES ("cffb3de7-fca7-45f8-9297-c83f883efb5b",
 	"8ef46445-9e53-4a55-bf19-6172c4e85b3f",
-	"b353c4cb-bba8-4ae0-a2df-87c40eca26b2",
-	0);
-INSERT INTO O_ID_PROXY
-	VALUES (0,
-	"cffb3de7-fca7-45f8-9297-c83f883efb5b",
-	'./Reservable Washing Machine/Reservable Washing Machine.xtuml');
+	"b353c4cb-bba8-4ae0-a2df-87c40eca26b2");
 INSERT INTO R_OIR
 	VALUES ("cffb3de7-fca7-45f8-9297-c83f883efb5b",
 	"8ef46445-9e53-4a55-bf19-6172c4e85b3f",

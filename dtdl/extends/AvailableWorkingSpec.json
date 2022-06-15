@@ -1,0 +1,51 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:AvailableWorkingSpec;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Available Working Spec",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "HotelID",
+      "schema": "string",
+      "comment": "@R11"
+    },
+    {
+      "@type": "Property",
+      "name": "MachineID",
+      "schema": "string",
+      "comment": "@I0,R8"
+    },
+    {
+      "@type": "Property",
+      "name": "WorkingSpecID",
+      "schema": "string",
+      "comment": "@I0,R8"
+    },
+    {
+      "@type": "Property",
+      "name": "PreAlarmSec",
+      "schema": "integer"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R11_WashingMachineAssigner;1",
+      "name": "R11_WashingMachineAssigner",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:WashingMachineAssigner;1"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R8_WashingMachine;1",
+      "name": "R8_WashingMachine",
+      "target": "dtmi:com:kae_made:LaundromatInHotel:WashingMachine;1"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R8_AvailableSpec_WorkingSpec;1",
+      "name": "R8_AvailableSpec_WorkingSpec",
+      "target": "dtmi:com:kae_made:LaundromatInHotel:WorkingSpec;1"
+    }
+  ]
+}

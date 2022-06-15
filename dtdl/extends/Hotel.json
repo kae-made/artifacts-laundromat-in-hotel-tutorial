@@ -1,0 +1,45 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:Hotel;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Hotel",
+  "description": "Please see description of class:'Hotel'",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "HotelID",
+      "schema": "string",
+      "comment": "@I0",
+      "description": "Please see description of attribute:'HotelID' of class:'Hotel'"
+    },
+    {
+      "@type": "Property",
+      "name": "Name",
+      "schema": "string",
+      "description": "Please see description of attribute:'Name' of class:'Hotel'"
+    },
+    {
+      "@type": "Command",
+      "name": "Support",
+      "request": {
+        "name": "payload",
+        "schema": {
+          "@type": "Object",
+          "fields": [
+            {
+              "name": "message",
+              "schema": "string"
+            }
+          ]
+        }
+      },
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "Support"
+    }
+  ]
+}

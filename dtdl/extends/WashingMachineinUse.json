@@ -1,0 +1,54 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:WashingMachineinUse;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Washing Machine in Use",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "UseId",
+      "schema": "string",
+      "comment": "@I0"
+    },
+    {
+      "@type": "Property",
+      "name": "WorkingSpecID",
+      "schema": "string",
+      "comment": "@R9"
+    },
+    {
+      "@type": "Property",
+      "name": "GuestStayID",
+      "schema": "string",
+      "comment": "@I2,R18"
+    },
+    {
+      "@type": "Property",
+      "name": "MachineID",
+      "schema": "string",
+      "comment": "@I1,I2,R18,R9",
+      "description": "Please see description of attribute:'MachineID' of class:'Washing Machine in Use'"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R9_CurrentSpec_AvailableWorkingSpec;1",
+      "name": "R9_CurrentSpec_AvailableWorkingSpec",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:AvailableWorkingSpec;1"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R18_IsUsedBy_GuestStay;1",
+      "name": "R18_IsUsedBy_GuestStay",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:GuestStay;1"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R18_IsUsing_WashingMachine;1",
+      "name": "R18_IsUsing_WashingMachine",
+      "target": "dtmi:com:kae_made:LaundromatInHotel:WashingMachine;1"
+    }
+  ]
+}

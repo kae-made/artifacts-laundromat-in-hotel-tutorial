@@ -1,0 +1,49 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:GuestRoom;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Guest Room",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "Floor",
+      "schema": "integer"
+    },
+    {
+      "@type": "Property",
+      "name": "RoomNumber",
+      "schema": "integer"
+    },
+    {
+      "@type": "Property",
+      "name": "Name",
+      "schema": "string"
+    },
+    {
+      "@type": "Property",
+      "name": "RoomID",
+      "schema": "string",
+      "comment": "@I0"
+    },
+    {
+      "@type": "Property",
+      "name": "Capacity",
+      "schema": "integer",
+      "description": "Please see description of attribute:'Capacity' of class:'Guest Room'"
+    },
+    {
+      "@type": "Property",
+      "name": "HotelID",
+      "schema": "string",
+      "comment": "@R3"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R3_Hotel;1",
+      "name": "R3_Hotel",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:Hotel;1"
+    }
+  ]
+}

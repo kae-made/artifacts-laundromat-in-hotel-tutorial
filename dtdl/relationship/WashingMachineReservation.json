@@ -1,0 +1,146 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:WashingMachineReservation;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Washing Machine Reservation",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "ReservationID",
+      "schema": "string",
+      "comment": "@I0"
+    },
+    {
+      "@type": "Property",
+      "name": "ReservationTime",
+      "schema": "dateTime",
+      "description": "Please see description of attribute:'ReservationTime' of class:'Washing Machine Reservation'"
+    },
+    {
+      "@type": "Property",
+      "name": "EstimatedEndTime",
+      "schema": "dateTime",
+      "description": "Please see description of attribute:'EstimatedEndTime' of class:'Washing Machine Reservation'"
+    },
+    {
+      "@type": "Property",
+      "name": "PreAlarmTime",
+      "schema": "integer",
+      "description": "Please see description of attribute:'PreAlarmTime' of class:'Washing Machine Reservation'"
+    },
+    {
+      "@type": "Property",
+      "name": "GuestStayID",
+      "schema": "string",
+      "comment": "@R12"
+    },
+    {
+      "@type": "Property",
+      "name": "WorkingSpecID",
+      "schema": "string",
+      "comment": "@R13"
+    },
+    {
+      "@type": "Property",
+      "name": "successor_ReservationID",
+      "schema": "string",
+      "comment": "@R17"
+    },
+    {
+      "@type": "Property",
+      "name": "current_state",
+      "schema": "string"
+    },
+    {
+      "@type": "Property",
+      "name": "MachineID",
+      "schema": "string",
+      "comment": "@R13",
+      "description": "Please see description of attribute:'MachineID' of class:'Washing Machine Reservation'"
+    },
+    {
+      "@type": "Property",
+      "name": "AlarmTimer",
+      "schema": "string"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "TryToReserve",
+      "displayName": "WashingMachineReservation1:Try to reserve",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          {
+            "name": "specId",
+            "schema": "string"
+          },
+          {
+            "name": "guestStayId",
+            "schema": "string"
+          },
+          {
+            "name": "reservationTime",
+            "schema": "dateTime"
+          },
+          {
+            "name": "TryToReserve_occurred",
+            "description": "The timestamp when this telemetry occurres",
+            "schema": "dateTime"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Telemetry",
+      "name": "Assigned",
+      "displayName": "WashingMachineReservation2:Assigned",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "PreAlarmIsTimeUp",
+      "displayName": "WashingMachineReservation3:Pre alarm is time up",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "TimeIsUp",
+      "displayName": "WashingMachineReservation4:Time is up",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "Canceled",
+      "displayName": "WashingMachineReservation5:Canceled",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "Rejected",
+      "displayName": "WashingMachineReservation6:Rejected",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R12_ReservationOwner_GuestStay;1",
+      "name": "R12_ReservationOwner_GuestStay",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:GuestStay;1"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R13_Target_AvailableWorkingSpec;1",
+      "name": "R13_Target_AvailableWorkingSpec",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:AvailableWorkingSpec;1"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R17_Successor_WashingMachineReservation;1",
+      "name": "R17_Successor_WashingMachineReservation",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:WashingMachineReservation;1"
+    }
+  ]
+}

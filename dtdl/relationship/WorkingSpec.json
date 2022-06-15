@@ -1,0 +1,40 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:WorkingSpec;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Working Spec",
+  "description": "Please see description of class:'Working Spec'",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "WorkingSpecID",
+      "schema": "string",
+      "comment": "@I0"
+    },
+    {
+      "@type": "Property",
+      "name": "WashingTime",
+      "schema": "integer",
+      "description": "Please see description of attribute:'WashingTime' of class:'Working Spec'"
+    },
+    {
+      "@type": "Property",
+      "name": "DryingTime",
+      "schema": "integer",
+      "description": "Please see description of attribute:'DryingTime' of class:'Working Spec'"
+    },
+    {
+      "@type": "Property",
+      "name": "StandardWeight",
+      "schema": "integer",
+      "description": "Please see description of attribute:'StandardWeight' of class:'Working Spec'"
+    },
+    {
+      "@type": "Property",
+      "name": "Price",
+      "schema": "integer",
+      "description": "Please see description of attribute:'Price' of class:'Working Spec'"
+    }
+  ]
+}

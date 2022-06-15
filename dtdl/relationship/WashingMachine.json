@@ -1,0 +1,211 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:WashingMachine;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Washing Machine",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "MachineID",
+      "schema": "string",
+      "comment": "@I0",
+      "description": "Please see description of attribute:'MachineID' of class:'Washing Machine'"
+    },
+    {
+      "@type": "Property",
+      "name": "FriendryName",
+      "schema": "string",
+      "description": "Please see description of attribute:'FriendryName' of class:'Washing Machine'"
+    },
+    {
+      "@type": "Property",
+      "name": "IsBusy",
+      "schema": "boolean"
+    },
+    {
+      "@type": "Property",
+      "name": "RoomID",
+      "schema": "string",
+      "comment": "@R2"
+    },
+    {
+      "@type": "Property",
+      "name": "DoorID",
+      "schema": "string",
+      "comment": "@R14"
+    },
+    {
+      "@type": "Property",
+      "name": "Status",
+      "schema": {
+        "@type": "Enum",
+        "valueSchema": "string",
+        "displayName": "WashingMachineStatus",
+        "enumValues": [
+          {
+            "name": "Ready",
+            "enumValue": "Ready"
+          },
+          {
+            "name": "Washing",
+            "enumValue": "Washing"
+          },
+          {
+            "name": "Drying",
+            "enumValue": "Drying"
+          },
+          {
+            "name": "WaitForTaking",
+            "enumValue": "WaitForTaking"
+          },
+          {
+            "name": "Reserved",
+            "enumValue": "Reserved"
+          },
+          {
+            "name": "Interupted",
+            "enumValue": "Interupted"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Property",
+      "name": "current_state",
+      "schema": "string"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "AssignedGuest",
+      "displayName": "WashingMachine1:Assigned guest",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "DoneWashing",
+      "displayName": "WashingMachine3:Done washing",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "DoneDrying",
+      "displayName": "WashingMachine5:Done drying",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "StartTaking",
+      "displayName": "WashingMachine6:Start taking",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "TakenOut",
+      "displayName": "WashingMachine7:Taken out",
+      "schema": "dateTime",
+      "description": "Please see description of event:'WashingMachine7:Taken out' of class:'Washing Machine'"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "Interupted",
+      "displayName": "WashingMachine8:Interupted",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "InteruptActionCompleted",
+      "displayName": "WashingMachine9:Interupt action completed",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Command",
+      "name": "IsAvailable",
+      "response": {
+        "name": "payload",
+        "schema": {
+          "@type": "Object",
+          "fields": [
+            {
+              "name": "result",
+              "schema": "boolean"
+            },
+            {
+              "name": "status",
+              "schema": "integer"
+            }
+          ]
+        }
+      },
+      "displayName": "IsAvailable"
+    },
+    {
+      "@type": "Command",
+      "name": "StopExecution",
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "StopExecution"
+    },
+    {
+      "@type": "Command",
+      "name": "StartWashing",
+      "request": {
+        "name": "payload",
+        "schema": {
+          "@type": "Object",
+          "fields": [
+            {
+              "name": "timeInMinutes",
+              "schema": "integer"
+            }
+          ]
+        }
+      },
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "StartWashing"
+    },
+    {
+      "@type": "Command",
+      "name": "StartDrying",
+      "request": {
+        "name": "payload",
+        "schema": {
+          "@type": "Object",
+          "fields": [
+            {
+              "name": "timeInMinutes",
+              "schema": "integer"
+            }
+          ]
+        }
+      },
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "StartDrying"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R2_IsSetUpAt_LaundromatRoom;1",
+      "name": "R2_IsSetUpAt_LaundromatRoom",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:LaundromatRoom;1"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R14_FrontDoor_DoorwithLock;1",
+      "name": "R14_FrontDoor_DoorwithLock",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:DoorwithLock;1"
+    }
+  ]
+}

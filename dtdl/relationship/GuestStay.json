@@ -1,0 +1,88 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:GuestStay;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Guest Stay",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "GuestStayID",
+      "schema": "string",
+      "comment": "@I0"
+    },
+    {
+      "@type": "Property",
+      "name": "StartTime",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Property",
+      "name": "EndTimeOfValidity",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Property",
+      "name": "RoomID",
+      "schema": "string",
+      "comment": "@R4"
+    },
+    {
+      "@type": "Property",
+      "name": "Charge",
+      "schema": "integer",
+      "description": "Please see description of attribute:'Charge' of class:'Guest Stay'"
+    },
+    {
+      "@type": "Command",
+      "name": "Notify",
+      "request": {
+        "name": "payload",
+        "schema": {
+          "@type": "Object",
+          "fields": [
+            {
+              "name": "topic",
+              "schema": {
+                "@type": "Enum",
+                "valueSchema": "string",
+                "displayName": "NotificationForGuestStay",
+                "enumValues": [
+                  {
+                    "name": "PreAlarm",
+                    "enumValue": "PreAlarm"
+                  },
+                  {
+                    "name": "TimeHasCome",
+                    "enumValue": "TimeHasCome"
+                  },
+                  {
+                    "name": "Released",
+                    "enumValue": "Released"
+                  },
+                  {
+                    "name": "LaundryCompleted",
+                    "enumValue": "LaundryCompleted"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "Notify"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R4_IsAssignedFor_GuestRoom;1",
+      "name": "R4_IsAssignedFor_GuestRoom",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:GuestRoom;1"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:CardKey;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Card Key",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "CardKeyID",
+      "schema": "string",
+      "comment": "@I0"
+    },
+    {
+      "@type": "Property",
+      "name": "GuestStayID",
+      "schema": "string",
+      "comment": "@R6"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R6_IsAssignedAsKeyFor_GuestStay;1",
+      "name": "R6_IsAssignedAsKeyFor_GuestStay",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:GuestStay;1"
+    }
+  ]
+}

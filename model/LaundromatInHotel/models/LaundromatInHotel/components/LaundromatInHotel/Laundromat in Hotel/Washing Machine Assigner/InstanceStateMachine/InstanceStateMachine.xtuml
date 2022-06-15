@@ -185,24 +185,25 @@ ELSE
 		IF ( nextReservation.ReservationTime >= requestingReservation.ReservationTime )
 			UNRELATE nextReservation FROM washingMachine ACROSS R19;
 			RELATE requestingReservation TO washingMachine ACROSS R19;
-			RELATE requestingReservation TO nextReservation ACROSS R17.''successor'';
+			RELATE requestingReservation TO nextReservation ACROSS R17.''predecessor'';
 		ELSE
 			ASSIGN unlinked = TRUE;
 			ASSIGN prevReservation = nextReservation;
 			WHILE ( unlinked )
-				SELECT ONE nextReservation RELATED BY nextReservation->WashingMachineReservation[R17.''successor''];
+				SELECT ONE nextReservation RELATED BY prevReservation->WashingMachineReservation[R17.''predecessor''];
 				IF ( NOT_EMPTY nextReservation )
 					IF ( nextReservation.ReservationTime >= requestingReservation.ReservationTime )
-						UNRELATE prevReservation FROM nextReservation ACROSS R17.''successor'';
-						RELATE prevReservation TO requestingReservation ACROSS R17.''successor'';
-						RELATE nextReservation TO requestingReservation ACROSS R17.''predecessor'';
+						UNRELATE prevReservation FROM nextReservation ACROSS R17.''predecessor'';
+						RELATE prevReservation TO requestingReservation ACROSS R17.''predecessor'';
+						RELATE nextReservation TO requestingReservation ACROSS R17.''successor'';
 						unlinked = FALSE;
+						BREAK;
 					END IF;
 				END IF;	
 				ASSIGN prevReservation = nextReservation;
 			END WHILE;
 			IF ( unlinked )
-				RELATE requestingReservation TO prevReservation ACROSS R17.''predecessor'';
+				RELATE requestingReservation TO prevReservation ACROSS R17.''successor'';
 			END IF;
 		END IF;
 		GENERATE WashingMachineReservation2:Assigned TO requestingReservation;
@@ -225,8 +226,8 @@ INSERT INTO SM_ACT
 // remove the reservation from the chain.
 // Then wait for new request.
 SELECT ANY cancelingReservation FROM INSTANCES OF WashingMachineReservation WHERE SELECTED.ReservationID == rcvd_evt.reservationId;
-SELECT ONE prevReservation RELATED BY cancelingReservation->WashingMachineReservation[R17.''predecessor''];
-SELECT ONE nextReservation RELATED BY cancelingReservation->WashingMachineReservation[R17.''successor''];
+SELECT ONE prevReservation RELATED BY cancelingReservation->WashingMachineReservation[R17.''successor''];
+SELECT ONE nextReservation RELATED BY cancelingReservation->WashingMachineReservation[R17.''predecessor''];
 
 IF ( EMPTY prevReservation )
 	SELECT ONE washingMachine RELATED BY cancelingReservation->ReservableWashingMachine[R19];
@@ -235,12 +236,12 @@ IF ( EMPTY prevReservation )
 		RELATE nextReservation TO washingMachine ACROSS R19;
 	END IF;
 ELSE
-	UNRELATE cancelingReservation FROM prevReservation ACROSS R17.''predecessor'';
+	UNRELATE cancelingReservation FROM prevReservation ACROSS R17.''successor'';
 END IF;
 IF ( NOT_EMPTY nextReservation )
-	UNRELATE cancelingReservation FROM nextReservation ACROSS R17.''successor'';
+	UNRELATE cancelingReservation FROM nextReservation ACROSS R17.''predecessor'';
 	IF ( NOT_EMPTY prevReservation )
-		RELATE prevReservation TO nextReservation ACROSS R17.''successor'';
+		RELATE prevReservation TO nextReservation ACROSS R17.''predecessor'';
 	END IF;
 END IF;
 
@@ -258,7 +259,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("7957ca68-3280-4b6b-b765-476adb3599e6",
 	"33f8cb74-6b95-4974-9d09-5077e88f3dae",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -272,7 +273,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("91653c30-b7a4-4c2a-8eff-160b82ce7982",
 	"33f8cb74-6b95-4974-9d09-5077e88f3dae",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -286,7 +287,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("05c8cef6-8701-4f3e-9713-dee22999a044",
 	"33f8cb74-6b95-4974-9d09-5077e88f3dae",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -300,7 +301,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("5eea53e6-24a3-452b-97b8-90563d00e97c",
 	"33f8cb74-6b95-4974-9d09-5077e88f3dae",
-	3,
+	1,
 	'',
 	'',
 	0);

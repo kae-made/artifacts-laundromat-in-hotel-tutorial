@@ -1,0 +1,22 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:NonReservationWashingMachine;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Non Reservation Washing Machine",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "MachineID",
+      "schema": "string",
+      "comment": "@I0,R15"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R15FromNonReservationWashingMachine;1",
+      "name": "R15FromNonReservationWashingMachine",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:WashingMachine;1"
+    }
+  ]
+}

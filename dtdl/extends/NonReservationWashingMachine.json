@@ -1,0 +1,11 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:NonReservationWashingMachine;1",
+  "@type": "Interface",
+  "extends": ["dtmi:com:kae_made:LaundromatInHotel:WashingMachine;1"],
+  "comment": "@extends:R15 auto generated - generator version=0.0.1",
+  "displayName": "Non Reservation Washing Machine",
+  "contents": [
+
+  ]
+}

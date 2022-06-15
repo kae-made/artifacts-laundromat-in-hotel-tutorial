@@ -1,0 +1,69 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:WashingMachineAssigner;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Washing Machine Assigner",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "HotelID",
+      "schema": "string",
+      "comment": "@I0,R10"
+    },
+    {
+      "@type": "Property",
+      "name": "current_state",
+      "schema": "string"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "RequestReservation",
+      "displayName": "WashingMachineAssigner1:Request reservation",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          {
+            "name": "guestStayId",
+            "schema": "string"
+          },
+          {
+            "name": "specId",
+            "schema": "string"
+          },
+          {
+            "name": "RequestReservation_occurred",
+            "description": "The timestamp when this telemetry occurres",
+            "schema": "dateTime"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Telemetry",
+      "name": "CancelReservation",
+      "displayName": "WashingMachineAssigner2:Cancel reservation",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          {
+            "name": "reservationId",
+            "schema": "string"
+          },
+          {
+            "name": "CancelReservation_occurred",
+            "description": "The timestamp when this telemetry occurres",
+            "schema": "dateTime"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R10_Hotel;1",
+      "name": "R10_Hotel",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:Hotel;1"
+    }
+  ]
+}

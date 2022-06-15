@@ -1,0 +1,40 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:ReservableWashingMachine;1",
+  "@type": "Interface",
+  "extends": ["dtmi:com:kae_made:LaundromatInHotel:WashingMachine;1"],
+  "comment": "@extends:R15 auto generated - generator version=0.0.1",
+  "displayName": "Reservable Washing Machine",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "current_state_of_ReservableWashingMachine",
+      "schema": "string"
+    },
+    {
+      "@type": "Property",
+      "name": "Next_ReservationID",
+      "schema": "string",
+      "comment": "@R19"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "Check",
+      "displayName": "ReservableWashingMachine1:Check",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "Reserved",
+      "displayName": "ReservableWashingMachine2:Reserved",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R19_NextReservation_WashingMachineReservation;1",
+      "name": "R19_NextReservation_WashingMachineReservation",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:WashingMachineReservation;1"
+    }
+  ]
+}

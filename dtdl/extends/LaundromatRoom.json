@@ -1,0 +1,39 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:LaundromatInHotel:LaundromatRoom;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Laundromat Room",
+  "description": "Please see description of class:'Laundromat Room'",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "Floor",
+      "schema": "integer"
+    },
+    {
+      "@type": "Property",
+      "name": "RoomNumber",
+      "schema": "integer"
+    },
+    {
+      "@type": "Property",
+      "name": "HotelID",
+      "schema": "string",
+      "comment": "@R1"
+    },
+    {
+      "@type": "Property",
+      "name": "RoomID",
+      "schema": "string",
+      "comment": "@I0"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:LaundromatInHotel:R1_Hotel;1",
+      "name": "R1_Hotel",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:LaundromatInHotel:Hotel;1"
+    }
+  ]
+}
