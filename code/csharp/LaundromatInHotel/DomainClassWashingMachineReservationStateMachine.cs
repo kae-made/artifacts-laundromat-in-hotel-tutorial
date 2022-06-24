@@ -169,13 +169,10 @@ namespace LaundromatInHotel
         protected DomainClassWashingMachineReservation target;
 
         public DomainClassWashingMachineReservationStateMachine(DomainClassWashingMachineReservation target) : base(0)
-        {
-            this.target = target;
-        }
-
 DomainClassWashingMachineReservationStateMachine(DomainClassWashingMachineReservation target) : base(1)
         {
             this.target = target;
+            this.stateTransition = this;
         }
 
         protected int[,] stateTransitionTable = new int[6, 6]

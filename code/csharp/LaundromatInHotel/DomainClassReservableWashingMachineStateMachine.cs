@@ -74,6 +74,7 @@ namespace LaundromatInHotel
         public DomainClassReservableWashingMachineStateMachine(DomainClassReservableWashingMachine target) : base(1)
         {
             this.target = target;
+            this.stateTransition = this;
         }
 
         protected int[,] stateTransitionTable = new int[2, 2]

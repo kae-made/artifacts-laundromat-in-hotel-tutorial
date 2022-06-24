@@ -227,6 +227,7 @@ namespace LaundromatInHotel
         public DomainClassDoorwithLockStateMachine(DomainClassDoorwithLock target) : base(1)
         {
             this.target = target;
+            this.stateTransition = this;
         }
 
         protected int[,] stateTransitionTable = new int[12, 8]
