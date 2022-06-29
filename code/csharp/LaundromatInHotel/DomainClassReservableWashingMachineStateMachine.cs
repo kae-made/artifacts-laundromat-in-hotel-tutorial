@@ -36,14 +36,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            ReservableWashingMachine1_Check Create(DomainClassReservableWashingMachine receiver, InstanceRepository instanceRepository=null)
+            ReservableWashingMachine1_Check Create(DomainClassReservableWashingMachine receiver)
             {
                 var newEvent = new ReservableWashingMachine1_Check();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassReservableWashingMachineBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -56,14 +55,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            ReservableWashingMachine2_Reserved Create(DomainClassReservableWashingMachine receiver, InstanceRepository instanceRepository=null)
+            ReservableWashingMachine2_Reserved Create(DomainClassReservableWashingMachine receiver)
             {
                 var newEvent = new ReservableWashingMachine2_Reserved();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassReservableWashingMachineBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }

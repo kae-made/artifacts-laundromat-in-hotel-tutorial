@@ -47,14 +47,13 @@ namespace LaundromatInHotel
 
             public string guestStayId { get; set; }
             public string specId { get; set; }
-            WashingMachineAssigner1_RequestReservation Create(DomainClassWashingMachineAssigner receiver, string guestStayId, string specId, InstanceRepository instanceRepository=null)
+            WashingMachineAssigner1_RequestReservation Create(DomainClassWashingMachineAssigner receiver, string guestStayId, string specId)
             {
                 var newEvent = new WashingMachineAssigner1_RequestReservation() { guestStayId = guestStayId, specId = specId };
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineAssignerBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -68,14 +67,13 @@ namespace LaundromatInHotel
             }
 
             public string reservationId { get; set; }
-            WashingMachineAssigner2_CancelReservation Create(DomainClassWashingMachineAssigner receiver, string reservationId, InstanceRepository instanceRepository=null)
+            WashingMachineAssigner2_CancelReservation Create(DomainClassWashingMachineAssigner receiver, string reservationId)
             {
                 var newEvent = new WashingMachineAssigner2_CancelReservation() { reservationId = reservationId };
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineAssignerBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }

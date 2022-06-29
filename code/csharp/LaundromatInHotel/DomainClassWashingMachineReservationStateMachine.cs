@@ -53,10 +53,10 @@ namespace LaundromatInHotel
             public string specId { get; set; }
             public string guestStayId { get; set; }
             public DateTime reservationTime { get; set; }
-            WashingMachineReservation1_TryToReserve Create(DomainClassWashingMachineReservation receiver, string specId, string guestStayId, DateTime reservationTime, InstanceRepository instanceRepository=null)
+            WashingMachineReservation1_TryToReserve Create(DomainClassWashingMachineReservation receiver, string specId, string guestStayId, DateTime reservationTime, InstanceRepository instanceRepository)
             {
                 var newEvent = new WashingMachineReservation1_TryToReserve() { specId = specId, guestStayId = guestStayId, reservationTime = reservationTime };
-                if (receiver == null && instanceRepository !=null)
+                if (receiver == null && instanceRepository != null)
                 {
                     receiver = DomainClassWashingMachineReservationBase.CreateInstance(instanceRepository);
                 }
@@ -73,14 +73,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachineReservation2_Assigned Create(DomainClassWashingMachineReservation receiver, InstanceRepository instanceRepository=null)
+            WashingMachineReservation2_Assigned Create(DomainClassWashingMachineReservation receiver)
             {
                 var newEvent = new WashingMachineReservation2_Assigned();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineReservationBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -93,14 +92,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachineReservation3_PreAlarmIsTimeUp Create(DomainClassWashingMachineReservation receiver, InstanceRepository instanceRepository=null)
+            WashingMachineReservation3_PreAlarmIsTimeUp Create(DomainClassWashingMachineReservation receiver)
             {
                 var newEvent = new WashingMachineReservation3_PreAlarmIsTimeUp();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineReservationBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -113,14 +111,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachineReservation4_TimeIsUp Create(DomainClassWashingMachineReservation receiver, InstanceRepository instanceRepository=null)
+            WashingMachineReservation4_TimeIsUp Create(DomainClassWashingMachineReservation receiver)
             {
                 var newEvent = new WashingMachineReservation4_TimeIsUp();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineReservationBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -133,14 +130,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachineReservation5_Canceled Create(DomainClassWashingMachineReservation receiver, InstanceRepository instanceRepository=null)
+            WashingMachineReservation5_Canceled Create(DomainClassWashingMachineReservation receiver)
             {
                 var newEvent = new WashingMachineReservation5_Canceled();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineReservationBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -153,14 +149,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachineReservation6_Rejected Create(DomainClassWashingMachineReservation receiver, InstanceRepository instanceRepository=null)
+            WashingMachineReservation6_Rejected Create(DomainClassWashingMachineReservation receiver)
             {
                 var newEvent = new WashingMachineReservation6_Rejected();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineReservationBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -169,7 +164,6 @@ namespace LaundromatInHotel
         protected DomainClassWashingMachineReservation target;
 
         public DomainClassWashingMachineReservationStateMachine(DomainClassWashingMachineReservation target) : base(0)
-DomainClassWashingMachineReservationStateMachine(DomainClassWashingMachineReservation target) : base(1)
         {
             this.target = target;
             this.stateTransition = this;

@@ -46,14 +46,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine1_AssignedGuest Create(DomainClassWashingMachine receiver, InstanceRepository instanceRepository=null)
+            WashingMachine1_AssignedGuest Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine1_AssignedGuest();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -66,14 +65,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine3_DoneWashing Create(DomainClassWashingMachine receiver, InstanceRepository instanceRepository=null)
+            WashingMachine3_DoneWashing Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine3_DoneWashing();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -86,14 +84,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine5_DoneDrying Create(DomainClassWashingMachine receiver, InstanceRepository instanceRepository=null)
+            WashingMachine5_DoneDrying Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine5_DoneDrying();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -106,14 +103,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine6_StartTaking Create(DomainClassWashingMachine receiver, InstanceRepository instanceRepository=null)
+            WashingMachine6_StartTaking Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine6_StartTaking();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -126,14 +122,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine7_TakenOut Create(DomainClassWashingMachine receiver, InstanceRepository instanceRepository=null)
+            WashingMachine7_TakenOut Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine7_TakenOut();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -146,14 +141,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine8_Interupted Create(DomainClassWashingMachine receiver, InstanceRepository instanceRepository=null)
+            WashingMachine8_Interupted Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine8_Interupted();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -166,14 +160,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine9_InteruptActionCompleted Create(DomainClassWashingMachine receiver, InstanceRepository instanceRepository=null)
+            WashingMachine9_InteruptActionCompleted Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine9_InteruptActionCompleted();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassWashingMachineBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }

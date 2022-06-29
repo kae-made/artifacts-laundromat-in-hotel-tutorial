@@ -66,14 +66,13 @@ namespace LaundromatInHotel
             }
 
             public string cardKeyId { get; set; }
-            DoorwithLock1_TouchCardKey Create(DomainClassDoorwithLock receiver, string cardKeyId, InstanceRepository instanceRepository=null)
+            DoorwithLock1_TouchCardKey Create(DomainClassDoorwithLock receiver, string cardKeyId)
             {
                 var newEvent = new DoorwithLock1_TouchCardKey() { cardKeyId = cardKeyId };
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassDoorwithLockBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -86,14 +85,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            DoorwithLock2_DoorClosed Create(DomainClassDoorwithLock receiver, InstanceRepository instanceRepository=null)
+            DoorwithLock2_DoorClosed Create(DomainClassDoorwithLock receiver)
             {
                 var newEvent = new DoorwithLock2_DoorClosed();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassDoorwithLockBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -106,14 +104,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            DoorwithLock3_DoorOpened Create(DomainClassDoorwithLock receiver, InstanceRepository instanceRepository=null)
+            DoorwithLock3_DoorOpened Create(DomainClassDoorwithLock receiver)
             {
                 var newEvent = new DoorwithLock3_DoorOpened();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassDoorwithLockBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -127,14 +124,13 @@ namespace LaundromatInHotel
             }
 
             public string pinCode { get; set; }
-            DoorwithLock4_SetPINCode Create(DomainClassDoorwithLock receiver, string pinCode, InstanceRepository instanceRepository=null)
+            DoorwithLock4_SetPINCode Create(DomainClassDoorwithLock receiver, string pinCode)
             {
                 var newEvent = new DoorwithLock4_SetPINCode() { pinCode = pinCode };
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassDoorwithLockBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -147,14 +143,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            DoorwithLock5_ValidatedUser Create(DomainClassDoorwithLock receiver, InstanceRepository instanceRepository=null)
+            DoorwithLock5_ValidatedUser Create(DomainClassDoorwithLock receiver)
             {
                 var newEvent = new DoorwithLock5_ValidatedUser();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassDoorwithLockBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -167,14 +162,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            DoorwithLock6_JudgedAsImproper Create(DomainClassDoorwithLock receiver, InstanceRepository instanceRepository=null)
+            DoorwithLock6_JudgedAsImproper Create(DomainClassDoorwithLock receiver)
             {
                 var newEvent = new DoorwithLock6_JudgedAsImproper();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassDoorwithLockBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -189,14 +183,13 @@ namespace LaundromatInHotel
 
             public string specId { get; set; }
             public string guestStayId { get; set; }
-            DoorwithLock7_EnterSpec Create(DomainClassDoorwithLock receiver, string specId, string guestStayId, InstanceRepository instanceRepository=null)
+            DoorwithLock7_EnterSpec Create(DomainClassDoorwithLock receiver, string specId, string guestStayId)
             {
                 var newEvent = new DoorwithLock7_EnterSpec() { specId = specId, guestStayId = guestStayId };
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassDoorwithLockBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
@@ -209,14 +202,13 @@ namespace LaundromatInHotel
                 ;
             }
 
-            DoorwithLock8_UnlockedAllowed Create(DomainClassDoorwithLock receiver, InstanceRepository instanceRepository=null)
+            DoorwithLock8_UnlockedAllowed Create(DomainClassDoorwithLock receiver)
             {
                 var newEvent = new DoorwithLock8_UnlockedAllowed();
-                if (receiver == null && instanceRepository !=null)
+                if (receiver != null)
                 {
-                    receiver = DomainClassDoorwithLockBase.CreateInstance(instanceRepository);
+                    receiver.TakeEvent(newEvent);
                 }
-                receiver.TakeEvent(newEvent);
 
                 return newEvent;
             }
