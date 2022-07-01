@@ -143,6 +143,16 @@ namespace LaundromatInHotel
             }
             return result;
         }
+        DomainClassNonReservationWashingMachine LinkedR15NonReservationWashingMachine()
+        {
+            return (DomainClassNonReservationWashingMachine)GetSubR15();
+        }
+
+        DomainClassReservableWashingMachine LinkedR15ReservableWashingMachine()
+        {
+            return (DomainClassReservableWashingMachine)GetSubR15();
+        }
+
         public DomainClassWashingMachineinUse LinkedR18OtherIsUsedBy()
         {
             var candidates = instanceRepository.GetDomainInstances("WashingMachineinUse").Where(inst=>(this.Attr_MachineID==((DomainClassWashingMachineinUse)inst).Attr_MachineID));

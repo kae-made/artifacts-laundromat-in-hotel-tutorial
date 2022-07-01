@@ -40,7 +40,9 @@ namespace LaundromatInHotel
         DomainClassWorkingSpec LinkedR8OtherAvailableSpec();
 
         DomainClassWashingMachineinUse LinkedR9();
+
         IEnumerable<DomainClassWashingMachineReservation> LinkedR13();
+
     }
 
     public interface DomainClassCardKey : DomainClassDef
@@ -65,11 +67,17 @@ namespace LaundromatInHotel
         void TakeEvent(EventData domainEvent);
 
         DomainClassWashingMachine LinkedR14();
+
         void Unlock();
+
         void Close();
+
         void Lock();
+
         void RequestPINCode();
+
         void RequestCardKey();
+
     }
 
     public interface DomainClassGuest : DomainClassDef
@@ -99,6 +107,7 @@ namespace LaundromatInHotel
         DomainClassHotel LinkedR3();
 
         DomainClassGuestStay LinkedR4();
+
     }
 
     public interface DomainClassGuestStay : DomainClassDef
@@ -114,10 +123,15 @@ namespace LaundromatInHotel
         DomainClassGuestRoom LinkedR4IsAssignedFor();
 
         IEnumerable<DomainClassGuest> LinkedR5();
+
         DomainClassCardKey LinkedR6();
+
         DomainClassWashingMachineReservation LinkedR12RequestOfReservation();
+
         IEnumerable<DomainClassWashingMachineinUse> LinkedR18OneIsUsing();
+
         void Notify(DomainTypeNotificationForGuestStay topic);
+
     }
 
     public interface DomainClassHotel : DomainClassDef
@@ -126,9 +140,13 @@ namespace LaundromatInHotel
         string Attr_Name { get; set; }
 
         IEnumerable<DomainClassLaundromatRoom> LinkedR1ProvideLaundromantService();
+
         IEnumerable<DomainClassGuestRoom> LinkedR3ProvideAsGuestStayingService();
+
         DomainClassWashingMachineAssigner LinkedR10ResponsibleForAssignment();
+
         void Support(string message);
+
     }
 
     public interface DomainClassLaundromatRoom : DomainClassDef
@@ -143,6 +161,7 @@ namespace LaundromatInHotel
         DomainClassHotel LinkedR1();
 
         IEnumerable<DomainClassWashingMachine> LinkedR2();
+
     }
 
     public interface DomainClassNonReservationWashingMachine : DomainClassDef, SubClassR15
@@ -194,12 +213,23 @@ namespace LaundromatInHotel
         DomainClassDoorwithLock LinkedR14FrontDoor();
 
         IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8OneAvailableSpec();
+
         SubClassR15 GetSubR15();
+
+        DomainClassNonReservationWashingMachine LinkedR15NonReservationWashingMachine();
+
+        DomainClassReservableWashingMachine LinkedR15ReservableWashingMachine();
+
         DomainClassWashingMachineinUse LinkedR18OtherIsUsedBy();
+
         bool IsAvailable();
+
         void StopExecution();
+
         void StartWashing(int timeInMinutes);
+
         void StartDrying(int timeInMinutes);
+
     }
 
     public interface DomainClassWashingMachineAssigner : DomainClassDef
@@ -215,6 +245,7 @@ namespace LaundromatInHotel
         DomainClassHotel LinkedR10();
 
         IEnumerable<DomainClassAvailableWorkingSpec> LinkedR11AssigningTarget();
+
     }
 
     public interface DomainClassWashingMachineinUse : DomainClassDef
@@ -263,7 +294,9 @@ namespace LaundromatInHotel
         DomainClassWashingMachineReservation LinkedR17Successor();
 
         DomainClassWashingMachineReservation LinkedR17Predecessor();
+
         DomainClassReservableWashingMachine LinkedR19();
+
     }
 
     public interface DomainClassWorkingSpec : DomainClassDef
@@ -275,5 +308,6 @@ namespace LaundromatInHotel
         int Attr_Price { get; set; }
 
         IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8Other();
+
     }
 }
