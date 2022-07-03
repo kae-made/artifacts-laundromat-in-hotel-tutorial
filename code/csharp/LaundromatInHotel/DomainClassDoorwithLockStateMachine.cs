@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
+using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
@@ -215,11 +216,13 @@ namespace LaundromatInHotel
         }
 
         protected DomainClassDoorwithLock target;
+        protected Logger logger;
 
-        public DomainClassDoorwithLockStateMachine(DomainClassDoorwithLock target) : base(1)
+        public DomainClassDoorwithLockStateMachine(DomainClassDoorwithLock target, Logger logger) : base(1)
         {
             this.target = target;
             this.stateTransition = this;
+            this.logger = logger;
         }
 
         protected int[,] stateTransitionTable = new int[12, 8]
@@ -245,6 +248,7 @@ namespace LaundromatInHotel
 
         protected override void RunEntryAction(int nextState, EventData eventData)
         {
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={target.Attr_DoorID}):entering[current={CurrentState},event={eventData.EventNumber},to={nextState}]");
             switch (nextState)
             {
             case (int)States.Locked:
@@ -284,6 +288,7 @@ namespace LaundromatInHotel
                 ActionUnlockAvailabled();
                 break;
             }
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={target.Attr_DoorID}):entered[current={CurrentState},event={eventData.EventNumber},to={nextState}]");
         }
     }
 }

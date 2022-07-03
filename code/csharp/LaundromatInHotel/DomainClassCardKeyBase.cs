@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
+using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
@@ -20,18 +21,21 @@ namespace LaundromatInHotel
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
+        protected Logger logger;
 
-        public static DomainClassCardKeyBase CreateInstance(InstanceRepository instanceRepository)
+        public static DomainClassCardKeyBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
         {
-            var newInstance = new DomainClassCardKeyBase(instanceRepository);
+            var newInstance = new DomainClassCardKeyBase(instanceRepository, logger);
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={newInstance.Attr_CardKeyID}):create");
             instanceRepository.Add(newInstance);
 
             return newInstance;
         }
 
-        public DomainClassCardKeyBase(InstanceRepository instanceRepository)
+        public DomainClassCardKeyBase(InstanceRepository instanceRepository, Logger logger)
         {
             this.instanceRepository = instanceRepository;
+            this.logger = logger;
             attr_CardKeyID = Guid.NewGuid().ToString();
         }
 
@@ -59,6 +63,8 @@ namespace LaundromatInHotel
             if (relR6GuestStayIsAssignedAsKeyFor == null)
             {
                 this.attr_GuestStayID = instance.Attr_GuestStayID;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={this.Attr_CardKeyID}):linked[from(GuestStay(GuestStayID={instance.Attr_GuestStayID}))]");
                 result = true;
             }
             return result;
@@ -70,6 +76,8 @@ namespace LaundromatInHotel
             {
                 this.attr_GuestStayID = null;
                 relR6GuestStayIsAssignedAsKeyFor = null;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={this.Attr_CardKeyID}):unlinked[from(GuestStay(GuestStayID={instance.Attr_GuestStayID}))]");
                 result = true;
             }
             return result;
@@ -87,6 +95,7 @@ namespace LaundromatInHotel
 
         public void Dispose()
         {
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={this.Attr_CardKeyID}):delete");
             instanceRepository.Delete(this);
         }
     }

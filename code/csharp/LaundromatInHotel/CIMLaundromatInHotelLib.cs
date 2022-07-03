@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
@@ -18,6 +19,8 @@ namespace LaundromatInHotel
     {
         protected InstanceRepository instanceRepository = new InstanceRepository();
         public static readonly string DomainName = "LaundromatInHotel";
+
+        public Logger Logger { get; set; }
 
         public InstanceRepository InstanceRepository { get { return instanceRepository; } }
 

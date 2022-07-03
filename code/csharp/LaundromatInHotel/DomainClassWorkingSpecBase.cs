@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
+using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
@@ -20,18 +21,21 @@ namespace LaundromatInHotel
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
+        protected Logger logger;
 
-        public static DomainClassWorkingSpecBase CreateInstance(InstanceRepository instanceRepository)
+        public static DomainClassWorkingSpecBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
         {
-            var newInstance = new DomainClassWorkingSpecBase(instanceRepository);
+            var newInstance = new DomainClassWorkingSpecBase(instanceRepository, logger);
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WorkingSpec(WorkingSpecID={newInstance.Attr_WorkingSpecID}):create");
             instanceRepository.Add(newInstance);
 
             return newInstance;
         }
 
-        public DomainClassWorkingSpecBase(InstanceRepository instanceRepository)
+        public DomainClassWorkingSpecBase(InstanceRepository instanceRepository, Logger logger)
         {
             this.instanceRepository = instanceRepository;
+            this.logger = logger;
             attr_WorkingSpecID = Guid.NewGuid().ToString();
         }
 
@@ -71,6 +75,7 @@ namespace LaundromatInHotel
 
         public void Dispose()
         {
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WorkingSpec(WorkingSpecID={this.Attr_WorkingSpecID}):delete");
             instanceRepository.Delete(this);
         }
     }

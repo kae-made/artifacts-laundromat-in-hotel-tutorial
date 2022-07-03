@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
+using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
@@ -20,20 +21,23 @@ namespace LaundromatInHotel
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
+        protected Logger logger;
 
-        public static DomainClassDoorwithLockBase CreateInstance(InstanceRepository instanceRepository)
+        public static DomainClassDoorwithLockBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
         {
-            var newInstance = new DomainClassDoorwithLockBase(instanceRepository);
+            var newInstance = new DomainClassDoorwithLockBase(instanceRepository, logger);
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={newInstance.Attr_DoorID}):create");
             instanceRepository.Add(newInstance);
 
             return newInstance;
         }
 
-        public DomainClassDoorwithLockBase(InstanceRepository instanceRepository)
+        public DomainClassDoorwithLockBase(InstanceRepository instanceRepository, Logger logger)
         {
             this.instanceRepository = instanceRepository;
+            this.logger = logger;
             attr_DoorID = Guid.NewGuid().ToString();
-            stateMachine = new DomainClassDoorwithLockStateMachine(this);
+            stateMachine = new DomainClassDoorwithLockStateMachine(this, logger);
         }
 
         string attr_DoorID;
@@ -56,6 +60,7 @@ namespace LaundromatInHotel
         public void TakeEvent(EventData domainEvent)
         {
             stateMachine.ReceivedEvent(domainEvent).Wait();
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={this.Attr_DoorID}):takeEvent({domainEvent.EventNumber})");
         }
 
         
@@ -72,6 +77,7 @@ namespace LaundromatInHotel
 
         public void Dispose()
         {
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={this.Attr_DoorID}):delete");
             instanceRepository.Delete(this);
         }
     }

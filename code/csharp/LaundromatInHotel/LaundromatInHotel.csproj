@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Kae.StateMachine" Version="0.0.1" />
+    <PackageReference Include="Kae.Utility.Logging" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

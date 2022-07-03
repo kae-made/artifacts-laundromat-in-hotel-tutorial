@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
+using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
@@ -173,11 +174,13 @@ namespace LaundromatInHotel
         }
 
         protected DomainClassWashingMachine target;
+        protected Logger logger;
 
-        public DomainClassWashingMachineStateMachine(DomainClassWashingMachine target) : base(1)
+        public DomainClassWashingMachineStateMachine(DomainClassWashingMachine target, Logger logger) : base(1)
         {
             this.target = target;
             this.stateTransition = this;
+            this.logger = logger;
         }
 
         protected int[,] stateTransitionTable = new int[7, 7]
@@ -198,6 +201,7 @@ namespace LaundromatInHotel
 
         protected override void RunEntryAction(int nextState, EventData eventData)
         {
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={target.Attr_MachineID}):entering[current={CurrentState},event={eventData.EventNumber},to={nextState}]");
             switch (nextState)
             {
             case (int)States.Standby:
@@ -222,6 +226,7 @@ namespace LaundromatInHotel
                 ActionInterupted();
                 break;
             }
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={target.Attr_MachineID}):entered[current={CurrentState},event={eventData.EventNumber},to={nextState}]");
         }
     }
 }

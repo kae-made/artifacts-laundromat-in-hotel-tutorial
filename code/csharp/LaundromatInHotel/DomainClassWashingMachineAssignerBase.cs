@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
+using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
@@ -20,19 +21,22 @@ namespace LaundromatInHotel
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
+        protected Logger logger;
 
-        public static DomainClassWashingMachineAssignerBase CreateInstance(InstanceRepository instanceRepository)
+        public static DomainClassWashingMachineAssignerBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
         {
-            var newInstance = new DomainClassWashingMachineAssignerBase(instanceRepository);
+            var newInstance = new DomainClassWashingMachineAssignerBase(instanceRepository, logger);
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineAssigner(HotelID={newInstance.Attr_HotelID}):create");
             instanceRepository.Add(newInstance);
 
             return newInstance;
         }
 
-        public DomainClassWashingMachineAssignerBase(InstanceRepository instanceRepository)
+        public DomainClassWashingMachineAssignerBase(InstanceRepository instanceRepository, Logger logger)
         {
             this.instanceRepository = instanceRepository;
-            stateMachine = new DomainClassWashingMachineAssignerStateMachine(this);
+            this.logger = logger;
+            stateMachine = new DomainClassWashingMachineAssignerStateMachine(this, logger);
         }
 
         string attr_HotelID;
@@ -61,6 +65,8 @@ namespace LaundromatInHotel
             if (relR10Hotel == null)
             {
                 this.attr_HotelID = instance.Attr_HotelID;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineAssigner(HotelID={this.Attr_HotelID}):linked[from(Hotel(HotelID={instance.Attr_HotelID}))]");
                 result = true;
             }
             return result;
@@ -72,6 +78,8 @@ namespace LaundromatInHotel
             {
                 this.attr_HotelID = null;
                 relR10Hotel = null;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineAssigner(HotelID={this.Attr_HotelID}):unlinked[from(Hotel(HotelID={instance.Attr_HotelID}))]");
                 result = true;
             }
             return result;
@@ -90,6 +98,7 @@ namespace LaundromatInHotel
         public void TakeEvent(EventData domainEvent)
         {
             stateMachine.ReceivedEvent(domainEvent).Wait();
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineAssigner(HotelID={this.Attr_HotelID}):takeEvent({domainEvent.EventNumber})");
         }
 
         
@@ -110,6 +119,7 @@ namespace LaundromatInHotel
 
         public void Dispose()
         {
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineAssigner(HotelID={this.Attr_HotelID}):delete");
             instanceRepository.Delete(this);
         }
     }

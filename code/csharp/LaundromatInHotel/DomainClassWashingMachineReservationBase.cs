@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
+using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
@@ -20,20 +21,23 @@ namespace LaundromatInHotel
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
+        protected Logger logger;
 
-        public static DomainClassWashingMachineReservationBase CreateInstance(InstanceRepository instanceRepository)
+        public static DomainClassWashingMachineReservationBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
         {
-            var newInstance = new DomainClassWashingMachineReservationBase(instanceRepository);
+            var newInstance = new DomainClassWashingMachineReservationBase(instanceRepository, logger);
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={newInstance.Attr_ReservationID}):create");
             instanceRepository.Add(newInstance);
 
             return newInstance;
         }
 
-        public DomainClassWashingMachineReservationBase(InstanceRepository instanceRepository)
+        public DomainClassWashingMachineReservationBase(InstanceRepository instanceRepository, Logger logger)
         {
             this.instanceRepository = instanceRepository;
+            this.logger = logger;
             attr_ReservationID = Guid.NewGuid().ToString();
-            stateMachine = new DomainClassWashingMachineReservationStateMachine(this);
+            stateMachine = new DomainClassWashingMachineReservationStateMachine(this, logger);
         }
 
         string attr_ReservationID;
@@ -78,6 +82,8 @@ namespace LaundromatInHotel
             if (relR12GuestStayReservationOwner == null)
             {
                 this.attr_GuestStayID = instance.Attr_GuestStayID;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={this.Attr_ReservationID}):linked[from(GuestStay(GuestStayID={instance.Attr_GuestStayID}))]");
                 result = true;
             }
             return result;
@@ -89,6 +95,8 @@ namespace LaundromatInHotel
             {
                 this.attr_GuestStayID = null;
                 relR12GuestStayReservationOwner = null;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={this.Attr_ReservationID}):unlinked[from(GuestStay(GuestStayID={instance.Attr_GuestStayID}))]");
                 result = true;
             }
             return result;
@@ -110,6 +118,8 @@ namespace LaundromatInHotel
             {
                 this.attr_WorkingSpecID = instance.Attr_WorkingSpecID;
                 this.attr_MachineID = instance.Attr_MachineID;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={this.Attr_ReservationID}):linked[from(AvailableWorkingSpec(MachineID={instance.Attr_MachineID},WorkingSpecID={instance.Attr_WorkingSpecID}))]");
                 result = true;
             }
             return result;
@@ -122,6 +132,8 @@ namespace LaundromatInHotel
                 this.attr_WorkingSpecID = null;
                 this.attr_MachineID = null;
                 relR13AvailableWorkingSpecTarget = null;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={this.Attr_ReservationID}):unlinked[from(AvailableWorkingSpec(MachineID={instance.Attr_MachineID},WorkingSpecID={instance.Attr_WorkingSpecID}))]");
                 result = true;
             }
             return result;
@@ -142,6 +154,8 @@ namespace LaundromatInHotel
             if (relR17WashingMachineReservationSuccessor == null)
             {
                 this.attr_successor_ReservationID = instance.Attr_ReservationID;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={this.Attr_ReservationID}):linked[from(WashingMachineReservation(ReservationID={instance.Attr_ReservationID}))]");
                 result = true;
             }
             return result;
@@ -153,6 +167,8 @@ namespace LaundromatInHotel
             {
                 this.attr_successor_ReservationID = null;
                 relR17WashingMachineReservationSuccessor = null;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={this.Attr_ReservationID}):unlinked[from(WashingMachineReservation(ReservationID={instance.Attr_ReservationID}))]");
                 result = true;
             }
             return result;
@@ -171,6 +187,7 @@ namespace LaundromatInHotel
         public void TakeEvent(EventData domainEvent)
         {
             stateMachine.ReceivedEvent(domainEvent).Wait();
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={this.Attr_ReservationID}):takeEvent({domainEvent.EventNumber})");
         }
 
         
@@ -190,6 +207,7 @@ namespace LaundromatInHotel
 
         public void Dispose()
         {
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={this.Attr_ReservationID}):delete");
             instanceRepository.Delete(this);
         }
     }

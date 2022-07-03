@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
+using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
@@ -20,18 +21,21 @@ namespace LaundromatInHotel
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
+        protected Logger logger;
 
-        public static DomainClassNonReservationWashingMachineBase CreateInstance(InstanceRepository instanceRepository)
+        public static DomainClassNonReservationWashingMachineBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
         {
-            var newInstance = new DomainClassNonReservationWashingMachineBase(instanceRepository);
+            var newInstance = new DomainClassNonReservationWashingMachineBase(instanceRepository, logger);
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:NonReservationWashingMachine(MachineID={newInstance.Attr_MachineID}):create");
             instanceRepository.Add(newInstance);
 
             return newInstance;
         }
 
-        public DomainClassNonReservationWashingMachineBase(InstanceRepository instanceRepository)
+        public DomainClassNonReservationWashingMachineBase(InstanceRepository instanceRepository, Logger logger)
         {
             this.instanceRepository = instanceRepository;
+            this.logger = logger;
         }
 
         string attr_MachineID;
@@ -55,6 +59,7 @@ namespace LaundromatInHotel
             if (relR15WashingMachine == null)
             {
                 this.attr_MachineID = instance.Attr_MachineID;
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:NonReservationWashingMachine(MachineID={this.Attr_MachineID}):linked[super(WashingMachine(MachineID={instance.Attr_MachineID}))]");
                 result = true;
             }
             return result;
@@ -66,6 +71,8 @@ namespace LaundromatInHotel
             {
                 this.attr_MachineID = null;
                 relR15WashingMachine = null;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:NonReservationWashingMachine(MachineID={this.Attr_MachineID}):unlinked[super(WashingMachine(MachineID={instance.Attr_MachineID}))]");
                 result = true;
             }
             return result;
@@ -84,6 +91,7 @@ namespace LaundromatInHotel
 
         public void Dispose()
         {
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:NonReservationWashingMachine(MachineID={this.Attr_MachineID}):delete");
             instanceRepository.Delete(this);
         }
     }

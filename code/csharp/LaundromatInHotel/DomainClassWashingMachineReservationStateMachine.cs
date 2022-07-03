@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
+using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
@@ -53,12 +54,12 @@ namespace LaundromatInHotel
             public string specId { get; set; }
             public string guestStayId { get; set; }
             public DateTime reservationTime { get; set; }
-            WashingMachineReservation1_TryToReserve Create(DomainClassWashingMachineReservation receiver, string specId, string guestStayId, DateTime reservationTime, InstanceRepository instanceRepository)
+            WashingMachineReservation1_TryToReserve Create(DomainClassWashingMachineReservation receiver, string specId, string guestStayId, DateTime reservationTime, InstanceRepository instanceRepository, Logger logger)
             {
                 var newEvent = new WashingMachineReservation1_TryToReserve() { specId = specId, guestStayId = guestStayId, reservationTime = reservationTime };
                 if (receiver == null && instanceRepository != null)
                 {
-                    receiver = DomainClassWashingMachineReservationBase.CreateInstance(instanceRepository);
+                    receiver = DomainClassWashingMachineReservationBase.CreateInstance(instanceRepository, logger);
                 }
                 receiver.TakeEvent(newEvent);
 
@@ -162,11 +163,13 @@ namespace LaundromatInHotel
         }
 
         protected DomainClassWashingMachineReservation target;
+        protected Logger logger;
 
-        public DomainClassWashingMachineReservationStateMachine(DomainClassWashingMachineReservation target) : base(0)
+        public DomainClassWashingMachineReservationStateMachine(DomainClassWashingMachineReservation target, Logger logger) : base(0)
         {
             this.target = target;
             this.stateTransition = this;
+            this.logger = logger;
         }
 
         protected int[,] stateTransitionTable = new int[6, 6]
@@ -186,6 +189,7 @@ namespace LaundromatInHotel
 
         protected override void RunEntryAction(int nextState, EventData eventData)
         {
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={target.Attr_ReservationID}):entering[current={CurrentState},event={eventData.EventNumber},to={nextState}]");
             switch (nextState)
             {
             case (int)States.WaitForAssignment:
@@ -207,6 +211,7 @@ namespace LaundromatInHotel
                 ActionNoWashingMachine();
                 break;
             }
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={target.Attr_ReservationID}):entered[current={CurrentState},event={eventData.EventNumber},to={nextState}]");
         }
     }
 }

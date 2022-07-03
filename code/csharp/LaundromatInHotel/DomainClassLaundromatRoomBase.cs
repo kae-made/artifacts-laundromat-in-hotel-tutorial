@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
+using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
@@ -20,18 +21,21 @@ namespace LaundromatInHotel
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
+        protected Logger logger;
 
-        public static DomainClassLaundromatRoomBase CreateInstance(InstanceRepository instanceRepository)
+        public static DomainClassLaundromatRoomBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
         {
-            var newInstance = new DomainClassLaundromatRoomBase(instanceRepository);
+            var newInstance = new DomainClassLaundromatRoomBase(instanceRepository, logger);
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:LaundromatRoom(RoomID={newInstance.Attr_RoomID}):create");
             instanceRepository.Add(newInstance);
 
             return newInstance;
         }
 
-        public DomainClassLaundromatRoomBase(InstanceRepository instanceRepository)
+        public DomainClassLaundromatRoomBase(InstanceRepository instanceRepository, Logger logger)
         {
             this.instanceRepository = instanceRepository;
+            this.logger = logger;
             attr_RoomID = Guid.NewGuid().ToString();
         }
 
@@ -63,6 +67,8 @@ namespace LaundromatInHotel
             if (relR1Hotel == null)
             {
                 this.attr_HotelID = instance.Attr_HotelID;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:LaundromatRoom(RoomID={this.Attr_RoomID}):linked[from(Hotel(HotelID={instance.Attr_HotelID}))]");
                 result = true;
             }
             return result;
@@ -74,6 +80,8 @@ namespace LaundromatInHotel
             {
                 this.attr_HotelID = null;
                 relR1Hotel = null;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:LaundromatRoom(RoomID={this.Attr_RoomID}):unlinked[from(Hotel(HotelID={instance.Attr_HotelID}))]");
                 result = true;
             }
             return result;
@@ -107,6 +115,7 @@ namespace LaundromatInHotel
 
         public void Dispose()
         {
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:LaundromatRoom(RoomID={this.Attr_RoomID}):delete");
             instanceRepository.Delete(this);
         }
     }
