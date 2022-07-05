@@ -27,6 +27,7 @@ namespace LaundromatInHotel
         {
             var newInstance = new DomainClassDoorwithLockBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={newInstance.Attr_DoorID}):create");
+
             instanceRepository.Add(newInstance);
 
             return newInstance;
@@ -78,6 +79,7 @@ namespace LaundromatInHotel
         public void Dispose()
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={this.Attr_DoorID}):delete");
+
             instanceRepository.Delete(this);
         }
     }

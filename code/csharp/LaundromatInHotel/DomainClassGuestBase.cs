@@ -27,6 +27,7 @@ namespace LaundromatInHotel
         {
             var newInstance = new DomainClassGuestBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Guest(GuestID={newInstance.Attr_GuestID}):create");
+
             instanceRepository.Add(newInstance);
 
             return newInstance;
@@ -68,7 +69,8 @@ namespace LaundromatInHotel
             {
                 this.attr_GuestStayId = instance.Attr_GuestStayID;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Guest(GuestID={this.Attr_GuestID}):linked[from(GuestStay(GuestStayID={instance.Attr_GuestStayID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Guest(GuestID={this.Attr_GuestID}):link[GuestStay(GuestStayID={instance.Attr_GuestStayID})]");
+
                 result = true;
             }
             return result;
@@ -81,7 +83,9 @@ namespace LaundromatInHotel
                 this.attr_GuestStayId = null;
                 relR5GuestStayHaveTheRightToUse = null;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Guest(GuestID={this.Attr_GuestID}):unlinked[from(GuestStay(GuestStayID={instance.Attr_GuestStayID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Guest(GuestID={this.Attr_GuestID}):unlink[GuestStay(GuestStayID={instance.Attr_GuestStayID})]");
+
+
                 result = true;
             }
             return result;
@@ -100,6 +104,7 @@ namespace LaundromatInHotel
         public void Dispose()
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Guest(GuestID={this.Attr_GuestID}):delete");
+
             instanceRepository.Delete(this);
         }
     }

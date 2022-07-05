@@ -27,6 +27,7 @@ namespace LaundromatInHotel
         {
             var newInstance = new DomainClassWashingMachineinUseBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineinUse(UseId={newInstance.Attr_UseId}):create");
+
             instanceRepository.Add(newInstance);
 
             return newInstance;
@@ -71,7 +72,8 @@ namespace LaundromatInHotel
                 this.attr_WorkingSpecID = instance.Attr_WorkingSpecID;
                 this.attr_MachineID = instance.Attr_MachineID;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineinUse(UseId={this.Attr_UseId}):linked[from(AvailableWorkingSpec(MachineID={instance.Attr_MachineID},WorkingSpecID={instance.Attr_WorkingSpecID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineinUse(UseId={this.Attr_UseId}):link[AvailableWorkingSpec(MachineID={instance.Attr_MachineID},WorkingSpecID={instance.Attr_WorkingSpecID})]");
+
                 result = true;
             }
             return result;
@@ -85,7 +87,9 @@ namespace LaundromatInHotel
                 this.attr_MachineID = null;
                 relR9AvailableWorkingSpecCurrentSpec = null;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineinUse(UseId={this.Attr_UseId}):unlinked[from(AvailableWorkingSpec(MachineID={instance.Attr_MachineID},WorkingSpecID={instance.Attr_WorkingSpecID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineinUse(UseId={this.Attr_UseId}):unlink[AvailableWorkingSpec(MachineID={instance.Attr_MachineID},WorkingSpecID={instance.Attr_WorkingSpecID})]");
+
+
                 result = true;
             }
             return result;
@@ -97,7 +101,9 @@ namespace LaundromatInHotel
             {
                 this.attr_GuestStayID = oneInstanceIsUsedBy.Attr_GuestStayID;
                 this.attr_MachineID = otherInstanceIsUsing.Attr_MachineID;
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineinUse(UseId={this.Attr_UseId}):linked[one(GuestStay(GuestStayID={relR18GuestStayIsUsedBy.Attr_GuestStayID}))other(Kae.CIM.MetaModel.CIMofCIM.CIMClassO_OBJBase(MachineID={relR18WashingMachineIsUsing.Attr_MachineID}))]");
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineinUse(UseId={this.Attr_UseId}):link[One(GuestStay(GuestStayID={oneInstanceIsUsedBy.Attr_GuestStayID})),Other(WashingMachine(MachineID={otherInstanceIsUsing.Attr_MachineID}))]");
+
                 result = true;
             }
             return result;
@@ -115,7 +121,8 @@ namespace LaundromatInHotel
                     relR18GuestStayIsUsedBy = null;
                     relR18WashingMachineIsUsing = null;
 
-                    if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineinUse(UseId={this.Attr_UseId}):unlinked[one(GuestStay(GuestStayID={relR18GuestStayIsUsedBy.Attr_GuestStayID}))other(Kae.CIM.MetaModel.CIMofCIM.CIMClassO_OBJBase(MachineID={relR18WashingMachineIsUsing.Attr_MachineID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineinUse(UseId={this.Attr_UseId}):unlink[GuestStay(GuestStayID={oneInstanceIsUsedBy.Attr_GuestStayID})]");
+
                     result = true;
                 }
             }
@@ -162,6 +169,7 @@ namespace LaundromatInHotel
         public void Dispose()
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineinUse(UseId={this.Attr_UseId}):delete");
+
             instanceRepository.Delete(this);
         }
     }

@@ -27,6 +27,7 @@ namespace LaundromatInHotel
         {
             var newInstance = new DomainClassHotelBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Hotel(HotelID={newInstance.Attr_HotelID}):create");
+
             instanceRepository.Add(newInstance);
 
             return newInstance;
@@ -85,6 +86,7 @@ namespace LaundromatInHotel
         public void Dispose()
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Hotel(HotelID={this.Attr_HotelID}):delete");
+
             instanceRepository.Delete(this);
         }
     }

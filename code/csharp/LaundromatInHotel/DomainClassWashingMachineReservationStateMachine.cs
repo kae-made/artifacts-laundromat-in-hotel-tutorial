@@ -163,9 +163,8 @@ namespace LaundromatInHotel
         }
 
         protected DomainClassWashingMachineReservation target;
-        protected Logger logger;
 
-        public DomainClassWashingMachineReservationStateMachine(DomainClassWashingMachineReservation target, Logger logger) : base(0)
+        public DomainClassWashingMachineReservationStateMachine(DomainClassWashingMachineReservation target, Logger logger) : base(0, logger)
         {
             this.target = target;
             this.stateTransition = this;
@@ -189,7 +188,8 @@ namespace LaundromatInHotel
 
         protected override void RunEntryAction(int nextState, EventData eventData)
         {
-            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={target.Attr_ReservationID}):entering[current={CurrentState},event={eventData.EventNumber},to={nextState}]");
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={target.Attr_ReservationID}):entering[current={CurrentState},event={eventData.EventNumber}");
+
             switch (nextState)
             {
             case (int)States.WaitForAssignment:
@@ -211,7 +211,8 @@ namespace LaundromatInHotel
                 ActionNoWashingMachine();
                 break;
             }
-            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={target.Attr_ReservationID}):entered[current={CurrentState},event={eventData.EventNumber},to={nextState}]");
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={target.Attr_ReservationID}):entered[current={CurrentState},event={eventData.EventNumber}");
+
         }
     }
 }

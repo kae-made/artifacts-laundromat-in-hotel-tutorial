@@ -216,9 +216,8 @@ namespace LaundromatInHotel
         }
 
         protected DomainClassDoorwithLock target;
-        protected Logger logger;
 
-        public DomainClassDoorwithLockStateMachine(DomainClassDoorwithLock target, Logger logger) : base(1)
+        public DomainClassDoorwithLockStateMachine(DomainClassDoorwithLock target, Logger logger) : base(1, logger)
         {
             this.target = target;
             this.stateTransition = this;
@@ -248,7 +247,8 @@ namespace LaundromatInHotel
 
         protected override void RunEntryAction(int nextState, EventData eventData)
         {
-            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={target.Attr_DoorID}):entering[current={CurrentState},event={eventData.EventNumber},to={nextState}]");
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={target.Attr_DoorID}):entering[current={CurrentState},event={eventData.EventNumber}");
+
             switch (nextState)
             {
             case (int)States.Locked:
@@ -288,7 +288,8 @@ namespace LaundromatInHotel
                 ActionUnlockAvailabled();
                 break;
             }
-            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={target.Attr_DoorID}):entered[current={CurrentState},event={eventData.EventNumber},to={nextState}]");
+            if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={target.Attr_DoorID}):entered[current={CurrentState},event={eventData.EventNumber}");
+
         }
     }
 }

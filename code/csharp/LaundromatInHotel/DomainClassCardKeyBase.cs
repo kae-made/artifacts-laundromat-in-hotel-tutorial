@@ -27,6 +27,7 @@ namespace LaundromatInHotel
         {
             var newInstance = new DomainClassCardKeyBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={newInstance.Attr_CardKeyID}):create");
+
             instanceRepository.Add(newInstance);
 
             return newInstance;
@@ -64,7 +65,8 @@ namespace LaundromatInHotel
             {
                 this.attr_GuestStayID = instance.Attr_GuestStayID;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={this.Attr_CardKeyID}):linked[from(GuestStay(GuestStayID={instance.Attr_GuestStayID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={this.Attr_CardKeyID}):link[GuestStay(GuestStayID={instance.Attr_GuestStayID})]");
+
                 result = true;
             }
             return result;
@@ -77,7 +79,9 @@ namespace LaundromatInHotel
                 this.attr_GuestStayID = null;
                 relR6GuestStayIsAssignedAsKeyFor = null;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={this.Attr_CardKeyID}):unlinked[from(GuestStay(GuestStayID={instance.Attr_GuestStayID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={this.Attr_CardKeyID}):unlink[GuestStay(GuestStayID={instance.Attr_GuestStayID})]");
+
+
                 result = true;
             }
             return result;
@@ -96,6 +100,7 @@ namespace LaundromatInHotel
         public void Dispose()
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={this.Attr_CardKeyID}):delete");
+
             instanceRepository.Delete(this);
         }
     }

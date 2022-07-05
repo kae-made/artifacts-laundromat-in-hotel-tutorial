@@ -27,6 +27,7 @@ namespace LaundromatInHotel
         {
             var newInstance = new DomainClassWashingMachineBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={newInstance.Attr_MachineID}):create");
+
             instanceRepository.Add(newInstance);
 
             return newInstance;
@@ -76,7 +77,8 @@ namespace LaundromatInHotel
             {
                 this.attr_RoomID = instance.Attr_RoomID;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={this.Attr_MachineID}):linked[from(LaundromatRoom(RoomID={instance.Attr_RoomID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={this.Attr_MachineID}):link[LaundromatRoom(RoomID={instance.Attr_RoomID})]");
+
                 result = true;
             }
             return result;
@@ -89,7 +91,9 @@ namespace LaundromatInHotel
                 this.attr_RoomID = null;
                 relR2LaundromatRoomIsSetUpAt = null;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={this.Attr_MachineID}):unlinked[from(LaundromatRoom(RoomID={instance.Attr_RoomID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={this.Attr_MachineID}):unlink[LaundromatRoom(RoomID={instance.Attr_RoomID})]");
+
+
                 result = true;
             }
             return result;
@@ -111,7 +115,8 @@ namespace LaundromatInHotel
             {
                 this.attr_DoorID = instance.Attr_DoorID;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={this.Attr_MachineID}):linked[from(DoorwithLock(DoorID={instance.Attr_DoorID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={this.Attr_MachineID}):link[DoorwithLock(DoorID={instance.Attr_DoorID})]");
+
                 result = true;
             }
             return result;
@@ -124,7 +129,9 @@ namespace LaundromatInHotel
                 this.attr_DoorID = null;
                 relR14DoorwithLockFrontDoor = null;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={this.Attr_MachineID}):unlinked[from(DoorwithLock(DoorID={instance.Attr_DoorID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={this.Attr_MachineID}):unlink[DoorwithLock(DoorID={instance.Attr_DoorID})]");
+
+
                 result = true;
             }
             return result;
@@ -203,6 +210,7 @@ namespace LaundromatInHotel
         public void Dispose()
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={this.Attr_MachineID}):delete");
+
             instanceRepository.Delete(this);
         }
     }

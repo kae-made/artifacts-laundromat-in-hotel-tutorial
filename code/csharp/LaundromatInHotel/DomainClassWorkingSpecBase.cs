@@ -27,6 +27,7 @@ namespace LaundromatInHotel
         {
             var newInstance = new DomainClassWorkingSpecBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WorkingSpec(WorkingSpecID={newInstance.Attr_WorkingSpecID}):create");
+
             instanceRepository.Add(newInstance);
 
             return newInstance;
@@ -76,6 +77,7 @@ namespace LaundromatInHotel
         public void Dispose()
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WorkingSpec(WorkingSpecID={this.Attr_WorkingSpecID}):delete");
+
             instanceRepository.Delete(this);
         }
     }

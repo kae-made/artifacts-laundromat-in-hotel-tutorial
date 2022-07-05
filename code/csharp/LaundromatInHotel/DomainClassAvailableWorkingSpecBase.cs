@@ -27,6 +27,7 @@ namespace LaundromatInHotel
         {
             var newInstance = new DomainClassAvailableWorkingSpecBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:AvailableWorkingSpec(MachineID={newInstance.Attr_MachineID},WorkingSpecID={newInstance.Attr_WorkingSpecID}):create");
+
             instanceRepository.Add(newInstance);
 
             return newInstance;
@@ -69,7 +70,8 @@ namespace LaundromatInHotel
             {
                 this.attr_HotelID = instance.Attr_HotelID;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:AvailableWorkingSpec(MachineID={this.Attr_MachineID},WorkingSpecID={this.Attr_WorkingSpecID}):linked[from(WashingMachineAssigner(HotelID={instance.Attr_HotelID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:AvailableWorkingSpec(MachineID={this.Attr_MachineID},WorkingSpecID={this.Attr_WorkingSpecID}):link[WashingMachineAssigner(HotelID={instance.Attr_HotelID})]");
+
                 result = true;
             }
             return result;
@@ -82,7 +84,9 @@ namespace LaundromatInHotel
                 this.attr_HotelID = null;
                 relR11WashingMachineAssigner = null;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:AvailableWorkingSpec(MachineID={this.Attr_MachineID},WorkingSpecID={this.Attr_WorkingSpecID}):unlinked[from(WashingMachineAssigner(HotelID={instance.Attr_HotelID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:AvailableWorkingSpec(MachineID={this.Attr_MachineID},WorkingSpecID={this.Attr_WorkingSpecID}):unlink[WashingMachineAssigner(HotelID={instance.Attr_HotelID})]");
+
+
                 result = true;
             }
             return result;
@@ -94,7 +98,9 @@ namespace LaundromatInHotel
             {
                 this.attr_MachineID = oneInstance.Attr_MachineID;
                 this.attr_WorkingSpecID = otherInstanceAvailableSpec.Attr_WorkingSpecID;
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:AvailableWorkingSpec(MachineID={this.Attr_MachineID},WorkingSpecID={this.Attr_WorkingSpecID}):linked[one(WashingMachine(MachineID={relR8WashingMachine.Attr_MachineID}))other(Kae.CIM.MetaModel.CIMofCIM.CIMClassO_OBJBase(WorkingSpecID={relR8WorkingSpecAvailableSpec.Attr_WorkingSpecID}))]");
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:AvailableWorkingSpec(MachineID={this.Attr_MachineID},WorkingSpecID={this.Attr_WorkingSpecID}):link[One(WashingMachine(MachineID={oneInstance.Attr_MachineID})),Other(WorkingSpec(WorkingSpecID={otherInstanceAvailableSpec.Attr_WorkingSpecID}))]");
+
                 result = true;
             }
             return result;
@@ -112,7 +118,8 @@ namespace LaundromatInHotel
                     relR8WashingMachine = null;
                     relR8WorkingSpecAvailableSpec = null;
 
-                    if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:AvailableWorkingSpec(MachineID={this.Attr_MachineID},WorkingSpecID={this.Attr_WorkingSpecID}):unlinked[one(WashingMachine(MachineID={relR8WashingMachine.Attr_MachineID}))other(Kae.CIM.MetaModel.CIMofCIM.CIMClassO_OBJBase(WorkingSpecID={relR8WorkingSpecAvailableSpec.Attr_WorkingSpecID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:AvailableWorkingSpec(MachineID={this.Attr_MachineID},WorkingSpecID={this.Attr_WorkingSpecID}):unlink[WashingMachine(MachineID={oneInstance.Attr_MachineID})]");
+
                     result = true;
                 }
             }
@@ -175,6 +182,7 @@ namespace LaundromatInHotel
         public void Dispose()
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:AvailableWorkingSpec(MachineID={this.Attr_MachineID},WorkingSpecID={this.Attr_WorkingSpecID}):delete");
+
             instanceRepository.Delete(this);
         }
     }

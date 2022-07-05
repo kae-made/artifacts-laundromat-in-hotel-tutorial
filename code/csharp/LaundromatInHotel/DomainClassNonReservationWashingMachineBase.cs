@@ -27,6 +27,7 @@ namespace LaundromatInHotel
         {
             var newInstance = new DomainClassNonReservationWashingMachineBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:NonReservationWashingMachine(MachineID={newInstance.Attr_MachineID}):create");
+
             instanceRepository.Add(newInstance);
 
             return newInstance;
@@ -59,7 +60,9 @@ namespace LaundromatInHotel
             if (relR15WashingMachine == null)
             {
                 this.attr_MachineID = instance.Attr_MachineID;
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:NonReservationWashingMachine(MachineID={this.Attr_MachineID}):linked[super(WashingMachine(MachineID={instance.Attr_MachineID}))]");
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:NonReservationWashingMachine(MachineID={this.Attr_MachineID}):link[WashingMachine(MachineID={instance.Attr_MachineID})]");
+
                 result = true;
             }
             return result;
@@ -72,7 +75,8 @@ namespace LaundromatInHotel
                 this.attr_MachineID = null;
                 relR15WashingMachine = null;
 
-                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:NonReservationWashingMachine(MachineID={this.Attr_MachineID}):unlinked[super(WashingMachine(MachineID={instance.Attr_MachineID}))]");
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:NonReservationWashingMachine(MachineID={this.Attr_MachineID}):unlink[WashingMachine(MachineID={instance.Attr_MachineID})]");
+
                 result = true;
             }
             return result;
@@ -92,6 +96,7 @@ namespace LaundromatInHotel
         public void Dispose()
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:NonReservationWashingMachine(MachineID={this.Attr_MachineID}):delete");
+
             instanceRepository.Delete(this);
         }
     }
