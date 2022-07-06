@@ -40,6 +40,8 @@ namespace LaundromatInHotel
         }
 
         string attr_MachineID;
+        bool stateof_MachineID = false;
+
 
         public string Attr_MachineID { get { return attr_MachineID; } }
 
@@ -99,5 +101,33 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_MachineID = (string)propertyValues["MachineID"];
+            stateof_MachineID = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_MachineID)
+            {
+                results.Add("MachineID", attr_MachineID);
+                stateof_MachineID = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("MachineID", attr_MachineID);
+
+            return results;
+        }
+
     }
 }

@@ -41,17 +41,29 @@ namespace LaundromatInHotel
         }
 
         int attr_Floor;
-        int attr_RoomNumber;
-        string attr_Name;
-        string attr_RoomID;
-        int attr_Capacity;
-        string attr_HotelID;
+        bool stateof_Floor = false;
 
-        public int Attr_Floor { get { return attr_Floor; } set { attr_Floor = value; } }
-        public int Attr_RoomNumber { get { return attr_RoomNumber; } set { attr_RoomNumber = value; } }
-        public string Attr_Name { get { return attr_Name; } set { attr_Name = value; } }
-        public string Attr_RoomID { get { return attr_RoomID; } set { attr_RoomID = value; } }
-        public int Attr_Capacity { get { return attr_Capacity; } set { attr_Capacity = value; } }
+        int attr_RoomNumber;
+        bool stateof_RoomNumber = false;
+
+        string attr_Name;
+        bool stateof_Name = false;
+
+        string attr_RoomID;
+        bool stateof_RoomID = false;
+
+        int attr_Capacity;
+        bool stateof_Capacity = false;
+
+        string attr_HotelID;
+        bool stateof_HotelID = false;
+
+
+        public int Attr_Floor { get { return attr_Floor; } set { attr_Floor = value; stateof_Floor = true; } }
+        public int Attr_RoomNumber { get { return attr_RoomNumber; } set { attr_RoomNumber = value; stateof_RoomNumber = true; } }
+        public string Attr_Name { get { return attr_Name; } set { attr_Name = value; stateof_Name = true; } }
+        public string Attr_RoomID { get { return attr_RoomID; } set { attr_RoomID = value; stateof_RoomID = true; } }
+        public int Attr_Capacity { get { return attr_Capacity; } set { attr_Capacity = value; stateof_Capacity = true; } }
         public string Attr_HotelID { get { return attr_HotelID; } }
 
         private DomainClassHotel relR3Hotel;
@@ -117,5 +129,73 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_Floor = (int)propertyValues["Floor"];
+            stateof_Floor = false;
+            attr_RoomNumber = (int)propertyValues["RoomNumber"];
+            stateof_RoomNumber = false;
+            attr_Name = (string)propertyValues["Name"];
+            stateof_Name = false;
+            attr_RoomID = (string)propertyValues["RoomID"];
+            stateof_RoomID = false;
+            attr_Capacity = (int)propertyValues["Capacity"];
+            stateof_Capacity = false;
+            attr_HotelID = (string)propertyValues["HotelID"];
+            stateof_HotelID = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_Floor)
+            {
+                results.Add("Floor", attr_Floor);
+                stateof_Floor = false;
+            }
+            if (stateof_RoomNumber)
+            {
+                results.Add("RoomNumber", attr_RoomNumber);
+                stateof_RoomNumber = false;
+            }
+            if (stateof_Name)
+            {
+                results.Add("Name", attr_Name);
+                stateof_Name = false;
+            }
+            if (stateof_RoomID)
+            {
+                results.Add("RoomID", attr_RoomID);
+                stateof_RoomID = false;
+            }
+            if (stateof_Capacity)
+            {
+                results.Add("Capacity", attr_Capacity);
+                stateof_Capacity = false;
+            }
+            if (stateof_HotelID)
+            {
+                results.Add("HotelID", attr_HotelID);
+                stateof_HotelID = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("Floor", attr_Floor);
+            results.Add("RoomNumber", attr_RoomNumber);
+            results.Add("Name", attr_Name);
+            results.Add("RoomID", attr_RoomID);
+            results.Add("Capacity", attr_Capacity);
+            results.Add("HotelID", attr_HotelID);
+
+            return results;
+        }
+
     }
 }

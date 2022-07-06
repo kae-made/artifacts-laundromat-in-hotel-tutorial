@@ -42,15 +42,25 @@ namespace LaundromatInHotel
         }
 
         string attr_DoorID;
-        string attr_PIN_Number;
-        int attr_NumberOfDigits;
-        DomainTypeDoorStatus attr_Status;
-        DomainClassDoorwithLockStateMachine stateMachine;
+        bool stateof_DoorID = false;
 
-        public string Attr_DoorID { get { return attr_DoorID; } set { attr_DoorID = value; } }
-        public string Attr_PIN_Number { get { return attr_PIN_Number; } set { attr_PIN_Number = value; } }
-        public int Attr_NumberOfDigits { get { return attr_NumberOfDigits; } set { attr_NumberOfDigits = value; } }
-        public DomainTypeDoorStatus Attr_Status { get { return attr_Status; } set { attr_Status = value; } }
+        string attr_PIN_Number;
+        bool stateof_PIN_Number = false;
+
+        int attr_NumberOfDigits;
+        bool stateof_NumberOfDigits = false;
+
+        DomainTypeDoorStatus attr_Status;
+        bool stateof_Status = false;
+
+        DomainClassDoorwithLockStateMachine stateMachine;
+        bool stateof_current_state = false;
+
+
+        public string Attr_DoorID { get { return attr_DoorID; } set { attr_DoorID = value; stateof_DoorID = true; } }
+        public string Attr_PIN_Number { get { return attr_PIN_Number; } set { attr_PIN_Number = value; stateof_PIN_Number = true; } }
+        public int Attr_NumberOfDigits { get { return attr_NumberOfDigits; } set { attr_NumberOfDigits = value; stateof_NumberOfDigits = true; } }
+        public DomainTypeDoorStatus Attr_Status { get { return attr_Status; } set { attr_Status = value; stateof_Status = true; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
 
         public DomainClassWashingMachine LinkedR14()
@@ -82,5 +92,60 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_DoorID = (string)propertyValues["DoorID"];
+            stateof_DoorID = false;
+            attr_PIN_Number = (string)propertyValues["PIN_Number"];
+            stateof_PIN_Number = false;
+            attr_NumberOfDigits = (int)propertyValues["NumberOfDigits"];
+            stateof_NumberOfDigits = false;
+            attr_Status = (DomainTypeDoorStatus)propertyValues["Status"];
+            stateof_Status = false;
+            stateMachine.ForceUpdateState((int)propertyValues["current_state"]);
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_DoorID)
+            {
+                results.Add("DoorID", attr_DoorID);
+                stateof_DoorID = false;
+            }
+            if (stateof_PIN_Number)
+            {
+                results.Add("PIN_Number", attr_PIN_Number);
+                stateof_PIN_Number = false;
+            }
+            if (stateof_NumberOfDigits)
+            {
+                results.Add("NumberOfDigits", attr_NumberOfDigits);
+                stateof_NumberOfDigits = false;
+            }
+            if (stateof_Status)
+            {
+                results.Add("Status", attr_Status);
+                stateof_Status = false;
+            }
+            results.Add("current_state", stateMachine.CurrentState);
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("DoorID", attr_DoorID);
+            results.Add("PIN_Number", attr_PIN_Number);
+            results.Add("NumberOfDigits", attr_NumberOfDigits);
+            results.Add("Status", attr_Status);
+            results.Add("current_state", stateMachine.CurrentState);
+
+            return results;
+        }
+
     }
 }

@@ -41,11 +41,19 @@ namespace LaundromatInHotel
         }
 
         string attr_UseId;
-        string attr_WorkingSpecID;
-        string attr_GuestStayID;
-        string attr_MachineID;
+        bool stateof_UseId = false;
 
-        public string Attr_UseId { get { return attr_UseId; } set { attr_UseId = value; } }
+        string attr_WorkingSpecID;
+        bool stateof_WorkingSpecID = false;
+
+        string attr_GuestStayID;
+        bool stateof_GuestStayID = false;
+
+        string attr_MachineID;
+        bool stateof_MachineID = false;
+
+
+        public string Attr_UseId { get { return attr_UseId; } set { attr_UseId = value; stateof_UseId = true; } }
         public string Attr_WorkingSpecID { get { return attr_WorkingSpecID; } }
         public string Attr_GuestStayID { get { return attr_GuestStayID; } }
         public string Attr_MachineID { get { return attr_MachineID; } }
@@ -172,5 +180,57 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_UseId = (string)propertyValues["UseId"];
+            stateof_UseId = false;
+            attr_WorkingSpecID = (string)propertyValues["WorkingSpecID"];
+            stateof_WorkingSpecID = false;
+            attr_GuestStayID = (string)propertyValues["GuestStayID"];
+            stateof_GuestStayID = false;
+            attr_MachineID = (string)propertyValues["MachineID"];
+            stateof_MachineID = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_UseId)
+            {
+                results.Add("UseId", attr_UseId);
+                stateof_UseId = false;
+            }
+            if (stateof_WorkingSpecID)
+            {
+                results.Add("WorkingSpecID", attr_WorkingSpecID);
+                stateof_WorkingSpecID = false;
+            }
+            if (stateof_GuestStayID)
+            {
+                results.Add("GuestStayID", attr_GuestStayID);
+                stateof_GuestStayID = false;
+            }
+            if (stateof_MachineID)
+            {
+                results.Add("MachineID", attr_MachineID);
+                stateof_MachineID = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("UseId", attr_UseId);
+            results.Add("WorkingSpecID", attr_WorkingSpecID);
+            results.Add("GuestStayID", attr_GuestStayID);
+            results.Add("MachineID", attr_MachineID);
+
+            return results;
+        }
+
     }
 }

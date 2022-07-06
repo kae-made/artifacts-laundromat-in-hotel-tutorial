@@ -42,19 +42,33 @@ namespace LaundromatInHotel
         }
 
         string attr_MachineID;
-        string attr_FriendryName;
-        bool attr_IsBusy;
-        string attr_RoomID;
-        string attr_DoorID;
-        DomainTypeWashingMachineStatus attr_Status;
-        DomainClassWashingMachineStateMachine stateMachine;
+        bool stateof_MachineID = false;
 
-        public string Attr_MachineID { get { return attr_MachineID; } set { attr_MachineID = value; } }
-        public string Attr_FriendryName { get { return attr_FriendryName; } set { attr_FriendryName = value; } }
-        public bool Attr_IsBusy { get { return attr_IsBusy; } set { attr_IsBusy = value; } }
+        string attr_FriendryName;
+        bool stateof_FriendryName = false;
+
+        bool attr_IsBusy;
+        bool stateof_IsBusy = false;
+
+        string attr_RoomID;
+        bool stateof_RoomID = false;
+
+        string attr_DoorID;
+        bool stateof_DoorID = false;
+
+        DomainTypeWashingMachineStatus attr_Status;
+        bool stateof_Status = false;
+
+        DomainClassWashingMachineStateMachine stateMachine;
+        bool stateof_current_state = false;
+
+
+        public string Attr_MachineID { get { return attr_MachineID; } set { attr_MachineID = value; stateof_MachineID = true; } }
+        public string Attr_FriendryName { get { return attr_FriendryName; } set { attr_FriendryName = value; stateof_FriendryName = true; } }
+        public bool Attr_IsBusy { get { return attr_IsBusy; } set { attr_IsBusy = value; stateof_IsBusy = true; } }
         public string Attr_RoomID { get { return attr_RoomID; } }
         public string Attr_DoorID { get { return attr_DoorID; } }
-        public DomainTypeWashingMachineStatus Attr_Status { get { return attr_Status; } set { attr_Status = value; } }
+        public DomainTypeWashingMachineStatus Attr_Status { get { return attr_Status; } set { attr_Status = value; stateof_Status = true; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
 
         private DomainClassLaundromatRoom relR2LaundromatRoomIsSetUpAt;
@@ -213,5 +227,76 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_MachineID = (string)propertyValues["MachineID"];
+            stateof_MachineID = false;
+            attr_FriendryName = (string)propertyValues["FriendryName"];
+            stateof_FriendryName = false;
+            attr_IsBusy = (bool)propertyValues["IsBusy"];
+            stateof_IsBusy = false;
+            attr_RoomID = (string)propertyValues["RoomID"];
+            stateof_RoomID = false;
+            attr_DoorID = (string)propertyValues["DoorID"];
+            stateof_DoorID = false;
+            attr_Status = (DomainTypeWashingMachineStatus)propertyValues["Status"];
+            stateof_Status = false;
+            stateMachine.ForceUpdateState((int)propertyValues["current_state"]);
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_MachineID)
+            {
+                results.Add("MachineID", attr_MachineID);
+                stateof_MachineID = false;
+            }
+            if (stateof_FriendryName)
+            {
+                results.Add("FriendryName", attr_FriendryName);
+                stateof_FriendryName = false;
+            }
+            if (stateof_IsBusy)
+            {
+                results.Add("IsBusy", attr_IsBusy);
+                stateof_IsBusy = false;
+            }
+            if (stateof_RoomID)
+            {
+                results.Add("RoomID", attr_RoomID);
+                stateof_RoomID = false;
+            }
+            if (stateof_DoorID)
+            {
+                results.Add("DoorID", attr_DoorID);
+                stateof_DoorID = false;
+            }
+            if (stateof_Status)
+            {
+                results.Add("Status", attr_Status);
+                stateof_Status = false;
+            }
+            results.Add("current_state", stateMachine.CurrentState);
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("MachineID", attr_MachineID);
+            results.Add("FriendryName", attr_FriendryName);
+            results.Add("IsBusy", attr_IsBusy);
+            results.Add("RoomID", attr_RoomID);
+            results.Add("DoorID", attr_DoorID);
+            results.Add("Status", attr_Status);
+            results.Add("current_state", stateMachine.CurrentState);
+
+            return results;
+        }
+
     }
 }

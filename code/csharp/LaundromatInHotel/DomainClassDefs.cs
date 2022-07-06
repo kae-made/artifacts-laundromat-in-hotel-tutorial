@@ -20,7 +20,12 @@ namespace LaundromatInHotel
         /// Check attributes and links are valid or not.
         /// </summary>
         /// <returns></returns>
-        bool Validate();     
+        bool Validate();
+
+        // methods for storage
+        void Restore(Dictionary<string, object> propertyValues);
+        Dictionary<string, object> ChangedProperties();
+        Dictionary<string, object> GetProperties();
     }
 
     public interface DomainClassAvailableWorkingSpec : DomainClassDef

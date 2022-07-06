@@ -41,14 +41,22 @@ namespace LaundromatInHotel
         }
 
         int attr_Floor;
-        int attr_RoomNumber;
-        string attr_HotelID;
-        string attr_RoomID;
+        bool stateof_Floor = false;
 
-        public int Attr_Floor { get { return attr_Floor; } set { attr_Floor = value; } }
-        public int Attr_RoomNumber { get { return attr_RoomNumber; } set { attr_RoomNumber = value; } }
+        int attr_RoomNumber;
+        bool stateof_RoomNumber = false;
+
+        string attr_HotelID;
+        bool stateof_HotelID = false;
+
+        string attr_RoomID;
+        bool stateof_RoomID = false;
+
+
+        public int Attr_Floor { get { return attr_Floor; } set { attr_Floor = value; stateof_Floor = true; } }
+        public int Attr_RoomNumber { get { return attr_RoomNumber; } set { attr_RoomNumber = value; stateof_RoomNumber = true; } }
         public string Attr_HotelID { get { return attr_HotelID; } }
-        public string Attr_RoomID { get { return attr_RoomID; } set { attr_RoomID = value; } }
+        public string Attr_RoomID { get { return attr_RoomID; } set { attr_RoomID = value; stateof_RoomID = true; } }
 
         private DomainClassHotel relR1Hotel;
 
@@ -123,5 +131,57 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_Floor = (int)propertyValues["Floor"];
+            stateof_Floor = false;
+            attr_RoomNumber = (int)propertyValues["RoomNumber"];
+            stateof_RoomNumber = false;
+            attr_HotelID = (string)propertyValues["HotelID"];
+            stateof_HotelID = false;
+            attr_RoomID = (string)propertyValues["RoomID"];
+            stateof_RoomID = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_Floor)
+            {
+                results.Add("Floor", attr_Floor);
+                stateof_Floor = false;
+            }
+            if (stateof_RoomNumber)
+            {
+                results.Add("RoomNumber", attr_RoomNumber);
+                stateof_RoomNumber = false;
+            }
+            if (stateof_HotelID)
+            {
+                results.Add("HotelID", attr_HotelID);
+                stateof_HotelID = false;
+            }
+            if (stateof_RoomID)
+            {
+                results.Add("RoomID", attr_RoomID);
+                stateof_RoomID = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("Floor", attr_Floor);
+            results.Add("RoomNumber", attr_RoomNumber);
+            results.Add("HotelID", attr_HotelID);
+            results.Add("RoomID", attr_RoomID);
+
+            return results;
+        }
+
     }
 }

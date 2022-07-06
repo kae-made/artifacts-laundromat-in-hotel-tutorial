@@ -41,16 +41,26 @@ namespace LaundromatInHotel
         }
 
         string attr_WorkingSpecID;
-        int attr_WashingTime;
-        int attr_DryingTime;
-        int attr_StandardWeight;
-        int attr_Price;
+        bool stateof_WorkingSpecID = false;
 
-        public string Attr_WorkingSpecID { get { return attr_WorkingSpecID; } set { attr_WorkingSpecID = value; } }
-        public int Attr_WashingTime { get { return attr_WashingTime; } set { attr_WashingTime = value; } }
-        public int Attr_DryingTime { get { return attr_DryingTime; } set { attr_DryingTime = value; } }
-        public int Attr_StandardWeight { get { return attr_StandardWeight; } set { attr_StandardWeight = value; } }
-        public int Attr_Price { get { return attr_Price; } set { attr_Price = value; } }
+        int attr_WashingTime;
+        bool stateof_WashingTime = false;
+
+        int attr_DryingTime;
+        bool stateof_DryingTime = false;
+
+        int attr_StandardWeight;
+        bool stateof_StandardWeight = false;
+
+        int attr_Price;
+        bool stateof_Price = false;
+
+
+        public string Attr_WorkingSpecID { get { return attr_WorkingSpecID; } set { attr_WorkingSpecID = value; stateof_WorkingSpecID = true; } }
+        public int Attr_WashingTime { get { return attr_WashingTime; } set { attr_WashingTime = value; stateof_WashingTime = true; } }
+        public int Attr_DryingTime { get { return attr_DryingTime; } set { attr_DryingTime = value; stateof_DryingTime = true; } }
+        public int Attr_StandardWeight { get { return attr_StandardWeight; } set { attr_StandardWeight = value; stateof_StandardWeight = true; } }
+        public int Attr_Price { get { return attr_Price; } set { attr_Price = value; stateof_Price = true; } }
 
         public IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8Other()
         {
@@ -80,5 +90,65 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_WorkingSpecID = (string)propertyValues["WorkingSpecID"];
+            stateof_WorkingSpecID = false;
+            attr_WashingTime = (int)propertyValues["WashingTime"];
+            stateof_WashingTime = false;
+            attr_DryingTime = (int)propertyValues["DryingTime"];
+            stateof_DryingTime = false;
+            attr_StandardWeight = (int)propertyValues["StandardWeight"];
+            stateof_StandardWeight = false;
+            attr_Price = (int)propertyValues["Price"];
+            stateof_Price = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_WorkingSpecID)
+            {
+                results.Add("WorkingSpecID", attr_WorkingSpecID);
+                stateof_WorkingSpecID = false;
+            }
+            if (stateof_WashingTime)
+            {
+                results.Add("WashingTime", attr_WashingTime);
+                stateof_WashingTime = false;
+            }
+            if (stateof_DryingTime)
+            {
+                results.Add("DryingTime", attr_DryingTime);
+                stateof_DryingTime = false;
+            }
+            if (stateof_StandardWeight)
+            {
+                results.Add("StandardWeight", attr_StandardWeight);
+                stateof_StandardWeight = false;
+            }
+            if (stateof_Price)
+            {
+                results.Add("Price", attr_Price);
+                stateof_Price = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("WorkingSpecID", attr_WorkingSpecID);
+            results.Add("WashingTime", attr_WashingTime);
+            results.Add("DryingTime", attr_DryingTime);
+            results.Add("StandardWeight", attr_StandardWeight);
+            results.Add("Price", attr_Price);
+
+            return results;
+        }
+
     }
 }

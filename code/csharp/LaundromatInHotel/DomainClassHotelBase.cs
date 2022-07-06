@@ -41,10 +41,14 @@ namespace LaundromatInHotel
         }
 
         string attr_HotelID;
-        string attr_Name;
+        bool stateof_HotelID = false;
 
-        public string Attr_HotelID { get { return attr_HotelID; } set { attr_HotelID = value; } }
-        public string Attr_Name { get { return attr_Name; } set { attr_Name = value; } }
+        string attr_Name;
+        bool stateof_Name = false;
+
+
+        public string Attr_HotelID { get { return attr_HotelID; } set { attr_HotelID = value; stateof_HotelID = true; } }
+        public string Attr_Name { get { return attr_Name; } set { attr_Name = value; stateof_Name = true; } }
 
         public IEnumerable<DomainClassLaundromatRoom> LinkedR1ProvideLaundromantService()
         {
@@ -89,5 +93,41 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_HotelID = (string)propertyValues["HotelID"];
+            stateof_HotelID = false;
+            attr_Name = (string)propertyValues["Name"];
+            stateof_Name = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_HotelID)
+            {
+                results.Add("HotelID", attr_HotelID);
+                stateof_HotelID = false;
+            }
+            if (stateof_Name)
+            {
+                results.Add("Name", attr_Name);
+                stateof_Name = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("HotelID", attr_HotelID);
+            results.Add("Name", attr_Name);
+
+            return results;
+        }
+
     }
 }

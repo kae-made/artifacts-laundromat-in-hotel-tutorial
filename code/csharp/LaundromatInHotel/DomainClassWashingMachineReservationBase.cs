@@ -42,26 +42,46 @@ namespace LaundromatInHotel
         }
 
         string attr_ReservationID;
-        DateTime attr_ReservationTime;
-        DateTime attr_EstimatedEndTime;
-        int attr_PreAlarmTime;
-        string attr_GuestStayID;
-        string attr_WorkingSpecID;
-        string attr_successor_ReservationID;
-        DomainClassWashingMachineReservationStateMachine stateMachine;
-        string attr_MachineID;
-        string attr_AlarmTimer;
+        bool stateof_ReservationID = false;
 
-        public string Attr_ReservationID { get { return attr_ReservationID; } set { attr_ReservationID = value; } }
-        public DateTime Attr_ReservationTime { get { return attr_ReservationTime; } set { attr_ReservationTime = value; } }
-        public DateTime Attr_EstimatedEndTime { get { return attr_EstimatedEndTime; } set { attr_EstimatedEndTime = value; } }
-        public int Attr_PreAlarmTime { get { return attr_PreAlarmTime; } set { attr_PreAlarmTime = value; } }
+        DateTime attr_ReservationTime;
+        bool stateof_ReservationTime = false;
+
+        DateTime attr_EstimatedEndTime;
+        bool stateof_EstimatedEndTime = false;
+
+        int attr_PreAlarmTime;
+        bool stateof_PreAlarmTime = false;
+
+        string attr_GuestStayID;
+        bool stateof_GuestStayID = false;
+
+        string attr_WorkingSpecID;
+        bool stateof_WorkingSpecID = false;
+
+        string attr_successor_ReservationID;
+        bool stateof_successor_ReservationID = false;
+
+        DomainClassWashingMachineReservationStateMachine stateMachine;
+        bool stateof_current_state = false;
+
+        string attr_MachineID;
+        bool stateof_MachineID = false;
+
+        string attr_AlarmTimer;
+        bool stateof_AlarmTimer = false;
+
+
+        public string Attr_ReservationID { get { return attr_ReservationID; } set { attr_ReservationID = value; stateof_ReservationID = true; } }
+        public DateTime Attr_ReservationTime { get { return attr_ReservationTime; } set { attr_ReservationTime = value; stateof_ReservationTime = true; } }
+        public DateTime Attr_EstimatedEndTime { get { return attr_EstimatedEndTime; } set { attr_EstimatedEndTime = value; stateof_EstimatedEndTime = true; } }
+        public int Attr_PreAlarmTime { get { return attr_PreAlarmTime; } set { attr_PreAlarmTime = value; stateof_PreAlarmTime = true; } }
         public string Attr_GuestStayID { get { return attr_GuestStayID; } }
         public string Attr_WorkingSpecID { get { return attr_WorkingSpecID; } }
         public string Attr_successor_ReservationID { get { return attr_successor_ReservationID; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
         public string Attr_MachineID { get { return attr_MachineID; } }
-        public string Attr_AlarmTimer { get { return attr_AlarmTimer; } set { attr_AlarmTimer = value; } }
+        public string Attr_AlarmTimer { get { return attr_AlarmTimer; } set { attr_AlarmTimer = value; stateof_AlarmTimer = true; } }
 
         private DomainClassGuestStay relR12GuestStayReservationOwner;
         private DomainClassAvailableWorkingSpec relR13AvailableWorkingSpecTarget;
@@ -221,5 +241,100 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_ReservationID = (string)propertyValues["ReservationID"];
+            stateof_ReservationID = false;
+            attr_ReservationTime = (DateTime)propertyValues["ReservationTime"];
+            stateof_ReservationTime = false;
+            attr_EstimatedEndTime = (DateTime)propertyValues["EstimatedEndTime"];
+            stateof_EstimatedEndTime = false;
+            attr_PreAlarmTime = (int)propertyValues["PreAlarmTime"];
+            stateof_PreAlarmTime = false;
+            attr_GuestStayID = (string)propertyValues["GuestStayID"];
+            stateof_GuestStayID = false;
+            attr_WorkingSpecID = (string)propertyValues["WorkingSpecID"];
+            stateof_WorkingSpecID = false;
+            attr_successor_ReservationID = (string)propertyValues["successor_ReservationID"];
+            stateof_successor_ReservationID = false;
+            stateMachine.ForceUpdateState((int)propertyValues["current_state"]);
+            attr_MachineID = (string)propertyValues["MachineID"];
+            stateof_MachineID = false;
+            attr_AlarmTimer = (string)propertyValues["AlarmTimer"];
+            stateof_AlarmTimer = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_ReservationID)
+            {
+                results.Add("ReservationID", attr_ReservationID);
+                stateof_ReservationID = false;
+            }
+            if (stateof_ReservationTime)
+            {
+                results.Add("ReservationTime", attr_ReservationTime);
+                stateof_ReservationTime = false;
+            }
+            if (stateof_EstimatedEndTime)
+            {
+                results.Add("EstimatedEndTime", attr_EstimatedEndTime);
+                stateof_EstimatedEndTime = false;
+            }
+            if (stateof_PreAlarmTime)
+            {
+                results.Add("PreAlarmTime", attr_PreAlarmTime);
+                stateof_PreAlarmTime = false;
+            }
+            if (stateof_GuestStayID)
+            {
+                results.Add("GuestStayID", attr_GuestStayID);
+                stateof_GuestStayID = false;
+            }
+            if (stateof_WorkingSpecID)
+            {
+                results.Add("WorkingSpecID", attr_WorkingSpecID);
+                stateof_WorkingSpecID = false;
+            }
+            if (stateof_successor_ReservationID)
+            {
+                results.Add("successor_ReservationID", attr_successor_ReservationID);
+                stateof_successor_ReservationID = false;
+            }
+            results.Add("current_state", stateMachine.CurrentState);
+            if (stateof_MachineID)
+            {
+                results.Add("MachineID", attr_MachineID);
+                stateof_MachineID = false;
+            }
+            if (stateof_AlarmTimer)
+            {
+                results.Add("AlarmTimer", attr_AlarmTimer);
+                stateof_AlarmTimer = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("ReservationID", attr_ReservationID);
+            results.Add("ReservationTime", attr_ReservationTime);
+            results.Add("EstimatedEndTime", attr_EstimatedEndTime);
+            results.Add("PreAlarmTime", attr_PreAlarmTime);
+            results.Add("GuestStayID", attr_GuestStayID);
+            results.Add("WorkingSpecID", attr_WorkingSpecID);
+            results.Add("successor_ReservationID", attr_successor_ReservationID);
+            results.Add("current_state", stateMachine.CurrentState);
+            results.Add("MachineID", attr_MachineID);
+            results.Add("AlarmTimer", attr_AlarmTimer);
+
+            return results;
+        }
+
     }
 }

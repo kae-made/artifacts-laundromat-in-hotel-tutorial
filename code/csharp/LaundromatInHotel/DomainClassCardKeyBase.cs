@@ -41,9 +41,13 @@ namespace LaundromatInHotel
         }
 
         string attr_CardKeyID;
-        string attr_GuestStayID;
+        bool stateof_CardKeyID = false;
 
-        public string Attr_CardKeyID { get { return attr_CardKeyID; } set { attr_CardKeyID = value; } }
+        string attr_GuestStayID;
+        bool stateof_GuestStayID = false;
+
+
+        public string Attr_CardKeyID { get { return attr_CardKeyID; } set { attr_CardKeyID = value; stateof_CardKeyID = true; } }
         public string Attr_GuestStayID { get { return attr_GuestStayID; } }
 
         private DomainClassGuestStay relR6GuestStayIsAssignedAsKeyFor;
@@ -103,5 +107,41 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_CardKeyID = (string)propertyValues["CardKeyID"];
+            stateof_CardKeyID = false;
+            attr_GuestStayID = (string)propertyValues["GuestStayID"];
+            stateof_GuestStayID = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_CardKeyID)
+            {
+                results.Add("CardKeyID", attr_CardKeyID);
+                stateof_CardKeyID = false;
+            }
+            if (stateof_GuestStayID)
+            {
+                results.Add("GuestStayID", attr_GuestStayID);
+                stateof_GuestStayID = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("CardKeyID", attr_CardKeyID);
+            results.Add("GuestStayID", attr_GuestStayID);
+
+            return results;
+        }
+
     }
 }

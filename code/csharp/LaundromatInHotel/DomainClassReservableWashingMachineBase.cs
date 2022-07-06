@@ -41,8 +41,14 @@ namespace LaundromatInHotel
         }
 
         string attr_MachineID;
+        bool stateof_MachineID = false;
+
         DomainClassReservableWashingMachineStateMachine stateMachine;
+        bool stateof_current_state = false;
+
         string attr_Next_ReservationID;
+        bool stateof_Next_ReservationID = false;
+
 
         public string Attr_MachineID { get { return attr_MachineID; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
@@ -149,5 +155,44 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_MachineID = (string)propertyValues["MachineID"];
+            stateof_MachineID = false;
+            stateMachine.ForceUpdateState((int)propertyValues["current_state"]);
+            attr_Next_ReservationID = (string)propertyValues["Next_ReservationID"];
+            stateof_Next_ReservationID = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_MachineID)
+            {
+                results.Add("MachineID", attr_MachineID);
+                stateof_MachineID = false;
+            }
+            results.Add("current_state", stateMachine.CurrentState);
+            if (stateof_Next_ReservationID)
+            {
+                results.Add("Next_ReservationID", attr_Next_ReservationID);
+                stateof_Next_ReservationID = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("MachineID", attr_MachineID);
+            results.Add("current_state", stateMachine.CurrentState);
+            results.Add("Next_ReservationID", attr_Next_ReservationID);
+
+            return results;
+        }
+
     }
 }

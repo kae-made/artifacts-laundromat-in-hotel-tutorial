@@ -41,12 +41,18 @@ namespace LaundromatInHotel
         }
 
         string attr_HotelID;
+        bool stateof_HotelID = false;
+
         DomainClassWashingMachineAssignerStateMachine stateMachine;
+        bool stateof_current_state = false;
+
         DomainTypeComplexDataType attr_Test;
+        bool stateof_Test = false;
+
 
         public string Attr_HotelID { get { return attr_HotelID; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
-        public DomainTypeComplexDataType Attr_Test { get { return attr_Test; } set { attr_Test = value; } }
+        public DomainTypeComplexDataType Attr_Test { get { return attr_Test; } set { attr_Test = value; stateof_Test = true; } }
 
         private DomainClassHotel relR10Hotel;
 
@@ -127,5 +133,44 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_HotelID = (string)propertyValues["HotelID"];
+            stateof_HotelID = false;
+            stateMachine.ForceUpdateState((int)propertyValues["current_state"]);
+            attr_Test = (DomainTypeComplexDataType)propertyValues["Test"];
+            stateof_Test = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_HotelID)
+            {
+                results.Add("HotelID", attr_HotelID);
+                stateof_HotelID = false;
+            }
+            results.Add("current_state", stateMachine.CurrentState);
+            if (stateof_Test)
+            {
+                results.Add("Test", attr_Test);
+                stateof_Test = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("HotelID", attr_HotelID);
+            results.Add("current_state", stateMachine.CurrentState);
+            results.Add("Test", attr_Test);
+
+            return results;
+        }
+
     }
 }

@@ -41,16 +41,26 @@ namespace LaundromatInHotel
         }
 
         string attr_GuestStayID;
-        DateTime attr_StartTime;
-        DateTime attr_EndTimeOfValidity;
-        string attr_RoomID;
-        int attr_Charge;
+        bool stateof_GuestStayID = false;
 
-        public string Attr_GuestStayID { get { return attr_GuestStayID; } set { attr_GuestStayID = value; } }
-        public DateTime Attr_StartTime { get { return attr_StartTime; } set { attr_StartTime = value; } }
-        public DateTime Attr_EndTimeOfValidity { get { return attr_EndTimeOfValidity; } set { attr_EndTimeOfValidity = value; } }
+        DateTime attr_StartTime;
+        bool stateof_StartTime = false;
+
+        DateTime attr_EndTimeOfValidity;
+        bool stateof_EndTimeOfValidity = false;
+
+        string attr_RoomID;
+        bool stateof_RoomID = false;
+
+        int attr_Charge;
+        bool stateof_Charge = false;
+
+
+        public string Attr_GuestStayID { get { return attr_GuestStayID; } set { attr_GuestStayID = value; stateof_GuestStayID = true; } }
+        public DateTime Attr_StartTime { get { return attr_StartTime; } set { attr_StartTime = value; stateof_StartTime = true; } }
+        public DateTime Attr_EndTimeOfValidity { get { return attr_EndTimeOfValidity; } set { attr_EndTimeOfValidity = value; stateof_EndTimeOfValidity = true; } }
         public string Attr_RoomID { get { return attr_RoomID; } }
-        public int Attr_Charge { get { return attr_Charge; } set { attr_Charge = value; } }
+        public int Attr_Charge { get { return attr_Charge; } set { attr_Charge = value; stateof_Charge = true; } }
 
         private DomainClassGuestRoom relR4GuestRoomIsAssignedFor;
 
@@ -145,5 +155,65 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_GuestStayID = (string)propertyValues["GuestStayID"];
+            stateof_GuestStayID = false;
+            attr_StartTime = (DateTime)propertyValues["StartTime"];
+            stateof_StartTime = false;
+            attr_EndTimeOfValidity = (DateTime)propertyValues["EndTimeOfValidity"];
+            stateof_EndTimeOfValidity = false;
+            attr_RoomID = (string)propertyValues["RoomID"];
+            stateof_RoomID = false;
+            attr_Charge = (int)propertyValues["Charge"];
+            stateof_Charge = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_GuestStayID)
+            {
+                results.Add("GuestStayID", attr_GuestStayID);
+                stateof_GuestStayID = false;
+            }
+            if (stateof_StartTime)
+            {
+                results.Add("StartTime", attr_StartTime);
+                stateof_StartTime = false;
+            }
+            if (stateof_EndTimeOfValidity)
+            {
+                results.Add("EndTimeOfValidity", attr_EndTimeOfValidity);
+                stateof_EndTimeOfValidity = false;
+            }
+            if (stateof_RoomID)
+            {
+                results.Add("RoomID", attr_RoomID);
+                stateof_RoomID = false;
+            }
+            if (stateof_Charge)
+            {
+                results.Add("Charge", attr_Charge);
+                stateof_Charge = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("GuestStayID", attr_GuestStayID);
+            results.Add("StartTime", attr_StartTime);
+            results.Add("EndTimeOfValidity", attr_EndTimeOfValidity);
+            results.Add("RoomID", attr_RoomID);
+            results.Add("Charge", attr_Charge);
+
+            return results;
+        }
+
     }
 }

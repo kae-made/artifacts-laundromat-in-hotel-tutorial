@@ -41,14 +41,22 @@ namespace LaundromatInHotel
         }
 
         string attr_Name;
-        string attr_GuestID;
-        string attr_GuestStayId;
-        string attr_MailAddress;
+        bool stateof_Name = false;
 
-        public string Attr_Name { get { return attr_Name; } set { attr_Name = value; } }
-        public string Attr_GuestID { get { return attr_GuestID; } set { attr_GuestID = value; } }
+        string attr_GuestID;
+        bool stateof_GuestID = false;
+
+        string attr_GuestStayId;
+        bool stateof_GuestStayId = false;
+
+        string attr_MailAddress;
+        bool stateof_MailAddress = false;
+
+
+        public string Attr_Name { get { return attr_Name; } set { attr_Name = value; stateof_Name = true; } }
+        public string Attr_GuestID { get { return attr_GuestID; } set { attr_GuestID = value; stateof_GuestID = true; } }
         public string Attr_GuestStayId { get { return attr_GuestStayId; } }
-        public string Attr_MailAddress { get { return attr_MailAddress; } set { attr_MailAddress = value; } }
+        public string Attr_MailAddress { get { return attr_MailAddress; } set { attr_MailAddress = value; stateof_MailAddress = true; } }
 
         private DomainClassGuestStay relR5GuestStayHaveTheRightToUse;
 
@@ -107,5 +115,57 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_Name = (string)propertyValues["Name"];
+            stateof_Name = false;
+            attr_GuestID = (string)propertyValues["GuestID"];
+            stateof_GuestID = false;
+            attr_GuestStayId = (string)propertyValues["GuestStayId"];
+            stateof_GuestStayId = false;
+            attr_MailAddress = (string)propertyValues["MailAddress"];
+            stateof_MailAddress = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_Name)
+            {
+                results.Add("Name", attr_Name);
+                stateof_Name = false;
+            }
+            if (stateof_GuestID)
+            {
+                results.Add("GuestID", attr_GuestID);
+                stateof_GuestID = false;
+            }
+            if (stateof_GuestStayId)
+            {
+                results.Add("GuestStayId", attr_GuestStayId);
+                stateof_GuestStayId = false;
+            }
+            if (stateof_MailAddress)
+            {
+                results.Add("MailAddress", attr_MailAddress);
+                stateof_MailAddress = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("Name", attr_Name);
+            results.Add("GuestID", attr_GuestID);
+            results.Add("GuestStayId", attr_GuestStayId);
+            results.Add("MailAddress", attr_MailAddress);
+
+            return results;
+        }
+
     }
 }

@@ -40,14 +40,22 @@ namespace LaundromatInHotel
         }
 
         string attr_HotelID;
+        bool stateof_HotelID = false;
+
         string attr_MachineID;
+        bool stateof_MachineID = false;
+
         string attr_WorkingSpecID;
+        bool stateof_WorkingSpecID = false;
+
         int attr_PreAlarmSec;
+        bool stateof_PreAlarmSec = false;
+
 
         public string Attr_HotelID { get { return attr_HotelID; } }
         public string Attr_MachineID { get { return attr_MachineID; } }
         public string Attr_WorkingSpecID { get { return attr_WorkingSpecID; } }
-        public int Attr_PreAlarmSec { get { return attr_PreAlarmSec; } set { attr_PreAlarmSec = value; } }
+        public int Attr_PreAlarmSec { get { return attr_PreAlarmSec; } set { attr_PreAlarmSec = value; stateof_PreAlarmSec = true; } }
 
         private DomainClassWashingMachineAssigner relR11WashingMachineAssigner;
         private DomainClassWashingMachine relR8WashingMachine;
@@ -185,5 +193,57 @@ namespace LaundromatInHotel
 
             instanceRepository.Delete(this);
         }
+
+        // methods for storage
+        public void Restore(Dictionary<string, object> propertyValues)
+        {
+            attr_HotelID = (string)propertyValues["HotelID"];
+            stateof_HotelID = false;
+            attr_MachineID = (string)propertyValues["MachineID"];
+            stateof_MachineID = false;
+            attr_WorkingSpecID = (string)propertyValues["WorkingSpecID"];
+            stateof_WorkingSpecID = false;
+            attr_PreAlarmSec = (int)propertyValues["PreAlarmSec"];
+            stateof_PreAlarmSec = false;
+        }
+        
+        public Dictionary<string, object> ChangedProperties()
+        {
+            var results = new Dictionary<string, object>();
+            if (stateof_HotelID)
+            {
+                results.Add("HotelID", attr_HotelID);
+                stateof_HotelID = false;
+            }
+            if (stateof_MachineID)
+            {
+                results.Add("MachineID", attr_MachineID);
+                stateof_MachineID = false;
+            }
+            if (stateof_WorkingSpecID)
+            {
+                results.Add("WorkingSpecID", attr_WorkingSpecID);
+                stateof_WorkingSpecID = false;
+            }
+            if (stateof_PreAlarmSec)
+            {
+                results.Add("PreAlarmSec", attr_PreAlarmSec);
+                stateof_PreAlarmSec = false;
+            }
+
+            return results;
+        }
+        
+        public Dictionary<string, object> GetProperties()
+        {
+            var results = new Dictionary<string, object>();
+            results.Add("HotelID", attr_HotelID);
+            results.Add("MachineID", attr_MachineID);
+            results.Add("WorkingSpecID", attr_WorkingSpecID);
+            results.Add("PreAlarmSec", attr_PreAlarmSec);
+
+            return results;
+        }
+
     }
 }
