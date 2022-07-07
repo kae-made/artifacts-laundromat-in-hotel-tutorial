@@ -9,10 +9,11 @@
 // ------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
-    public class InstanceRepository
+    public abstract class InstanceRepository
     {
         private Dictionary<string, List<DomainClassDef>> domainInstances = new Dictionary<string, List<DomainClassDef>>();
 
@@ -61,10 +62,103 @@ namespace LaundromatInHotel
             return result;
         }
 
-        public void UpdateState(DomainClassDef instance, IDictionary<string,object> chnaged)
+        ///
+        /// Update stored state of the instance by changed argument.
+        /// changed.key is name of property of the instance.
+        /// changed.value is value of the property that the name of it  is changed.key
+        ///
+        public abstract void UpdateState(DomainClassDef instance, IDictionary<string, object> chnaged);
+
+        ///
+        /// Construct state of the instances by instances argument.
+        /// instances.key is domain class name.
+        /// instances.value is instances states of the domain class.
+        /// each item of the instances.value is property name and value pairs.
+        ///
+        public abstract void LoadState(IDictionary<string, IList<IDictionary<string, object>>> instances);
+
+    }
+
+    public class InstanceRepositoryInMemory : InstanceRepository
+    {
+        private Logger logger;
+
+        public InstanceRepositoryInMemory(Logger logger)
         {
-            // TODO : write code to store changed state into eternal storage.
+            this.logger = logger;
+        }
+
+        public override void UpdateState(DomainClassDef instance, IDictionary<string, object> chnaged)
+        {
+            // Do nothing.
+        }
+
+        public override void LoadState(IDictionary<string, IList<IDictionary<string, object>>> instances)
+        {
+            foreach (var className in instances.Keys)
+            {
+                foreach (var states in instances[className])
+                {
+                    DomainClassDef newInstance = null;
+                    switch (className)
+                    {
+                        case "AvailableWorkingSpec":
+                            newInstance = DomainClassAvailableWorkingSpecBase.CreateInstance(this, logger);
+                            break;
+                        case "CardKey":
+                            newInstance = DomainClassCardKeyBase.CreateInstance(this, logger);
+                            break;
+                        case "DoorwithLock":
+                            newInstance = DomainClassDoorwithLockBase.CreateInstance(this, logger);
+                            break;
+                        case "Guest":
+                            newInstance = DomainClassGuestBase.CreateInstance(this, logger);
+                            break;
+                        case "GuestRoom":
+                            newInstance = DomainClassGuestRoomBase.CreateInstance(this, logger);
+                            break;
+                        case "GuestStay":
+                            newInstance = DomainClassGuestStayBase.CreateInstance(this, logger);
+                            break;
+                        case "Hotel":
+                            newInstance = DomainClassHotelBase.CreateInstance(this, logger);
+                            break;
+                        case "LaundromatRoom":
+                            newInstance = DomainClassLaundromatRoomBase.CreateInstance(this, logger);
+                            break;
+                        case "NonReservationWashingMachine":
+                            newInstance = DomainClassNonReservationWashingMachineBase.CreateInstance(this, logger);
+                            break;
+                        case "ReservableWashingMachine":
+                            newInstance = DomainClassReservableWashingMachineBase.CreateInstance(this, logger);
+                            break;
+                        case "WashingMachine":
+                            newInstance = DomainClassWashingMachineBase.CreateInstance(this, logger);
+                            break;
+                        case "WashingMachineAssigner":
+                            newInstance = DomainClassWashingMachineAssignerBase.CreateInstance(this, logger);
+                            break;
+                        case "WashingMachineinUse":
+                            newInstance = DomainClassWashingMachineinUseBase.CreateInstance(this, logger);
+                            break;
+                        case "WashingMachineReservation":
+                            newInstance = DomainClassWashingMachineReservationBase.CreateInstance(this, logger);
+                            break;
+                        case "WorkingSpec":
+                            newInstance = DomainClassWorkingSpecBase.CreateInstance(this, logger);
+                            break;
+                        default:
+                            if (logger != null) logger.LogError($"{className} is not right domain class.");
+                            break;
+                    }
+                    if (newInstance != null)
+                    {
+                        newInstance.Restore(states);
+                    }
+                }
+            }
         }
 
     }
+
 }
