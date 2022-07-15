@@ -17,18 +17,20 @@ namespace LaundromatInHotel
 {
     public partial class DomainClassReservableWashingMachineBase : DomainClassReservableWashingMachine
     {
-        private static readonly string className = "ReservableWashingMachine";
+        protected static readonly string className = "ReservableWashingMachine";
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
         protected Logger logger;
 
-        public static DomainClassReservableWashingMachineBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
+        public static DomainClassReservableWashingMachineBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
         {
             var newInstance = new DomainClassReservableWashingMachineBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:ReservableWashingMachine(MachineID={newInstance.Attr_MachineID}):create");
 
             instanceRepository.Add(newInstance);
+
+            if (changedStates !=null) changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Create, Target = newInstance, ChangedProperties = null });
 
             return newInstance;
         }
@@ -37,36 +39,64 @@ namespace LaundromatInHotel
         {
             this.instanceRepository = instanceRepository;
             this.logger = logger;
-            stateMachine = new DomainClassReservableWashingMachineStateMachine(this, logger);
+            stateMachine = new DomainClassReservableWashingMachineStateMachine(this, instanceRepository, logger);
         }
 
-        string attr_MachineID;
-        bool stateof_MachineID = false;
+        protected string attr_MachineID;
+        protected bool stateof_MachineID = false;
 
-        DomainClassReservableWashingMachineStateMachine stateMachine;
-        bool stateof_current_state = false;
+        protected DomainClassReservableWashingMachineStateMachine stateMachine;
+        protected bool stateof_current_state = false;
 
-        string attr_Next_ReservationID;
-        bool stateof_Next_ReservationID = false;
+        protected string attr_Next_ReservationID;
+        protected bool stateof_Next_ReservationID = false;
 
 
         public string Attr_MachineID { get { return attr_MachineID; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
         public string Attr_Next_ReservationID { get { return attr_Next_ReservationID; } }
 
-        private DomainClassWashingMachine relR15WashingMachine;
-        private DomainClassWashingMachineReservation relR19WashingMachineReservationNextReservation;
+        public static bool Compare(DomainClassReservableWashingMachine instance, IDictionary<string, object> conditionPropertyValues)
+        {
+            bool result = true;
+            foreach (var propertyName in conditionPropertyValues.Keys)
+            {
+                switch (propertyName)
+                {
+                    case "MachineID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_MachineID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "Next_ReservationID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_Next_ReservationID)
+                        {
+                            result = false;
+                        }
+                        break;
+                }
+                if (result== false)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        protected LinkedInstance relR15WashingMachine;
+        protected LinkedInstance relR19WashingMachineReservationNextReservation;
 
         public DomainClassWashingMachine GetSuperClassR15()
         {
             if (relR15WashingMachine == null)
             {
                 var candidates = instanceRepository.GetDomainInstances("WashingMachine").Where(inst => (this.Attr_MachineID==((DomainClassWashingMachine)inst).Attr_MachineID));
-                relR15WashingMachine = (DomainClassWashingMachine)candidates.First();
+                relR15WashingMachine = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R15", Phrase = null };
             }
-            return relR15WashingMachine;
+            return relR15WashingMachine.GetDestination<DomainClassWashingMachine>();
         }
-        public bool LinkR15(DomainClassWashingMachine instance)
+        public bool LinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR15WashingMachine == null)
@@ -75,15 +105,21 @@ namespace LaundromatInHotel
 
                 if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:ReservableWashingMachine(MachineID={this.Attr_MachineID}):link[WashingMachine(MachineID={instance.Attr_MachineID})]");
 
-                result = true;
+                result = (GetSuperClassR15()!=null);
+                if (result)
+                {
+                    if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Create, Target = relR15WashingMachine });
+                }
             }
             return result;
         }
-        public bool UnlinkR15(DomainClassWashingMachine instance)
+        public bool UnlinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR15WashingMachine != null && ( this.Attr_MachineID==instance.Attr_MachineID ))
             {
+                if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR15WashingMachine });
+
                 this.attr_MachineID = null;
                 relR15WashingMachine = null;
 
@@ -99,12 +135,13 @@ namespace LaundromatInHotel
             if (relR19WashingMachineReservationNextReservation == null)
             {
                 var candidates = instanceRepository.GetDomainInstances("WashingMachineReservation").Where(inst=>(this.Attr_Next_ReservationID==((DomainClassWashingMachineReservation)inst).Attr_ReservationID));
-                relR19WashingMachineReservationNextReservation = (DomainClassWashingMachineReservation)candidates.First();
+                relR19WashingMachineReservationNextReservation = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R19", Phrase = "NextReservation" };
+
             }
-            return relR19WashingMachineReservationNextReservation;
+            return relR19WashingMachineReservationNextReservation.GetDestination<DomainClassWashingMachineReservation>();
         }
 
-        public bool LinkR19NextReservation(DomainClassWashingMachineReservation instance)
+        public bool LinkR19NextReservation(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR19WashingMachineReservationNextReservation == null)
@@ -113,15 +150,22 @@ namespace LaundromatInHotel
 
                 if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:ReservableWashingMachine(MachineID={this.Attr_MachineID}):link[WashingMachineReservation(ReservationID={instance.Attr_ReservationID})]");
 
-                result = true;
+                result = (LinkedR19NextReservation()!=null);
+                if (result)
+                {
+                    if(changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Create, Target = relR19WashingMachineReservationNextReservation });
+                }
             }
             return result;
         }
-        public bool UnlinkR19NextReservation(DomainClassWashingMachineReservation instance)
+
+        public bool UnlinkR19NextReservation(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR19WashingMachineReservationNextReservation != null && ( this.Attr_Next_ReservationID==instance.Attr_ReservationID ))
             {
+                if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR19WashingMachineReservationNextReservation });
+
                 this.attr_Next_ReservationID = null;
                 relR19WashingMachineReservationNextReservation = null;
 
@@ -149,9 +193,11 @@ namespace LaundromatInHotel
             return isValid;
         }
 
-        public void Dispose()
+        public void DeleteInstance(IList<ChangedState> changedStates=null)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:ReservableWashingMachine(MachineID={this.Attr_MachineID}):delete");
+
+            changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Delete, Target = this, ChangedProperties = null });
 
             instanceRepository.Delete(this);
         }
@@ -185,16 +231,29 @@ namespace LaundromatInHotel
             return results;
         }
         
-        public IDictionary<string, object> GetProperties()
+        public IDictionary<string, object> GetProperties(bool onlyIdentity)
         {
             var results = new Dictionary<string, object>();
 
-            results.Add("MachineID", attr_MachineID);
+            if (!onlyIdentity) results.Add("MachineID", attr_MachineID);
             results.Add("current_state", stateMachine.CurrentState);
-            results.Add("Next_ReservationID", attr_Next_ReservationID);
+            if (!onlyIdentity) results.Add("Next_ReservationID", attr_Next_ReservationID);
 
             return results;
         }
 
+#if false
+        List<ChangedState> changedStates = new List<ChangedState>();
+
+        public IList<ChangedState> ChangedStates()
+        {
+            List<ChangedState> results = new List<ChangedState>();
+            results.AddRange(changedStates);
+            results.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Update, Target = this, ChangedProperties = ChangedProperties() });
+            changedStates.Clear();
+
+            return results;
+        }
+#endif
     }
 }

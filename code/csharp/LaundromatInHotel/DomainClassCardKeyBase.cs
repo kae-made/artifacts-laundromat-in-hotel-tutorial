@@ -17,18 +17,20 @@ namespace LaundromatInHotel
 {
     public partial class DomainClassCardKeyBase : DomainClassCardKey
     {
-        private static readonly string className = "CardKey";
+        protected static readonly string className = "CardKey";
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
         protected Logger logger;
 
-        public static DomainClassCardKeyBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
+        public static DomainClassCardKeyBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
         {
             var newInstance = new DomainClassCardKeyBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={newInstance.Attr_CardKeyID}):create");
 
             instanceRepository.Add(newInstance);
+
+            if (changedStates !=null) changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Create, Target = newInstance, ChangedProperties = null });
 
             return newInstance;
         }
@@ -40,29 +42,58 @@ namespace LaundromatInHotel
             attr_CardKeyID = Guid.NewGuid().ToString();
         }
 
-        string attr_CardKeyID;
-        bool stateof_CardKeyID = false;
+        protected string attr_CardKeyID;
+        protected bool stateof_CardKeyID = false;
 
-        string attr_GuestStayID;
-        bool stateof_GuestStayID = false;
+        protected string attr_GuestStayID;
+        protected bool stateof_GuestStayID = false;
 
 
         public string Attr_CardKeyID { get { return attr_CardKeyID; } set { attr_CardKeyID = value; stateof_CardKeyID = true; } }
         public string Attr_GuestStayID { get { return attr_GuestStayID; } }
 
-        private DomainClassGuestStay relR6GuestStayIsAssignedAsKeyFor;
+        public static bool Compare(DomainClassCardKey instance, IDictionary<string, object> conditionPropertyValues)
+        {
+            bool result = true;
+            foreach (var propertyName in conditionPropertyValues.Keys)
+            {
+                switch (propertyName)
+                {
+                    case "CardKeyID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_CardKeyID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "GuestStayID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_GuestStayID)
+                        {
+                            result = false;
+                        }
+                        break;
+                }
+                if (result== false)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        protected LinkedInstance relR6GuestStayIsAssignedAsKeyFor;
 
         public DomainClassGuestStay LinkedR6IsAssignedAsKeyFor()
         {
             if (relR6GuestStayIsAssignedAsKeyFor == null)
             {
                 var candidates = instanceRepository.GetDomainInstances("GuestStay").Where(inst=>(this.Attr_GuestStayID==((DomainClassGuestStay)inst).Attr_GuestStayID));
-                relR6GuestStayIsAssignedAsKeyFor = (DomainClassGuestStay)candidates.First();
+                relR6GuestStayIsAssignedAsKeyFor = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R6", Phrase = "IsAssignedAsKeyFor" };
+
             }
-            return relR6GuestStayIsAssignedAsKeyFor;
+            return relR6GuestStayIsAssignedAsKeyFor.GetDestination<DomainClassGuestStay>();
         }
 
-        public bool LinkR6IsAssignedAsKeyFor(DomainClassGuestStay instance)
+        public bool LinkR6IsAssignedAsKeyFor(DomainClassGuestStay instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR6GuestStayIsAssignedAsKeyFor == null)
@@ -71,15 +102,22 @@ namespace LaundromatInHotel
 
                 if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={this.Attr_CardKeyID}):link[GuestStay(GuestStayID={instance.Attr_GuestStayID})]");
 
-                result = true;
+                result = (LinkedR6IsAssignedAsKeyFor()!=null);
+                if (result)
+                {
+                    if(changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Create, Target = relR6GuestStayIsAssignedAsKeyFor });
+                }
             }
             return result;
         }
-        public bool UnlinkR6IsAssignedAsKeyFor(DomainClassGuestStay instance)
+
+        public bool UnlinkR6IsAssignedAsKeyFor(DomainClassGuestStay instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR6GuestStayIsAssignedAsKeyFor != null && ( this.Attr_GuestStayID==instance.Attr_GuestStayID ))
             {
+                if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR6GuestStayIsAssignedAsKeyFor });
+
                 this.attr_GuestStayID = null;
                 relR6GuestStayIsAssignedAsKeyFor = null;
 
@@ -101,9 +139,11 @@ namespace LaundromatInHotel
             return isValid;
         }
 
-        public void Dispose()
+        public void DeleteInstance(IList<ChangedState> changedStates=null)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:CardKey(CardKeyID={this.Attr_CardKeyID}):delete");
+
+            changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Delete, Target = this, ChangedProperties = null });
 
             instanceRepository.Delete(this);
         }
@@ -134,15 +174,28 @@ namespace LaundromatInHotel
             return results;
         }
         
-        public IDictionary<string, object> GetProperties()
+        public IDictionary<string, object> GetProperties(bool onlyIdentity)
         {
             var results = new Dictionary<string, object>();
 
             results.Add("CardKeyID", attr_CardKeyID);
-            results.Add("GuestStayID", attr_GuestStayID);
+            if (!onlyIdentity) results.Add("GuestStayID", attr_GuestStayID);
 
             return results;
         }
 
+#if false
+        List<ChangedState> changedStates = new List<ChangedState>();
+
+        public IList<ChangedState> ChangedStates()
+        {
+            List<ChangedState> results = new List<ChangedState>();
+            results.AddRange(changedStates);
+            results.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Update, Target = this, ChangedProperties = ChangedProperties() });
+            changedStates.Clear();
+
+            return results;
+        }
+#endif
     }
 }

@@ -17,18 +17,20 @@ namespace LaundromatInHotel
 {
     public partial class DomainClassDoorwithLockBase : DomainClassDoorwithLock
     {
-        private static readonly string className = "DoorwithLock";
+        protected static readonly string className = "DoorwithLock";
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
         protected Logger logger;
 
-        public static DomainClassDoorwithLockBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
+        public static DomainClassDoorwithLockBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
         {
             var newInstance = new DomainClassDoorwithLockBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={newInstance.Attr_DoorID}):create");
 
             instanceRepository.Add(newInstance);
+
+            if (changedStates !=null) changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Create, Target = newInstance, ChangedProperties = null });
 
             return newInstance;
         }
@@ -38,23 +40,23 @@ namespace LaundromatInHotel
             this.instanceRepository = instanceRepository;
             this.logger = logger;
             attr_DoorID = Guid.NewGuid().ToString();
-            stateMachine = new DomainClassDoorwithLockStateMachine(this, logger);
+            stateMachine = new DomainClassDoorwithLockStateMachine(this, instanceRepository, logger);
         }
 
-        string attr_DoorID;
-        bool stateof_DoorID = false;
+        protected string attr_DoorID;
+        protected bool stateof_DoorID = false;
 
-        string attr_PIN_Number;
-        bool stateof_PIN_Number = false;
+        protected string attr_PIN_Number;
+        protected bool stateof_PIN_Number = false;
 
-        int attr_NumberOfDigits;
-        bool stateof_NumberOfDigits = false;
+        protected int attr_NumberOfDigits;
+        protected bool stateof_NumberOfDigits = false;
 
-        DomainTypeDoorStatus attr_Status;
-        bool stateof_Status = false;
+        protected DomainTypeDoorStatus attr_Status;
+        protected bool stateof_Status = false;
 
-        DomainClassDoorwithLockStateMachine stateMachine;
-        bool stateof_current_state = false;
+        protected DomainClassDoorwithLockStateMachine stateMachine;
+        protected bool stateof_current_state = false;
 
 
         public string Attr_DoorID { get { return attr_DoorID; } set { attr_DoorID = value; stateof_DoorID = true; } }
@@ -62,6 +64,46 @@ namespace LaundromatInHotel
         public int Attr_NumberOfDigits { get { return attr_NumberOfDigits; } set { attr_NumberOfDigits = value; stateof_NumberOfDigits = true; } }
         public DomainTypeDoorStatus Attr_Status { get { return attr_Status; } set { attr_Status = value; stateof_Status = true; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
+
+        public static bool Compare(DomainClassDoorwithLock instance, IDictionary<string, object> conditionPropertyValues)
+        {
+            bool result = true;
+            foreach (var propertyName in conditionPropertyValues.Keys)
+            {
+                switch (propertyName)
+                {
+                    case "DoorID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_DoorID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "PIN_Number":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_PIN_Number)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "NumberOfDigits":
+                        if ((int)conditionPropertyValues[propertyName] != instance.Attr_NumberOfDigits)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "Status":
+                        if ((DomainTypeDoorStatus)conditionPropertyValues[propertyName] != instance.Attr_Status)
+                        {
+                            result = false;
+                        }
+                        break;
+                }
+                if (result== false)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
 
         public DomainClassWashingMachine LinkedR14()
         {
@@ -86,9 +128,11 @@ namespace LaundromatInHotel
             return isValid;
         }
 
-        public void Dispose()
+        public void DeleteInstance(IList<ChangedState> changedStates=null)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={this.Attr_DoorID}):delete");
+
+            changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Delete, Target = this, ChangedProperties = null });
 
             instanceRepository.Delete(this);
         }
@@ -136,18 +180,31 @@ namespace LaundromatInHotel
             return results;
         }
         
-        public IDictionary<string, object> GetProperties()
+        public IDictionary<string, object> GetProperties(bool onlyIdentity)
         {
             var results = new Dictionary<string, object>();
 
             results.Add("DoorID", attr_DoorID);
-            results.Add("PIN_Number", attr_PIN_Number);
-            results.Add("NumberOfDigits", attr_NumberOfDigits);
-            results.Add("Status", attr_Status);
+            if (!onlyIdentity) results.Add("PIN_Number", attr_PIN_Number);
+            if (!onlyIdentity) results.Add("NumberOfDigits", attr_NumberOfDigits);
+            if (!onlyIdentity) results.Add("Status", attr_Status);
             results.Add("current_state", stateMachine.CurrentState);
 
             return results;
         }
 
+#if false
+        List<ChangedState> changedStates = new List<ChangedState>();
+
+        public IList<ChangedState> ChangedStates()
+        {
+            List<ChangedState> results = new List<ChangedState>();
+            results.AddRange(changedStates);
+            results.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Update, Target = this, ChangedProperties = ChangedProperties() });
+            changedStates.Clear();
+
+            return results;
+        }
+#endif
     }
 }

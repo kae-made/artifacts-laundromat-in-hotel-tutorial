@@ -17,18 +17,20 @@ namespace LaundromatInHotel
 {
     public partial class DomainClassHotelBase : DomainClassHotel
     {
-        private static readonly string className = "Hotel";
+        protected static readonly string className = "Hotel";
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
         protected Logger logger;
 
-        public static DomainClassHotelBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
+        public static DomainClassHotelBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
         {
             var newInstance = new DomainClassHotelBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Hotel(HotelID={newInstance.Attr_HotelID}):create");
 
             instanceRepository.Add(newInstance);
+
+            if (changedStates !=null) changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Create, Target = newInstance, ChangedProperties = null });
 
             return newInstance;
         }
@@ -40,15 +42,43 @@ namespace LaundromatInHotel
             attr_HotelID = Guid.NewGuid().ToString();
         }
 
-        string attr_HotelID;
-        bool stateof_HotelID = false;
+        protected string attr_HotelID;
+        protected bool stateof_HotelID = false;
 
-        string attr_Name;
-        bool stateof_Name = false;
+        protected string attr_Name;
+        protected bool stateof_Name = false;
 
 
         public string Attr_HotelID { get { return attr_HotelID; } set { attr_HotelID = value; stateof_HotelID = true; } }
         public string Attr_Name { get { return attr_Name; } set { attr_Name = value; stateof_Name = true; } }
+
+        public static bool Compare(DomainClassHotel instance, IDictionary<string, object> conditionPropertyValues)
+        {
+            bool result = true;
+            foreach (var propertyName in conditionPropertyValues.Keys)
+            {
+                switch (propertyName)
+                {
+                    case "HotelID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_HotelID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "Name":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_Name)
+                        {
+                            result = false;
+                        }
+                        break;
+                }
+                if (result== false)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
 
         public IEnumerable<DomainClassLaundromatRoom> LinkedR1ProvideLaundromantService()
         {
@@ -87,9 +117,11 @@ namespace LaundromatInHotel
             return isValid;
         }
 
-        public void Dispose()
+        public void DeleteInstance(IList<ChangedState> changedStates=null)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Hotel(HotelID={this.Attr_HotelID}):delete");
+
+            changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Delete, Target = this, ChangedProperties = null });
 
             instanceRepository.Delete(this);
         }
@@ -120,15 +152,28 @@ namespace LaundromatInHotel
             return results;
         }
         
-        public IDictionary<string, object> GetProperties()
+        public IDictionary<string, object> GetProperties(bool onlyIdentity)
         {
             var results = new Dictionary<string, object>();
 
             results.Add("HotelID", attr_HotelID);
-            results.Add("Name", attr_Name);
+            if (!onlyIdentity) results.Add("Name", attr_Name);
 
             return results;
         }
 
+#if false
+        List<ChangedState> changedStates = new List<ChangedState>();
+
+        public IList<ChangedState> ChangedStates()
+        {
+            List<ChangedState> results = new List<ChangedState>();
+            results.AddRange(changedStates);
+            results.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Update, Target = this, ChangedProperties = ChangedProperties() });
+            changedStates.Clear();
+
+            return results;
+        }
+#endif
     }
 }

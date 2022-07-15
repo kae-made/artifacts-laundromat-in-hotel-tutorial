@@ -9,13 +9,14 @@
 // ------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Kae.Utility.Logging;
 
 namespace LaundromatInHotel
 {
     public abstract class InstanceRepository
     {
-        private Dictionary<string, List<DomainClassDef>> domainInstances = new Dictionary<string, List<DomainClassDef>>();
+        protected Dictionary<string, List<DomainClassDef>> domainInstances = new Dictionary<string, List<DomainClassDef>>();
 
         public void Add(DomainClassDef instance)
         {
@@ -62,6 +63,49 @@ namespace LaundromatInHotel
             return result;
         }
 
+        public IList<ChangedState> CreateChangedStates()
+        {
+            return new List<ChangedState>();
+        }
+
+        public void SyncChangedStates(IList<ChangedState> changedStates)
+        {
+            lock (domainInstances)
+            {
+                foreach (var changedState in changedStates)
+                {
+                    if (changedState is CInstanceChagedState)
+                    {
+                        UpdateCInstance((CInstanceChagedState)changedState);
+                    }
+                    else if (changedState is CLinkChangedState)
+                    {
+                        UpdateCLink((CLinkChangedState)changedState);
+                    }
+                }
+                foreach (var className in domainInstances.Keys)
+                {
+                    foreach (var instance in domainInstances[className])
+                    {
+                        var updatedState = instance.ChangedProperties();
+                        UpdateState(instance, updatedState);
+                    }
+                }
+            }
+        }
+
+        public void UpdateState()
+        {
+            foreach (var className in domainInstances.Keys)
+            {
+                foreach (var instance in domainInstances[className])
+                {
+                    var changedStates = instance.ChangedProperties();
+                    UpdateState(instance, changedStates);
+                }
+            }
+        }
+
         ///
         /// Update stored state of the instance by changed argument.
         /// changed.key is name of property of the instance.
@@ -77,6 +121,34 @@ namespace LaundromatInHotel
         ///
         public abstract void LoadState(IDictionary<string, IList<IDictionary<string, object>>> instances);
 
+        public abstract void UpdateCInstance(CInstanceChagedState instanceState);
+        public abstract void UpdateCLink(CLinkChangedState linkState);
+
+        public abstract IEnumerable<T> SelectInstances<T>(string className, IDictionary<string, object> conditionPropertyValues, Func<T, IDictionary<string, object>, bool> compare) where T : DomainClassDef;
+
+    }
+
+    public abstract class ChangedState
+    {
+        public enum Operation
+        {
+            Create,
+            Update,
+            Delete
+        }
+
+        public Operation OP { get; set; }
+    }
+
+    public class CInstanceChagedState : ChangedState
+    {
+        public DomainClassDef Target { get; set; }
+        public IDictionary<string, object> ChangedProperties { get; set; }
+    }
+
+    public class CLinkChangedState : ChangedState
+    {
+        public LinkedInstance Target { get; set; }
     }
 
     public class InstanceRepositoryInMemory : InstanceRepository
@@ -157,6 +229,27 @@ namespace LaundromatInHotel
                     }
                 }
             }
+        }
+
+        public override void UpdateCInstance(CInstanceChagedState instanceState)
+        {
+            // Do nothing
+        }
+
+        public override void UpdateCLink(CLinkChangedState linkState)
+        {
+            // To nothing
+        }
+
+        public override IEnumerable<T> SelectInstances<T>(string className, IDictionary<string, object> conditionPropertyValues, Func<T, IDictionary<string, object>, bool> compare)
+        {
+            var resultSet = new List<T>();
+            var candidates = domainInstances[className].Where(i => { return compare((T)i, conditionPropertyValues); });
+            foreach (var ci in candidates)
+            {
+                resultSet.Add((T)ci);
+            }
+            return resultSet;
         }
 
     }

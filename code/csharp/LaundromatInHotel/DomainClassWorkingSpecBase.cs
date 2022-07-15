@@ -17,18 +17,20 @@ namespace LaundromatInHotel
 {
     public partial class DomainClassWorkingSpecBase : DomainClassWorkingSpec
     {
-        private static readonly string className = "WorkingSpec";
+        protected static readonly string className = "WorkingSpec";
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
         protected Logger logger;
 
-        public static DomainClassWorkingSpecBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
+        public static DomainClassWorkingSpecBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
         {
             var newInstance = new DomainClassWorkingSpecBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WorkingSpec(WorkingSpecID={newInstance.Attr_WorkingSpecID}):create");
 
             instanceRepository.Add(newInstance);
+
+            if (changedStates !=null) changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Create, Target = newInstance, ChangedProperties = null });
 
             return newInstance;
         }
@@ -40,20 +42,20 @@ namespace LaundromatInHotel
             attr_WorkingSpecID = Guid.NewGuid().ToString();
         }
 
-        string attr_WorkingSpecID;
-        bool stateof_WorkingSpecID = false;
+        protected string attr_WorkingSpecID;
+        protected bool stateof_WorkingSpecID = false;
 
-        int attr_WashingTime;
-        bool stateof_WashingTime = false;
+        protected int attr_WashingTime;
+        protected bool stateof_WashingTime = false;
 
-        int attr_DryingTime;
-        bool stateof_DryingTime = false;
+        protected int attr_DryingTime;
+        protected bool stateof_DryingTime = false;
 
-        int attr_StandardWeight;
-        bool stateof_StandardWeight = false;
+        protected int attr_StandardWeight;
+        protected bool stateof_StandardWeight = false;
 
-        int attr_Price;
-        bool stateof_Price = false;
+        protected int attr_Price;
+        protected bool stateof_Price = false;
 
 
         public string Attr_WorkingSpecID { get { return attr_WorkingSpecID; } set { attr_WorkingSpecID = value; stateof_WorkingSpecID = true; } }
@@ -61,6 +63,52 @@ namespace LaundromatInHotel
         public int Attr_DryingTime { get { return attr_DryingTime; } set { attr_DryingTime = value; stateof_DryingTime = true; } }
         public int Attr_StandardWeight { get { return attr_StandardWeight; } set { attr_StandardWeight = value; stateof_StandardWeight = true; } }
         public int Attr_Price { get { return attr_Price; } set { attr_Price = value; stateof_Price = true; } }
+
+        public static bool Compare(DomainClassWorkingSpec instance, IDictionary<string, object> conditionPropertyValues)
+        {
+            bool result = true;
+            foreach (var propertyName in conditionPropertyValues.Keys)
+            {
+                switch (propertyName)
+                {
+                    case "WorkingSpecID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_WorkingSpecID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "WashingTime":
+                        if ((int)conditionPropertyValues[propertyName] != instance.Attr_WashingTime)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "DryingTime":
+                        if ((int)conditionPropertyValues[propertyName] != instance.Attr_DryingTime)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "StandardWeight":
+                        if ((int)conditionPropertyValues[propertyName] != instance.Attr_StandardWeight)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "Price":
+                        if ((int)conditionPropertyValues[propertyName] != instance.Attr_Price)
+                        {
+                            result = false;
+                        }
+                        break;
+                }
+                if (result== false)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
 
         public IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8Other()
         {
@@ -84,9 +132,11 @@ namespace LaundromatInHotel
             return isValid;
         }
 
-        public void Dispose()
+        public void DeleteInstance(IList<ChangedState> changedStates=null)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WorkingSpec(WorkingSpecID={this.Attr_WorkingSpecID}):delete");
+
+            changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Delete, Target = this, ChangedProperties = null });
 
             instanceRepository.Delete(this);
         }
@@ -138,18 +188,31 @@ namespace LaundromatInHotel
             return results;
         }
         
-        public IDictionary<string, object> GetProperties()
+        public IDictionary<string, object> GetProperties(bool onlyIdentity)
         {
             var results = new Dictionary<string, object>();
 
             results.Add("WorkingSpecID", attr_WorkingSpecID);
-            results.Add("WashingTime", attr_WashingTime);
-            results.Add("DryingTime", attr_DryingTime);
-            results.Add("StandardWeight", attr_StandardWeight);
-            results.Add("Price", attr_Price);
+            if (!onlyIdentity) results.Add("WashingTime", attr_WashingTime);
+            if (!onlyIdentity) results.Add("DryingTime", attr_DryingTime);
+            if (!onlyIdentity) results.Add("StandardWeight", attr_StandardWeight);
+            if (!onlyIdentity) results.Add("Price", attr_Price);
 
             return results;
         }
 
+#if false
+        List<ChangedState> changedStates = new List<ChangedState>();
+
+        public IList<ChangedState> ChangedStates()
+        {
+            List<ChangedState> results = new List<ChangedState>();
+            results.AddRange(changedStates);
+            results.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Update, Target = this, ChangedProperties = ChangedProperties() });
+            changedStates.Clear();
+
+            return results;
+        }
+#endif
     }
 }

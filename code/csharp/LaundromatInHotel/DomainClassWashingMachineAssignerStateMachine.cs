@@ -48,7 +48,7 @@ namespace LaundromatInHotel
 
             public string guestStayId { get; set; }
             public string specId { get; set; }
-            WashingMachineAssigner1_RequestReservation Create(DomainClassWashingMachineAssigner receiver, string guestStayId, string specId)
+            public static WashingMachineAssigner1_RequestReservation Create(DomainClassWashingMachineAssigner receiver, string guestStayId, string specId)
             {
                 var newEvent = new WashingMachineAssigner1_RequestReservation() { guestStayId = guestStayId, specId = specId };
                 if (receiver != null)
@@ -68,7 +68,7 @@ namespace LaundromatInHotel
             }
 
             public string reservationId { get; set; }
-            WashingMachineAssigner2_CancelReservation Create(DomainClassWashingMachineAssigner receiver, string reservationId)
+            public static WashingMachineAssigner2_CancelReservation Create(DomainClassWashingMachineAssigner receiver, string reservationId)
             {
                 var newEvent = new WashingMachineAssigner2_CancelReservation() { reservationId = reservationId };
                 if (receiver != null)
@@ -82,11 +82,14 @@ namespace LaundromatInHotel
 
         protected DomainClassWashingMachineAssigner target;
 
-        public DomainClassWashingMachineAssignerStateMachine(DomainClassWashingMachineAssigner target, Logger logger) : base(1, logger)
+        protected InstanceRepository instanceRepository;
+
+        public DomainClassWashingMachineAssignerStateMachine(DomainClassWashingMachineAssigner target, InstanceRepository instanceRepository, Logger logger) : base(1, logger)
         {
             this.target = target;
             this.stateTransition = this;
             this.logger = logger;
+            this.instanceRepository = instanceRepository;
         }
 
         protected int[,] stateTransitionTable = new int[2, 2]
@@ -100,9 +103,14 @@ namespace LaundromatInHotel
             return stateTransitionTable[currentState, eventNumber];
         }
 
+        private List<ChangedState> changedStates;
+
         protected override void RunEntryAction(int nextState, EventData eventData)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineAssigner(HotelID={target.Attr_HotelID}):entering[current={CurrentState},event={eventData.EventNumber}");
+
+
+            changedStates = new List<ChangedState>();
 
             switch (nextState)
             {
@@ -115,6 +123,8 @@ namespace LaundromatInHotel
             }
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineAssigner(HotelID={target.Attr_HotelID}):entered[current={CurrentState},event={eventData.EventNumber}");
 
+
+            instanceRepository.SyncChangedStates(changedStates);
         }
     }
 }

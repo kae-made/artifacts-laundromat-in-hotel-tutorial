@@ -17,18 +17,20 @@ namespace LaundromatInHotel
 {
     public partial class DomainClassGuestBase : DomainClassGuest
     {
-        private static readonly string className = "Guest";
+        protected static readonly string className = "Guest";
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
         protected Logger logger;
 
-        public static DomainClassGuestBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
+        public static DomainClassGuestBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
         {
             var newInstance = new DomainClassGuestBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Guest(GuestID={newInstance.Attr_GuestID}):create");
 
             instanceRepository.Add(newInstance);
+
+            if (changedStates !=null) changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Create, Target = newInstance, ChangedProperties = null });
 
             return newInstance;
         }
@@ -40,17 +42,17 @@ namespace LaundromatInHotel
             attr_GuestID = Guid.NewGuid().ToString();
         }
 
-        string attr_Name;
-        bool stateof_Name = false;
+        protected string attr_Name;
+        protected bool stateof_Name = false;
 
-        string attr_GuestID;
-        bool stateof_GuestID = false;
+        protected string attr_GuestID;
+        protected bool stateof_GuestID = false;
 
-        string attr_GuestStayId;
-        bool stateof_GuestStayId = false;
+        protected string attr_GuestStayId;
+        protected bool stateof_GuestStayId = false;
 
-        string attr_MailAddress;
-        bool stateof_MailAddress = false;
+        protected string attr_MailAddress;
+        protected bool stateof_MailAddress = false;
 
 
         public string Attr_Name { get { return attr_Name; } set { attr_Name = value; stateof_Name = true; } }
@@ -58,19 +60,60 @@ namespace LaundromatInHotel
         public string Attr_GuestStayId { get { return attr_GuestStayId; } }
         public string Attr_MailAddress { get { return attr_MailAddress; } set { attr_MailAddress = value; stateof_MailAddress = true; } }
 
-        private DomainClassGuestStay relR5GuestStayHaveTheRightToUse;
+        public static bool Compare(DomainClassGuest instance, IDictionary<string, object> conditionPropertyValues)
+        {
+            bool result = true;
+            foreach (var propertyName in conditionPropertyValues.Keys)
+            {
+                switch (propertyName)
+                {
+                    case "Name":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_Name)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "GuestID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_GuestID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "GuestStayId":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_GuestStayId)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "MailAddress":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_MailAddress)
+                        {
+                            result = false;
+                        }
+                        break;
+                }
+                if (result== false)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        protected LinkedInstance relR5GuestStayHaveTheRightToUse;
 
         public DomainClassGuestStay LinkedR5HaveTheRightToUse()
         {
             if (relR5GuestStayHaveTheRightToUse == null)
             {
                 var candidates = instanceRepository.GetDomainInstances("GuestStay").Where(inst=>(this.Attr_GuestStayId==((DomainClassGuestStay)inst).Attr_GuestStayID));
-                relR5GuestStayHaveTheRightToUse = (DomainClassGuestStay)candidates.First();
+                relR5GuestStayHaveTheRightToUse = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R5", Phrase = "HaveTheRightToUse" };
+
             }
-            return relR5GuestStayHaveTheRightToUse;
+            return relR5GuestStayHaveTheRightToUse.GetDestination<DomainClassGuestStay>();
         }
 
-        public bool LinkR5HaveTheRightToUse(DomainClassGuestStay instance)
+        public bool LinkR5HaveTheRightToUse(DomainClassGuestStay instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR5GuestStayHaveTheRightToUse == null)
@@ -79,15 +122,22 @@ namespace LaundromatInHotel
 
                 if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Guest(GuestID={this.Attr_GuestID}):link[GuestStay(GuestStayID={instance.Attr_GuestStayID})]");
 
-                result = true;
+                result = (LinkedR5HaveTheRightToUse()!=null);
+                if (result)
+                {
+                    if(changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Create, Target = relR5GuestStayHaveTheRightToUse });
+                }
             }
             return result;
         }
-        public bool UnlinkR5HaveTheRightToUse(DomainClassGuestStay instance)
+
+        public bool UnlinkR5HaveTheRightToUse(DomainClassGuestStay instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR5GuestStayHaveTheRightToUse != null && ( this.Attr_GuestStayId==instance.Attr_GuestStayID ))
             {
+                if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR5GuestStayHaveTheRightToUse });
+
                 this.attr_GuestStayId = null;
                 relR5GuestStayHaveTheRightToUse = null;
 
@@ -109,9 +159,11 @@ namespace LaundromatInHotel
             return isValid;
         }
 
-        public void Dispose()
+        public void DeleteInstance(IList<ChangedState> changedStates=null)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Guest(GuestID={this.Attr_GuestID}):delete");
+
+            changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Delete, Target = this, ChangedProperties = null });
 
             instanceRepository.Delete(this);
         }
@@ -156,17 +208,30 @@ namespace LaundromatInHotel
             return results;
         }
         
-        public IDictionary<string, object> GetProperties()
+        public IDictionary<string, object> GetProperties(bool onlyIdentity)
         {
             var results = new Dictionary<string, object>();
 
-            results.Add("Name", attr_Name);
+            if (!onlyIdentity) results.Add("Name", attr_Name);
             results.Add("GuestID", attr_GuestID);
-            results.Add("GuestStayId", attr_GuestStayId);
-            results.Add("MailAddress", attr_MailAddress);
+            if (!onlyIdentity) results.Add("GuestStayId", attr_GuestStayId);
+            if (!onlyIdentity) results.Add("MailAddress", attr_MailAddress);
 
             return results;
         }
 
+#if false
+        List<ChangedState> changedStates = new List<ChangedState>();
+
+        public IList<ChangedState> ChangedStates()
+        {
+            List<ChangedState> results = new List<ChangedState>();
+            results.AddRange(changedStates);
+            results.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Update, Target = this, ChangedProperties = ChangedProperties() });
+            changedStates.Clear();
+
+            return results;
+        }
+#endif
     }
 }

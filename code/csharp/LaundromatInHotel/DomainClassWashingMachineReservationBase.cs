@@ -17,18 +17,20 @@ namespace LaundromatInHotel
 {
     public partial class DomainClassWashingMachineReservationBase : DomainClassWashingMachineReservation
     {
-        private static readonly string className = "WashingMachineReservation";
+        protected static readonly string className = "WashingMachineReservation";
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
         protected Logger logger;
 
-        public static DomainClassWashingMachineReservationBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
+        public static DomainClassWashingMachineReservationBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
         {
             var newInstance = new DomainClassWashingMachineReservationBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={newInstance.Attr_ReservationID}):create");
 
             instanceRepository.Add(newInstance);
+
+            if (changedStates !=null) changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Create, Target = newInstance, ChangedProperties = null });
 
             return newInstance;
         }
@@ -38,38 +40,38 @@ namespace LaundromatInHotel
             this.instanceRepository = instanceRepository;
             this.logger = logger;
             attr_ReservationID = Guid.NewGuid().ToString();
-            stateMachine = new DomainClassWashingMachineReservationStateMachine(this, logger);
+            stateMachine = new DomainClassWashingMachineReservationStateMachine(this, instanceRepository, logger);
         }
 
-        string attr_ReservationID;
-        bool stateof_ReservationID = false;
+        protected string attr_ReservationID;
+        protected bool stateof_ReservationID = false;
 
-        DateTime attr_ReservationTime;
-        bool stateof_ReservationTime = false;
+        protected DateTime attr_ReservationTime;
+        protected bool stateof_ReservationTime = false;
 
-        DateTime attr_EstimatedEndTime;
-        bool stateof_EstimatedEndTime = false;
+        protected DateTime attr_EstimatedEndTime;
+        protected bool stateof_EstimatedEndTime = false;
 
-        int attr_PreAlarmTime;
-        bool stateof_PreAlarmTime = false;
+        protected int attr_PreAlarmTime;
+        protected bool stateof_PreAlarmTime = false;
 
-        string attr_GuestStayID;
-        bool stateof_GuestStayID = false;
+        protected string attr_GuestStayID;
+        protected bool stateof_GuestStayID = false;
 
-        string attr_WorkingSpecID;
-        bool stateof_WorkingSpecID = false;
+        protected string attr_WorkingSpecID;
+        protected bool stateof_WorkingSpecID = false;
 
-        string attr_successor_ReservationID;
-        bool stateof_successor_ReservationID = false;
+        protected string attr_successor_ReservationID;
+        protected bool stateof_successor_ReservationID = false;
 
-        DomainClassWashingMachineReservationStateMachine stateMachine;
-        bool stateof_current_state = false;
+        protected DomainClassWashingMachineReservationStateMachine stateMachine;
+        protected bool stateof_current_state = false;
 
-        string attr_MachineID;
-        bool stateof_MachineID = false;
+        protected string attr_MachineID;
+        protected bool stateof_MachineID = false;
 
-        string attr_AlarmTimer;
-        bool stateof_AlarmTimer = false;
+        protected string attr_AlarmTimer;
+        protected bool stateof_AlarmTimer = false;
 
 
         public string Attr_ReservationID { get { return attr_ReservationID; } set { attr_ReservationID = value; stateof_ReservationID = true; } }
@@ -83,21 +85,92 @@ namespace LaundromatInHotel
         public string Attr_MachineID { get { return attr_MachineID; } }
         public string Attr_AlarmTimer { get { return attr_AlarmTimer; } set { attr_AlarmTimer = value; stateof_AlarmTimer = true; } }
 
-        private DomainClassGuestStay relR12GuestStayReservationOwner;
-        private DomainClassAvailableWorkingSpec relR13AvailableWorkingSpecTarget;
-        private DomainClassWashingMachineReservation relR17WashingMachineReservationSuccessor;
+        public static bool Compare(DomainClassWashingMachineReservation instance, IDictionary<string, object> conditionPropertyValues)
+        {
+            bool result = true;
+            foreach (var propertyName in conditionPropertyValues.Keys)
+            {
+                switch (propertyName)
+                {
+                    case "ReservationID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_ReservationID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "ReservationTime":
+                        if ((DateTime)conditionPropertyValues[propertyName] != instance.Attr_ReservationTime)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "EstimatedEndTime":
+                        if ((DateTime)conditionPropertyValues[propertyName] != instance.Attr_EstimatedEndTime)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "PreAlarmTime":
+                        if ((int)conditionPropertyValues[propertyName] != instance.Attr_PreAlarmTime)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "GuestStayID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_GuestStayID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "WorkingSpecID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_WorkingSpecID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "successor_ReservationID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_successor_ReservationID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "MachineID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_MachineID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "AlarmTimer":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_AlarmTimer)
+                        {
+                            result = false;
+                        }
+                        break;
+                }
+                if (result== false)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        protected LinkedInstance relR12GuestStayReservationOwner;
+        protected LinkedInstance relR13AvailableWorkingSpecTarget;
+        protected LinkedInstance relR17WashingMachineReservationSuccessor;
 
         public DomainClassGuestStay LinkedR12ReservationOwner()
         {
             if (relR12GuestStayReservationOwner == null)
             {
                 var candidates = instanceRepository.GetDomainInstances("GuestStay").Where(inst=>(this.Attr_GuestStayID==((DomainClassGuestStay)inst).Attr_GuestStayID));
-                relR12GuestStayReservationOwner = (DomainClassGuestStay)candidates.First();
+                relR12GuestStayReservationOwner = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R12", Phrase = "ReservationOwner" };
+
             }
-            return relR12GuestStayReservationOwner;
+            return relR12GuestStayReservationOwner.GetDestination<DomainClassGuestStay>();
         }
 
-        public bool LinkR12ReservationOwner(DomainClassGuestStay instance)
+        public bool LinkR12ReservationOwner(DomainClassGuestStay instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR12GuestStayReservationOwner == null)
@@ -106,15 +179,22 @@ namespace LaundromatInHotel
 
                 if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={this.Attr_ReservationID}):link[GuestStay(GuestStayID={instance.Attr_GuestStayID})]");
 
-                result = true;
+                result = (LinkedR12ReservationOwner()!=null);
+                if (result)
+                {
+                    if(changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Create, Target = relR12GuestStayReservationOwner });
+                }
             }
             return result;
         }
-        public bool UnlinkR12ReservationOwner(DomainClassGuestStay instance)
+
+        public bool UnlinkR12ReservationOwner(DomainClassGuestStay instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR12GuestStayReservationOwner != null && ( this.Attr_GuestStayID==instance.Attr_GuestStayID ))
             {
+                if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR12GuestStayReservationOwner });
+
                 this.attr_GuestStayID = null;
                 relR12GuestStayReservationOwner = null;
 
@@ -130,12 +210,13 @@ namespace LaundromatInHotel
             if (relR13AvailableWorkingSpecTarget == null)
             {
                 var candidates = instanceRepository.GetDomainInstances("AvailableWorkingSpec").Where(inst=>(this.Attr_WorkingSpecID==((DomainClassAvailableWorkingSpec)inst).Attr_WorkingSpecID && this.Attr_MachineID==((DomainClassAvailableWorkingSpec)inst).Attr_MachineID));
-                relR13AvailableWorkingSpecTarget = (DomainClassAvailableWorkingSpec)candidates.First();
+                relR13AvailableWorkingSpecTarget = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R13", Phrase = "Target" };
+
             }
-            return relR13AvailableWorkingSpecTarget;
+            return relR13AvailableWorkingSpecTarget.GetDestination<DomainClassAvailableWorkingSpec>();
         }
 
-        public bool LinkR13Target(DomainClassAvailableWorkingSpec instance)
+        public bool LinkR13Target(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR13AvailableWorkingSpecTarget == null)
@@ -145,15 +226,22 @@ namespace LaundromatInHotel
 
                 if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={this.Attr_ReservationID}):link[AvailableWorkingSpec(MachineID={instance.Attr_MachineID},WorkingSpecID={instance.Attr_WorkingSpecID})]");
 
-                result = true;
+                result = (LinkedR13Target()!=null);
+                if (result)
+                {
+                    if(changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Create, Target = relR13AvailableWorkingSpecTarget });
+                }
             }
             return result;
         }
-        public bool UnlinkR13Target(DomainClassAvailableWorkingSpec instance)
+
+        public bool UnlinkR13Target(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR13AvailableWorkingSpecTarget != null && ( this.Attr_WorkingSpecID==instance.Attr_WorkingSpecID && this.Attr_MachineID==instance.Attr_MachineID ))
             {
+                if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR13AvailableWorkingSpecTarget });
+
                 this.attr_WorkingSpecID = null;
                 this.attr_MachineID = null;
                 relR13AvailableWorkingSpecTarget = null;
@@ -170,12 +258,13 @@ namespace LaundromatInHotel
             if (relR17WashingMachineReservationSuccessor == null)
             {
                 var candidates = instanceRepository.GetDomainInstances("WashingMachineReservation").Where(inst=>(this.Attr_successor_ReservationID==((DomainClassWashingMachineReservation)inst).Attr_ReservationID));
-                relR17WashingMachineReservationSuccessor = (DomainClassWashingMachineReservation)candidates.First();
+                relR17WashingMachineReservationSuccessor = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R17", Phrase = "Successor" };
+
             }
-            return relR17WashingMachineReservationSuccessor;
+            return relR17WashingMachineReservationSuccessor.GetDestination<DomainClassWashingMachineReservation>();
         }
 
-        public bool LinkR17Successor(DomainClassWashingMachineReservation instance)
+        public bool LinkR17Successor(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR17WashingMachineReservationSuccessor == null)
@@ -184,15 +273,22 @@ namespace LaundromatInHotel
 
                 if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={this.Attr_ReservationID}):link[WashingMachineReservation(ReservationID={instance.Attr_ReservationID})]");
 
-                result = true;
+                result = (LinkedR17Successor()!=null);
+                if (result)
+                {
+                    if(changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Create, Target = relR17WashingMachineReservationSuccessor });
+                }
             }
             return result;
         }
-        public bool UnlinkR17Successor(DomainClassWashingMachineReservation instance)
+
+        public bool UnlinkR17Successor(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR17WashingMachineReservationSuccessor != null && ( this.Attr_successor_ReservationID==instance.Attr_ReservationID ))
             {
+                if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR17WashingMachineReservationSuccessor });
+
                 this.attr_successor_ReservationID = null;
                 relR17WashingMachineReservationSuccessor = null;
 
@@ -235,9 +331,11 @@ namespace LaundromatInHotel
             return isValid;
         }
 
-        public void Dispose()
+        public void DeleteInstance(IList<ChangedState> changedStates=null)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={this.Attr_ReservationID}):delete");
+
+            changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Delete, Target = this, ChangedProperties = null });
 
             instanceRepository.Delete(this);
         }
@@ -320,23 +418,36 @@ namespace LaundromatInHotel
             return results;
         }
         
-        public IDictionary<string, object> GetProperties()
+        public IDictionary<string, object> GetProperties(bool onlyIdentity)
         {
             var results = new Dictionary<string, object>();
 
             results.Add("ReservationID", attr_ReservationID);
-            results.Add("ReservationTime", attr_ReservationTime);
-            results.Add("EstimatedEndTime", attr_EstimatedEndTime);
-            results.Add("PreAlarmTime", attr_PreAlarmTime);
-            results.Add("GuestStayID", attr_GuestStayID);
-            results.Add("WorkingSpecID", attr_WorkingSpecID);
-            results.Add("successor_ReservationID", attr_successor_ReservationID);
+            if (!onlyIdentity) results.Add("ReservationTime", attr_ReservationTime);
+            if (!onlyIdentity) results.Add("EstimatedEndTime", attr_EstimatedEndTime);
+            if (!onlyIdentity) results.Add("PreAlarmTime", attr_PreAlarmTime);
+            if (!onlyIdentity) results.Add("GuestStayID", attr_GuestStayID);
+            if (!onlyIdentity) results.Add("WorkingSpecID", attr_WorkingSpecID);
+            if (!onlyIdentity) results.Add("successor_ReservationID", attr_successor_ReservationID);
             results.Add("current_state", stateMachine.CurrentState);
-            results.Add("MachineID", attr_MachineID);
-            results.Add("AlarmTimer", attr_AlarmTimer);
+            if (!onlyIdentity) results.Add("MachineID", attr_MachineID);
+            if (!onlyIdentity) results.Add("AlarmTimer", attr_AlarmTimer);
 
             return results;
         }
 
+#if false
+        List<ChangedState> changedStates = new List<ChangedState>();
+
+        public IList<ChangedState> ChangedStates()
+        {
+            List<ChangedState> results = new List<ChangedState>();
+            results.AddRange(changedStates);
+            results.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Update, Target = this, ChangedProperties = ChangedProperties() });
+            changedStates.Clear();
+
+            return results;
+        }
+#endif
     }
 }

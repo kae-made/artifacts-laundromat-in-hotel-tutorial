@@ -17,18 +17,20 @@ namespace LaundromatInHotel
 {
     public partial class DomainClassGuestRoomBase : DomainClassGuestRoom
     {
-        private static readonly string className = "GuestRoom";
+        protected static readonly string className = "GuestRoom";
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
         protected Logger logger;
 
-        public static DomainClassGuestRoomBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
+        public static DomainClassGuestRoomBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
         {
             var newInstance = new DomainClassGuestRoomBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:GuestRoom(RoomID={newInstance.Attr_RoomID}):create");
 
             instanceRepository.Add(newInstance);
+
+            if (changedStates !=null) changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Create, Target = newInstance, ChangedProperties = null });
 
             return newInstance;
         }
@@ -40,23 +42,23 @@ namespace LaundromatInHotel
             attr_RoomID = Guid.NewGuid().ToString();
         }
 
-        int attr_Floor;
-        bool stateof_Floor = false;
+        protected int attr_Floor;
+        protected bool stateof_Floor = false;
 
-        int attr_RoomNumber;
-        bool stateof_RoomNumber = false;
+        protected int attr_RoomNumber;
+        protected bool stateof_RoomNumber = false;
 
-        string attr_Name;
-        bool stateof_Name = false;
+        protected string attr_Name;
+        protected bool stateof_Name = false;
 
-        string attr_RoomID;
-        bool stateof_RoomID = false;
+        protected string attr_RoomID;
+        protected bool stateof_RoomID = false;
 
-        int attr_Capacity;
-        bool stateof_Capacity = false;
+        protected int attr_Capacity;
+        protected bool stateof_Capacity = false;
 
-        string attr_HotelID;
-        bool stateof_HotelID = false;
+        protected string attr_HotelID;
+        protected bool stateof_HotelID = false;
 
 
         public int Attr_Floor { get { return attr_Floor; } set { attr_Floor = value; stateof_Floor = true; } }
@@ -66,19 +68,72 @@ namespace LaundromatInHotel
         public int Attr_Capacity { get { return attr_Capacity; } set { attr_Capacity = value; stateof_Capacity = true; } }
         public string Attr_HotelID { get { return attr_HotelID; } }
 
-        private DomainClassHotel relR3Hotel;
+        public static bool Compare(DomainClassGuestRoom instance, IDictionary<string, object> conditionPropertyValues)
+        {
+            bool result = true;
+            foreach (var propertyName in conditionPropertyValues.Keys)
+            {
+                switch (propertyName)
+                {
+                    case "Floor":
+                        if ((int)conditionPropertyValues[propertyName] != instance.Attr_Floor)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "RoomNumber":
+                        if ((int)conditionPropertyValues[propertyName] != instance.Attr_RoomNumber)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "Name":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_Name)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "RoomID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_RoomID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "Capacity":
+                        if ((int)conditionPropertyValues[propertyName] != instance.Attr_Capacity)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "HotelID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_HotelID)
+                        {
+                            result = false;
+                        }
+                        break;
+                }
+                if (result== false)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        protected LinkedInstance relR3Hotel;
 
         public DomainClassHotel LinkedR3()
         {
             if (relR3Hotel == null)
             {
                 var candidates = instanceRepository.GetDomainInstances("Hotel").Where(inst=>(this.Attr_HotelID==((DomainClassHotel)inst).Attr_HotelID));
-                relR3Hotel = (DomainClassHotel)candidates.First();
+                relR3Hotel = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R3", Phrase = "" };
+
             }
-            return relR3Hotel;
+            return relR3Hotel.GetDestination<DomainClassHotel>();
         }
 
-        public bool LinkR3(DomainClassHotel instance)
+        public bool LinkR3(DomainClassHotel instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR3Hotel == null)
@@ -87,15 +142,22 @@ namespace LaundromatInHotel
 
                 if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:GuestRoom(RoomID={this.Attr_RoomID}):link[Hotel(HotelID={instance.Attr_HotelID})]");
 
-                result = true;
+                result = (LinkedR3()!=null);
+                if (result)
+                {
+                    if(changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Create, Target = relR3Hotel });
+                }
             }
             return result;
         }
-        public bool UnlinkR3(DomainClassHotel instance)
+
+        public bool UnlinkR3(DomainClassHotel instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR3Hotel != null && ( this.Attr_HotelID==instance.Attr_HotelID ))
             {
+                if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR3Hotel });
+
                 this.attr_HotelID = null;
                 relR3Hotel = null;
 
@@ -123,9 +185,11 @@ namespace LaundromatInHotel
             return isValid;
         }
 
-        public void Dispose()
+        public void DeleteInstance(IList<ChangedState> changedStates=null)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:GuestRoom(RoomID={this.Attr_RoomID}):delete");
+
+            changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Delete, Target = this, ChangedProperties = null });
 
             instanceRepository.Delete(this);
         }
@@ -184,19 +248,32 @@ namespace LaundromatInHotel
             return results;
         }
         
-        public IDictionary<string, object> GetProperties()
+        public IDictionary<string, object> GetProperties(bool onlyIdentity)
         {
             var results = new Dictionary<string, object>();
 
-            results.Add("Floor", attr_Floor);
-            results.Add("RoomNumber", attr_RoomNumber);
-            results.Add("Name", attr_Name);
+            if (!onlyIdentity) results.Add("Floor", attr_Floor);
+            if (!onlyIdentity) results.Add("RoomNumber", attr_RoomNumber);
+            if (!onlyIdentity) results.Add("Name", attr_Name);
             results.Add("RoomID", attr_RoomID);
-            results.Add("Capacity", attr_Capacity);
-            results.Add("HotelID", attr_HotelID);
+            if (!onlyIdentity) results.Add("Capacity", attr_Capacity);
+            if (!onlyIdentity) results.Add("HotelID", attr_HotelID);
 
             return results;
         }
 
+#if false
+        List<ChangedState> changedStates = new List<ChangedState>();
+
+        public IList<ChangedState> ChangedStates()
+        {
+            List<ChangedState> results = new List<ChangedState>();
+            results.AddRange(changedStates);
+            results.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Update, Target = this, ChangedProperties = ChangedProperties() });
+            changedStates.Clear();
+
+            return results;
+        }
+#endif
     }
 }

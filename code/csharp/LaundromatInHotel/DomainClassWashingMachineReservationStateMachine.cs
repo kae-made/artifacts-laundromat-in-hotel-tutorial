@@ -54,7 +54,7 @@ namespace LaundromatInHotel
             public string specId { get; set; }
             public string guestStayId { get; set; }
             public DateTime reservationTime { get; set; }
-            WashingMachineReservation1_TryToReserve Create(DomainClassWashingMachineReservation receiver, string specId, string guestStayId, DateTime reservationTime, InstanceRepository instanceRepository, Logger logger)
+            public static WashingMachineReservation1_TryToReserve Create(DomainClassWashingMachineReservation receiver, string specId, string guestStayId, DateTime reservationTime, InstanceRepository instanceRepository, Logger logger)
             {
                 var newEvent = new WashingMachineReservation1_TryToReserve() { specId = specId, guestStayId = guestStayId, reservationTime = reservationTime };
                 if (receiver == null && instanceRepository != null)
@@ -74,7 +74,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachineReservation2_Assigned Create(DomainClassWashingMachineReservation receiver)
+            public static WashingMachineReservation2_Assigned Create(DomainClassWashingMachineReservation receiver)
             {
                 var newEvent = new WashingMachineReservation2_Assigned();
                 if (receiver != null)
@@ -93,7 +93,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachineReservation3_PreAlarmIsTimeUp Create(DomainClassWashingMachineReservation receiver)
+            public static WashingMachineReservation3_PreAlarmIsTimeUp Create(DomainClassWashingMachineReservation receiver)
             {
                 var newEvent = new WashingMachineReservation3_PreAlarmIsTimeUp();
                 if (receiver != null)
@@ -112,7 +112,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachineReservation4_TimeIsUp Create(DomainClassWashingMachineReservation receiver)
+            public static WashingMachineReservation4_TimeIsUp Create(DomainClassWashingMachineReservation receiver)
             {
                 var newEvent = new WashingMachineReservation4_TimeIsUp();
                 if (receiver != null)
@@ -131,7 +131,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachineReservation5_Canceled Create(DomainClassWashingMachineReservation receiver)
+            public static WashingMachineReservation5_Canceled Create(DomainClassWashingMachineReservation receiver)
             {
                 var newEvent = new WashingMachineReservation5_Canceled();
                 if (receiver != null)
@@ -150,7 +150,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachineReservation6_Rejected Create(DomainClassWashingMachineReservation receiver)
+            public static WashingMachineReservation6_Rejected Create(DomainClassWashingMachineReservation receiver)
             {
                 var newEvent = new WashingMachineReservation6_Rejected();
                 if (receiver != null)
@@ -164,11 +164,14 @@ namespace LaundromatInHotel
 
         protected DomainClassWashingMachineReservation target;
 
-        public DomainClassWashingMachineReservationStateMachine(DomainClassWashingMachineReservation target, Logger logger) : base(0, logger)
+        protected InstanceRepository instanceRepository;
+
+        public DomainClassWashingMachineReservationStateMachine(DomainClassWashingMachineReservation target, InstanceRepository instanceRepository, Logger logger) : base(0, logger)
         {
             this.target = target;
             this.stateTransition = this;
             this.logger = logger;
+            this.instanceRepository = instanceRepository;
         }
 
         protected int[,] stateTransitionTable = new int[6, 6]
@@ -186,9 +189,14 @@ namespace LaundromatInHotel
             return stateTransitionTable[currentState, eventNumber];
         }
 
+        private List<ChangedState> changedStates;
+
         protected override void RunEntryAction(int nextState, EventData eventData)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={target.Attr_ReservationID}):entering[current={CurrentState},event={eventData.EventNumber}");
+
+
+            changedStates = new List<ChangedState>();
 
             switch (nextState)
             {
@@ -213,6 +221,8 @@ namespace LaundromatInHotel
             }
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineReservation(ReservationID={target.Attr_ReservationID}):entered[current={CurrentState},event={eventData.EventNumber}");
 
+
+            instanceRepository.SyncChangedStates(changedStates);
         }
     }
 }

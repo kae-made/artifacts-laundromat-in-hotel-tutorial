@@ -28,7 +28,13 @@ namespace LaundromatInHotel
             // RELATE hotel TO machineAssigner ACROSS R10;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void CreateLaundromantRoom(int floor, int roomNumber, string hotelId)
         {
@@ -43,7 +49,13 @@ namespace LaundromatInHotel
             // RELATE room TO hotel ACROSS R1;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void CreateWashingMachine(string roomId, bool isReservable)
         {
@@ -66,7 +78,13 @@ namespace LaundromatInHotel
             // END IF;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public bool CreateWorkingSpec(int washingTime, int dryingTime, int standardWaight, int price)
         {
@@ -88,7 +106,13 @@ namespace LaundromatInHotel
             // RETURN created;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void AssignAvailableWorkingSpec(string machineId, string specId)
         {
@@ -101,7 +125,13 @@ namespace LaundromatInHotel
             // RELATE machine TO spec ACROSS R8 USING availableSpec;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void CreateGuestRoom(string hotelId, int floor, int roomNumber, string name, int capacity)
         {
@@ -117,7 +147,13 @@ namespace LaundromatInHotel
             // room.Capacity = PARAM.capacity;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void CreateGuestStay(string roomId, DateTime startTime, DateTime endTime)
         {
@@ -131,7 +167,13 @@ namespace LaundromatInHotel
             // stay.EndTimeOfValidity = PARAM.endTime;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public bool AssignGuest(string name, string mailAddress, string guestStayId)
         {
@@ -153,7 +195,13 @@ namespace LaundromatInHotel
             // RETURN created;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void TouchCardKey(string machineId, string cardKeyId)
         {
@@ -164,7 +212,13 @@ namespace LaundromatInHotel
             // GENERATE WashingMachine7 TO machine;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void EnterPINCode(string machineId, string pinCode)
         {
@@ -176,7 +230,13 @@ namespace LaundromatInHotel
             // GENERATE DoorwithLock4(pinCode:PARAM.pinCode) TO door;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void DoorOpened(string machineId)
         {
@@ -188,7 +248,13 @@ namespace LaundromatInHotel
             // GENERATE DoorwithLock3 TO door;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void DoorClosed(string machineId)
         {
@@ -200,7 +266,13 @@ namespace LaundromatInHotel
             // GENERATE DoorwithLock2 TO door;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void TakenOut(string machineId)
         {
@@ -211,7 +283,13 @@ namespace LaundromatInHotel
             // GENERATE WashingMachine7 TO machine;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public bool CreateCardKey(string guestStayId)
         {
@@ -230,7 +308,13 @@ namespace LaundromatInHotel
             // RETURN created;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void WashingMachineDoneWashing(string machineId)
         {
@@ -241,7 +325,13 @@ namespace LaundromatInHotel
             // GENERATE WashingMachine3 TO machine;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void WashingMachineDoneDrying(string machineId)
         {
@@ -252,7 +342,13 @@ namespace LaundromatInHotel
             // GENERATE WashingMachine5 TO machine;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void WashingMachineDoneInterupt(string machineId)
         {
@@ -263,7 +359,13 @@ namespace LaundromatInHotel
             // GENERATE WashingMachine9 TO machine;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void ReservationCreate(string specId, string guestStayId, DateTime reservationTime)
         {
@@ -273,7 +375,13 @@ namespace LaundromatInHotel
             // GENERATE WashingMachineReservation1:'Try to reserve'(specId:PARAM.specId, guestStayId:PARAM.guestStayId, reservationTime:PARAM.reservationTime) TO WashingMachineReservation Creator;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
         public void ReservationCancel(string reservationId)
         {
@@ -284,7 +392,13 @@ namespace LaundromatInHotel
             // GENERATE WashingMachineReservation5:Canceled TO reservation;
 
 
+
+            var changedStates = new List<ChangedState>();
+            // Please record changing states by using changedStates;
+
+            instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
+            // Please delete above throw exception statement after implement this method.
         }
     }
 }

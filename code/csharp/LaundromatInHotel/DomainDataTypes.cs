@@ -38,8 +38,18 @@ namespace LaundromatInHotel
 
     public class DomainTypeComplexDataType
     {
-        int X { get; set; }
-        int Y { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+
+        public static bool operator ==(DomainTypeComplexDataType one, DomainTypeComplexDataType other)
+        {
+            return (one.Y == other.Y);
+        }
+
+        public static bool operator !=(DomainTypeComplexDataType one, DomainTypeComplexDataType other)
+        {
+            return !(one == other);
+        }
     }
 
 }

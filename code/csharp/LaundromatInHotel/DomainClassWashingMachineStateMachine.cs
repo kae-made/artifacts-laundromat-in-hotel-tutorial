@@ -47,7 +47,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine1_AssignedGuest Create(DomainClassWashingMachine receiver)
+            public static WashingMachine1_AssignedGuest Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine1_AssignedGuest();
                 if (receiver != null)
@@ -66,7 +66,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine3_DoneWashing Create(DomainClassWashingMachine receiver)
+            public static WashingMachine3_DoneWashing Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine3_DoneWashing();
                 if (receiver != null)
@@ -85,7 +85,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine5_DoneDrying Create(DomainClassWashingMachine receiver)
+            public static WashingMachine5_DoneDrying Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine5_DoneDrying();
                 if (receiver != null)
@@ -104,7 +104,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine6_StartTaking Create(DomainClassWashingMachine receiver)
+            public static WashingMachine6_StartTaking Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine6_StartTaking();
                 if (receiver != null)
@@ -123,7 +123,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine7_TakenOut Create(DomainClassWashingMachine receiver)
+            public static WashingMachine7_TakenOut Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine7_TakenOut();
                 if (receiver != null)
@@ -142,7 +142,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine8_Interupted Create(DomainClassWashingMachine receiver)
+            public static WashingMachine8_Interupted Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine8_Interupted();
                 if (receiver != null)
@@ -161,7 +161,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            WashingMachine9_InteruptActionCompleted Create(DomainClassWashingMachine receiver)
+            public static WashingMachine9_InteruptActionCompleted Create(DomainClassWashingMachine receiver)
             {
                 var newEvent = new WashingMachine9_InteruptActionCompleted();
                 if (receiver != null)
@@ -175,11 +175,14 @@ namespace LaundromatInHotel
 
         protected DomainClassWashingMachine target;
 
-        public DomainClassWashingMachineStateMachine(DomainClassWashingMachine target, Logger logger) : base(1, logger)
+        protected InstanceRepository instanceRepository;
+
+        public DomainClassWashingMachineStateMachine(DomainClassWashingMachine target, InstanceRepository instanceRepository, Logger logger) : base(1, logger)
         {
             this.target = target;
             this.stateTransition = this;
             this.logger = logger;
+            this.instanceRepository = instanceRepository;
         }
 
         protected int[,] stateTransitionTable = new int[7, 7]
@@ -198,9 +201,14 @@ namespace LaundromatInHotel
             return stateTransitionTable[currentState, eventNumber];
         }
 
+        private List<ChangedState> changedStates;
+
         protected override void RunEntryAction(int nextState, EventData eventData)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={target.Attr_MachineID}):entering[current={CurrentState},event={eventData.EventNumber}");
+
+
+            changedStates = new List<ChangedState>();
 
             switch (nextState)
             {
@@ -228,6 +236,8 @@ namespace LaundromatInHotel
             }
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={target.Attr_MachineID}):entered[current={CurrentState},event={eventData.EventNumber}");
 
+
+            instanceRepository.SyncChangedStates(changedStates);
         }
     }
 }

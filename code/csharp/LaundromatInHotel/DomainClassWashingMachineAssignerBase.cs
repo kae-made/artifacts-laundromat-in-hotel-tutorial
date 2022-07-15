@@ -17,18 +17,20 @@ namespace LaundromatInHotel
 {
     public partial class DomainClassWashingMachineAssignerBase : DomainClassWashingMachineAssigner
     {
-        private static readonly string className = "WashingMachineAssigner";
+        protected static readonly string className = "WashingMachineAssigner";
         public string ClassName { get { return className; } }
 
         InstanceRepository instanceRepository;
         protected Logger logger;
 
-        public static DomainClassWashingMachineAssignerBase CreateInstance(InstanceRepository instanceRepository, Logger logger)
+        public static DomainClassWashingMachineAssignerBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
         {
             var newInstance = new DomainClassWashingMachineAssignerBase(instanceRepository, logger);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineAssigner(HotelID={newInstance.Attr_HotelID}):create");
 
             instanceRepository.Add(newInstance);
+
+            if (changedStates !=null) changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Create, Target = newInstance, ChangedProperties = null });
 
             return newInstance;
         }
@@ -37,36 +39,65 @@ namespace LaundromatInHotel
         {
             this.instanceRepository = instanceRepository;
             this.logger = logger;
-            stateMachine = new DomainClassWashingMachineAssignerStateMachine(this, logger);
+            stateMachine = new DomainClassWashingMachineAssignerStateMachine(this, instanceRepository, logger);
         }
 
-        string attr_HotelID;
-        bool stateof_HotelID = false;
+        protected string attr_HotelID;
+        protected bool stateof_HotelID = false;
 
-        DomainClassWashingMachineAssignerStateMachine stateMachine;
-        bool stateof_current_state = false;
+        protected DomainClassWashingMachineAssignerStateMachine stateMachine;
+        protected bool stateof_current_state = false;
 
-        DomainTypeComplexDataType attr_Test;
-        bool stateof_Test = false;
+        protected DomainTypeComplexDataType attr_Test;
+        protected bool stateof_Test = false;
 
 
         public string Attr_HotelID { get { return attr_HotelID; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
         public DomainTypeComplexDataType Attr_Test { get { return attr_Test; } set { attr_Test = value; stateof_Test = true; } }
 
-        private DomainClassHotel relR10Hotel;
+        public static bool Compare(DomainClassWashingMachineAssigner instance, IDictionary<string, object> conditionPropertyValues)
+        {
+            bool result = true;
+            foreach (var propertyName in conditionPropertyValues.Keys)
+            {
+                switch (propertyName)
+                {
+                    case "HotelID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_HotelID)
+                        {
+                            result = false;
+                        }
+                        break;
+                    case "Test":
+                        if ((DomainTypeComplexDataType)conditionPropertyValues[propertyName] != instance.Attr_Test)
+                        {
+                            result = false;
+                        }
+                        break;
+                }
+                if (result== false)
+                {
+                    break;
+                }
+            }
+            return result;
+        }
+
+        protected LinkedInstance relR10Hotel;
 
         public DomainClassHotel LinkedR10()
         {
             if (relR10Hotel == null)
             {
                 var candidates = instanceRepository.GetDomainInstances("Hotel").Where(inst=>(this.Attr_HotelID==((DomainClassHotel)inst).Attr_HotelID));
-                relR10Hotel = (DomainClassHotel)candidates.First();
+                relR10Hotel = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R10", Phrase = "" };
+
             }
-            return relR10Hotel;
+            return relR10Hotel.GetDestination<DomainClassHotel>();
         }
 
-        public bool LinkR10(DomainClassHotel instance)
+        public bool LinkR10(DomainClassHotel instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR10Hotel == null)
@@ -75,15 +106,22 @@ namespace LaundromatInHotel
 
                 if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineAssigner(HotelID={this.Attr_HotelID}):link[Hotel(HotelID={instance.Attr_HotelID})]");
 
-                result = true;
+                result = (LinkedR10()!=null);
+                if (result)
+                {
+                    if(changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Create, Target = relR10Hotel });
+                }
             }
             return result;
         }
-        public bool UnlinkR10(DomainClassHotel instance)
+
+        public bool UnlinkR10(DomainClassHotel instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR10Hotel != null && ( this.Attr_HotelID==instance.Attr_HotelID ))
             {
+                if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR10Hotel });
+
                 this.attr_HotelID = null;
                 relR10Hotel = null;
 
@@ -127,9 +165,11 @@ namespace LaundromatInHotel
             return isValid;
         }
 
-        public void Dispose()
+        public void DeleteInstance(IList<ChangedState> changedStates=null)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachineAssigner(HotelID={this.Attr_HotelID}):delete");
+
+            changedStates.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Delete, Target = this, ChangedProperties = null });
 
             instanceRepository.Delete(this);
         }
@@ -163,16 +203,29 @@ namespace LaundromatInHotel
             return results;
         }
         
-        public IDictionary<string, object> GetProperties()
+        public IDictionary<string, object> GetProperties(bool onlyIdentity)
         {
             var results = new Dictionary<string, object>();
 
-            results.Add("HotelID", attr_HotelID);
+            if (!onlyIdentity) results.Add("HotelID", attr_HotelID);
             results.Add("current_state", stateMachine.CurrentState);
-            results.Add("Test", attr_Test);
+            if (!onlyIdentity) results.Add("Test", attr_Test);
 
             return results;
         }
 
+#if false
+        List<ChangedState> changedStates = new List<ChangedState>();
+
+        public IList<ChangedState> ChangedStates()
+        {
+            List<ChangedState> results = new List<ChangedState>();
+            results.AddRange(changedStates);
+            results.Add(new CInstanceChagedState() { OP = ChangedState.Operation.Update, Target = this, ChangedProperties = ChangedProperties() });
+            changedStates.Clear();
+
+            return results;
+        }
+#endif
     }
 }

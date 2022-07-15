@@ -13,9 +13,12 @@ using Kae.StateMachine;
 
 namespace LaundromatInHotel
 {
-    public interface DomainClassDef : IDisposable
+    public interface DomainClassDef
     {
         public string ClassName { get; }
+
+        void DeleteInstance(IList<ChangedState> changedStates=null);
+
         /// <summary>
         /// Check attributes and links are valid or not.
         /// </summary>
@@ -25,8 +28,20 @@ namespace LaundromatInHotel
         // methods for storage
         void Restore(IDictionary<string, object> propertyValues);
         IDictionary<string, object> ChangedProperties();
-        IDictionary<string, object> GetProperties();
+        IDictionary<string, object> GetProperties(bool onlyIdentity);
+        // IList<ChangedState> ChangedStates();
     }
+
+    public class LinkedInstance
+    {
+        public string RelationshipID { get; set; }
+        public string Phrase { get; set; }
+        public DomainClassDef Source { get; set; }
+        public DomainClassDef Destination { get; set; }
+        public bool Changed { get; set; } = true;
+        public T GetDestination<T>() where T : DomainClassDef { return (T)Destination; }
+    }
+
 
     public interface DomainClassAvailableWorkingSpec : DomainClassDef
     {
@@ -35,12 +50,12 @@ namespace LaundromatInHotel
         string Attr_WorkingSpecID { get; }
         int Attr_PreAlarmSec { get; set; }
 
-        bool LinkR11(DomainClassWashingMachineAssigner instance);
-        bool UnlinkR11(DomainClassWashingMachineAssigner instance);
+        bool LinkR11(DomainClassWashingMachineAssigner instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR11(DomainClassWashingMachineAssigner instance, IList<ChangedState> changedStates=null);
         DomainClassWashingMachineAssigner LinkedR11();
 
-        bool LinkR8(DomainClassWashingMachine oneInstance, DomainClassWorkingSpec otherInstanceAvailableSpec);
-        bool UnlinkR8(DomainClassWashingMachine oneInstance, DomainClassWorkingSpec otherInstanceAvailableSpec);
+        bool LinkR8(DomainClassWashingMachine oneInstance, DomainClassWorkingSpec otherInstanceAvailableSpec, IList<ChangedState> changedStates=null);
+        bool UnlinkR8(DomainClassWashingMachine oneInstance, DomainClassWorkingSpec otherInstanceAvailableSpec, IList<ChangedState> changedStates=null);
         DomainClassWashingMachine LinkedR8One();
         DomainClassWorkingSpec LinkedR8OtherAvailableSpec();
 
@@ -55,8 +70,8 @@ namespace LaundromatInHotel
         string Attr_CardKeyID { get; }
         string Attr_GuestStayID { get; }
 
-        bool LinkR6IsAssignedAsKeyFor(DomainClassGuestStay instance);
-        bool UnlinkR6IsAssignedAsKeyFor(DomainClassGuestStay instance);
+        bool LinkR6IsAssignedAsKeyFor(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR6IsAssignedAsKeyFor(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
         DomainClassGuestStay LinkedR6IsAssignedAsKeyFor();
 
     }
@@ -92,8 +107,8 @@ namespace LaundromatInHotel
         string Attr_GuestStayId { get; }
         string Attr_MailAddress { get; set; }
 
-        bool LinkR5HaveTheRightToUse(DomainClassGuestStay instance);
-        bool UnlinkR5HaveTheRightToUse(DomainClassGuestStay instance);
+        bool LinkR5HaveTheRightToUse(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR5HaveTheRightToUse(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
         DomainClassGuestStay LinkedR5HaveTheRightToUse();
 
     }
@@ -107,8 +122,8 @@ namespace LaundromatInHotel
         int Attr_Capacity { get; set; }
         string Attr_HotelID { get; }
 
-        bool LinkR3(DomainClassHotel instance);
-        bool UnlinkR3(DomainClassHotel instance);
+        bool LinkR3(DomainClassHotel instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR3(DomainClassHotel instance, IList<ChangedState> changedStates=null);
         DomainClassHotel LinkedR3();
 
         DomainClassGuestStay LinkedR4();
@@ -123,8 +138,8 @@ namespace LaundromatInHotel
         string Attr_RoomID { get; }
         int Attr_Charge { get; set; }
 
-        bool LinkR4IsAssignedFor(DomainClassGuestRoom instance);
-        bool UnlinkR4IsAssignedFor(DomainClassGuestRoom instance);
+        bool LinkR4IsAssignedFor(DomainClassGuestRoom instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR4IsAssignedFor(DomainClassGuestRoom instance, IList<ChangedState> changedStates=null);
         DomainClassGuestRoom LinkedR4IsAssignedFor();
 
         IEnumerable<DomainClassGuest> LinkedR5();
@@ -161,8 +176,8 @@ namespace LaundromatInHotel
         string Attr_HotelID { get; }
         string Attr_RoomID { get; }
 
-        bool LinkR1(DomainClassHotel instance);
-        bool UnlinkR1(DomainClassHotel instance);
+        bool LinkR1(DomainClassHotel instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR1(DomainClassHotel instance, IList<ChangedState> changedStates=null);
         DomainClassHotel LinkedR1();
 
         IEnumerable<DomainClassWashingMachine> LinkedR2();
@@ -174,8 +189,8 @@ namespace LaundromatInHotel
         string Attr_MachineID { get; }
 
 //        DomainClassWashingMachine GetSuperTypeR15WashingMachine();
-        bool LinkR15(DomainClassWashingMachine instance);
-        bool UnlinkR15(DomainClassWashingMachine instance);
+        bool LinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null);
 
     }
 
@@ -188,11 +203,11 @@ namespace LaundromatInHotel
         void TakeEvent(EventData domainEvent);
 
 //        DomainClassWashingMachine GetSuperTypeR15WashingMachine();
-        bool LinkR15(DomainClassWashingMachine instance);
-        bool UnlinkR15(DomainClassWashingMachine instance);
+        bool LinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null);
 
-        bool LinkR19NextReservation(DomainClassWashingMachineReservation instance);
-        bool UnlinkR19NextReservation(DomainClassWashingMachineReservation instance);
+        bool LinkR19NextReservation(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR19NextReservation(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null);
         DomainClassWashingMachineReservation LinkedR19NextReservation();
 
     }
@@ -209,12 +224,12 @@ namespace LaundromatInHotel
 
         void TakeEvent(EventData domainEvent);
 
-        bool LinkR2IsSetUpAt(DomainClassLaundromatRoom instance);
-        bool UnlinkR2IsSetUpAt(DomainClassLaundromatRoom instance);
+        bool LinkR2IsSetUpAt(DomainClassLaundromatRoom instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR2IsSetUpAt(DomainClassLaundromatRoom instance, IList<ChangedState> changedStates=null);
         DomainClassLaundromatRoom LinkedR2IsSetUpAt();
 
-        bool LinkR14FrontDoor(DomainClassDoorwithLock instance);
-        bool UnlinkR14FrontDoor(DomainClassDoorwithLock instance);
+        bool LinkR14FrontDoor(DomainClassDoorwithLock instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR14FrontDoor(DomainClassDoorwithLock instance, IList<ChangedState> changedStates=null);
         DomainClassDoorwithLock LinkedR14FrontDoor();
 
         IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8OneAvailableSpec();
@@ -245,8 +260,8 @@ namespace LaundromatInHotel
 
         void TakeEvent(EventData domainEvent);
 
-        bool LinkR10(DomainClassHotel instance);
-        bool UnlinkR10(DomainClassHotel instance);
+        bool LinkR10(DomainClassHotel instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR10(DomainClassHotel instance, IList<ChangedState> changedStates=null);
         DomainClassHotel LinkedR10();
 
         IEnumerable<DomainClassAvailableWorkingSpec> LinkedR11AssigningTarget();
@@ -260,12 +275,12 @@ namespace LaundromatInHotel
         string Attr_GuestStayID { get; }
         string Attr_MachineID { get; }
 
-        bool LinkR9CurrentSpec(DomainClassAvailableWorkingSpec instance);
-        bool UnlinkR9CurrentSpec(DomainClassAvailableWorkingSpec instance);
+        bool LinkR9CurrentSpec(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR9CurrentSpec(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null);
         DomainClassAvailableWorkingSpec LinkedR9CurrentSpec();
 
-        bool LinkR18(DomainClassGuestStay oneInstanceIsUsedBy, DomainClassWashingMachine otherInstanceIsUsing);
-        bool UnlinkR18(DomainClassGuestStay oneInstanceIsUsedBy, DomainClassWashingMachine otherInstanceIsUsing);
+        bool LinkR18(DomainClassGuestStay oneInstanceIsUsedBy, DomainClassWashingMachine otherInstanceIsUsing, IList<ChangedState> changedStates=null);
+        bool UnlinkR18(DomainClassGuestStay oneInstanceIsUsedBy, DomainClassWashingMachine otherInstanceIsUsing, IList<ChangedState> changedStates=null);
         DomainClassGuestStay LinkedR18OneIsUsedBy();
         DomainClassWashingMachine LinkedR18OtherIsUsing();
 
@@ -286,16 +301,16 @@ namespace LaundromatInHotel
 
         void TakeEvent(EventData domainEvent);
 
-        bool LinkR12ReservationOwner(DomainClassGuestStay instance);
-        bool UnlinkR12ReservationOwner(DomainClassGuestStay instance);
+        bool LinkR12ReservationOwner(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR12ReservationOwner(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
         DomainClassGuestStay LinkedR12ReservationOwner();
 
-        bool LinkR13Target(DomainClassAvailableWorkingSpec instance);
-        bool UnlinkR13Target(DomainClassAvailableWorkingSpec instance);
+        bool LinkR13Target(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR13Target(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null);
         DomainClassAvailableWorkingSpec LinkedR13Target();
 
-        bool LinkR17Successor(DomainClassWashingMachineReservation instance);
-        bool UnlinkR17Successor(DomainClassWashingMachineReservation instance);
+        bool LinkR17Successor(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null);
+        bool UnlinkR17Successor(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null);
         DomainClassWashingMachineReservation LinkedR17Successor();
 
         DomainClassWashingMachineReservation LinkedR17Predecessor();

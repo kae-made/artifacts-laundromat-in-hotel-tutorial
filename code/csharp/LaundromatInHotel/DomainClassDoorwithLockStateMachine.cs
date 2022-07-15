@@ -67,7 +67,7 @@ namespace LaundromatInHotel
             }
 
             public string cardKeyId { get; set; }
-            DoorwithLock1_TouchCardKey Create(DomainClassDoorwithLock receiver, string cardKeyId)
+            public static DoorwithLock1_TouchCardKey Create(DomainClassDoorwithLock receiver, string cardKeyId)
             {
                 var newEvent = new DoorwithLock1_TouchCardKey() { cardKeyId = cardKeyId };
                 if (receiver != null)
@@ -86,7 +86,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            DoorwithLock2_DoorClosed Create(DomainClassDoorwithLock receiver)
+            public static DoorwithLock2_DoorClosed Create(DomainClassDoorwithLock receiver)
             {
                 var newEvent = new DoorwithLock2_DoorClosed();
                 if (receiver != null)
@@ -105,7 +105,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            DoorwithLock3_DoorOpened Create(DomainClassDoorwithLock receiver)
+            public static DoorwithLock3_DoorOpened Create(DomainClassDoorwithLock receiver)
             {
                 var newEvent = new DoorwithLock3_DoorOpened();
                 if (receiver != null)
@@ -125,7 +125,7 @@ namespace LaundromatInHotel
             }
 
             public string pinCode { get; set; }
-            DoorwithLock4_SetPINCode Create(DomainClassDoorwithLock receiver, string pinCode)
+            public static DoorwithLock4_SetPINCode Create(DomainClassDoorwithLock receiver, string pinCode)
             {
                 var newEvent = new DoorwithLock4_SetPINCode() { pinCode = pinCode };
                 if (receiver != null)
@@ -144,7 +144,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            DoorwithLock5_ValidatedUser Create(DomainClassDoorwithLock receiver)
+            public static DoorwithLock5_ValidatedUser Create(DomainClassDoorwithLock receiver)
             {
                 var newEvent = new DoorwithLock5_ValidatedUser();
                 if (receiver != null)
@@ -163,7 +163,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            DoorwithLock6_JudgedAsImproper Create(DomainClassDoorwithLock receiver)
+            public static DoorwithLock6_JudgedAsImproper Create(DomainClassDoorwithLock receiver)
             {
                 var newEvent = new DoorwithLock6_JudgedAsImproper();
                 if (receiver != null)
@@ -184,7 +184,7 @@ namespace LaundromatInHotel
 
             public string specId { get; set; }
             public string guestStayId { get; set; }
-            DoorwithLock7_EnterSpec Create(DomainClassDoorwithLock receiver, string specId, string guestStayId)
+            public static DoorwithLock7_EnterSpec Create(DomainClassDoorwithLock receiver, string specId, string guestStayId)
             {
                 var newEvent = new DoorwithLock7_EnterSpec() { specId = specId, guestStayId = guestStayId };
                 if (receiver != null)
@@ -203,7 +203,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            DoorwithLock8_UnlockedAllowed Create(DomainClassDoorwithLock receiver)
+            public static DoorwithLock8_UnlockedAllowed Create(DomainClassDoorwithLock receiver)
             {
                 var newEvent = new DoorwithLock8_UnlockedAllowed();
                 if (receiver != null)
@@ -217,11 +217,14 @@ namespace LaundromatInHotel
 
         protected DomainClassDoorwithLock target;
 
-        public DomainClassDoorwithLockStateMachine(DomainClassDoorwithLock target, Logger logger) : base(1, logger)
+        protected InstanceRepository instanceRepository;
+
+        public DomainClassDoorwithLockStateMachine(DomainClassDoorwithLock target, InstanceRepository instanceRepository, Logger logger) : base(1, logger)
         {
             this.target = target;
             this.stateTransition = this;
             this.logger = logger;
+            this.instanceRepository = instanceRepository;
         }
 
         protected int[,] stateTransitionTable = new int[12, 8]
@@ -245,9 +248,14 @@ namespace LaundromatInHotel
             return stateTransitionTable[currentState, eventNumber];
         }
 
+        private List<ChangedState> changedStates;
+
         protected override void RunEntryAction(int nextState, EventData eventData)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={target.Attr_DoorID}):entering[current={CurrentState},event={eventData.EventNumber}");
+
+
+            changedStates = new List<ChangedState>();
 
             switch (nextState)
             {
@@ -290,6 +298,8 @@ namespace LaundromatInHotel
             }
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={target.Attr_DoorID}):entered[current={CurrentState},event={eventData.EventNumber}");
 
+
+            instanceRepository.SyncChangedStates(changedStates);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            ReservableWashingMachine1_Check Create(DomainClassReservableWashingMachine receiver)
+            public static ReservableWashingMachine1_Check Create(DomainClassReservableWashingMachine receiver)
             {
                 var newEvent = new ReservableWashingMachine1_Check();
                 if (receiver != null)
@@ -56,7 +56,7 @@ namespace LaundromatInHotel
                 ;
             }
 
-            ReservableWashingMachine2_Reserved Create(DomainClassReservableWashingMachine receiver)
+            public static ReservableWashingMachine2_Reserved Create(DomainClassReservableWashingMachine receiver)
             {
                 var newEvent = new ReservableWashingMachine2_Reserved();
                 if (receiver != null)
@@ -70,11 +70,14 @@ namespace LaundromatInHotel
 
         protected DomainClassReservableWashingMachine target;
 
-        public DomainClassReservableWashingMachineStateMachine(DomainClassReservableWashingMachine target, Logger logger) : base(1, logger)
+        protected InstanceRepository instanceRepository;
+
+        public DomainClassReservableWashingMachineStateMachine(DomainClassReservableWashingMachine target, InstanceRepository instanceRepository, Logger logger) : base(1, logger)
         {
             this.target = target;
             this.stateTransition = this;
             this.logger = logger;
+            this.instanceRepository = instanceRepository;
         }
 
         protected int[,] stateTransitionTable = new int[2, 2]
@@ -88,9 +91,14 @@ namespace LaundromatInHotel
             return stateTransitionTable[currentState, eventNumber];
         }
 
+        private List<ChangedState> changedStates;
+
         protected override void RunEntryAction(int nextState, EventData eventData)
         {
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:ReservableWashingMachine(MachineID={target.Attr_MachineID}):entering[current={CurrentState},event={eventData.EventNumber}");
+
+
+            changedStates = new List<ChangedState>();
 
             switch (nextState)
             {
@@ -103,6 +111,8 @@ namespace LaundromatInHotel
             }
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:ReservableWashingMachine(MachineID={target.Attr_MachineID}):entered[current={CurrentState},event={eventData.EventNumber}");
 
+
+            instanceRepository.SyncChangedStates(changedStates);
         }
     }
 }
