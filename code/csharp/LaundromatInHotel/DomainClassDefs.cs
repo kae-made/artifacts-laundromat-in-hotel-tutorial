@@ -10,38 +10,10 @@
 using System;
 using System.Collections.Generic;
 using Kae.StateMachine;
+using Kae.DomainModel.Csharp.Framework;
 
 namespace LaundromatInHotel
 {
-    public interface DomainClassDef
-    {
-        public string ClassName { get; }
-
-        void DeleteInstance(IList<ChangedState> changedStates=null);
-
-        /// <summary>
-        /// Check attributes and links are valid or not.
-        /// </summary>
-        /// <returns></returns>
-        bool Validate();
-
-        // methods for storage
-        void Restore(IDictionary<string, object> propertyValues);
-        IDictionary<string, object> ChangedProperties();
-        IDictionary<string, object> GetProperties(bool onlyIdentity);
-        // IList<ChangedState> ChangedStates();
-    }
-
-    public class LinkedInstance
-    {
-        public string RelationshipID { get; set; }
-        public string Phrase { get; set; }
-        public DomainClassDef Source { get; set; }
-        public DomainClassDef Destination { get; set; }
-        public bool Changed { get; set; } = true;
-        public T GetDestination<T>() where T : DomainClassDef { return (T)Destination; }
-    }
-
 
     public interface DomainClassAvailableWorkingSpec : DomainClassDef
     {

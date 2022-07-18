@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Kae.DomainModel.Csharp.Framework;
 
 namespace LaundromatInHotel
 {

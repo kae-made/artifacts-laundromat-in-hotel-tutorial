@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Kae.Utility.Logging;
+using Kae.DomainModel.Csharp.Framework;
 
 namespace LaundromatInHotel
 {

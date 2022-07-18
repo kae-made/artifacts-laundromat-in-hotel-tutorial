@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
 using Kae.Utility.Logging;
+using Kae.DomainModel.Csharp.Framework;
 
 namespace LaundromatInHotel
 {
@@ -56,6 +57,7 @@ namespace LaundromatInHotel
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
         public string Attr_Next_ReservationID { get { return attr_Next_ReservationID; } }
 
+        // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassReservableWashingMachine instance, IDictionary<string, object> conditionPropertyValues)
         {
             bool result = true;

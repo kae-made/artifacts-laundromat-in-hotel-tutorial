@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
 using Kae.Utility.Logging;
+using Kae.DomainModel.Csharp.Framework;
 
 namespace LaundromatInHotel
 {
@@ -59,6 +60,7 @@ namespace LaundromatInHotel
         public string Attr_WorkingSpecID { get { return attr_WorkingSpecID; } }
         public int Attr_PreAlarmSec { get { return attr_PreAlarmSec; } set { attr_PreAlarmSec = value; stateof_PreAlarmSec = true; } }
 
+        // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassAvailableWorkingSpec instance, IDictionary<string, object> conditionPropertyValues)
         {
             bool result = true;

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Kae.StateMachine;
 using Kae.Utility.Logging;
+using Kae.DomainModel.Csharp.Framework;
 
 namespace LaundromatInHotel
 {
@@ -64,6 +65,7 @@ namespace LaundromatInHotel
         public int Attr_StandardWeight { get { return attr_StandardWeight; } set { attr_StandardWeight = value; stateof_StandardWeight = true; } }
         public int Attr_Price { get { return attr_Price; } set { attr_Price = value; stateof_Price = true; } }
 
+        // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassWorkingSpec instance, IDictionary<string, object> conditionPropertyValues)
         {
             bool result = true;
