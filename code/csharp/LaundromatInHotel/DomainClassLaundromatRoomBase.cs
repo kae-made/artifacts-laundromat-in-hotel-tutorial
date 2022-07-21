@@ -42,7 +42,6 @@ namespace LaundromatInHotel
             this.logger = logger;
             attr_RoomID = Guid.NewGuid().ToString();
         }
-
         protected int attr_Floor;
         protected bool stateof_Floor = false;
 
@@ -55,11 +54,11 @@ namespace LaundromatInHotel
         protected string attr_RoomID;
         protected bool stateof_RoomID = false;
 
-
         public int Attr_Floor { get { return attr_Floor; } set { attr_Floor = value; stateof_Floor = true; } }
         public int Attr_RoomNumber { get { return attr_RoomNumber; } set { attr_RoomNumber = value; stateof_RoomNumber = true; } }
         public string Attr_HotelID { get { return attr_HotelID; } }
         public string Attr_RoomID { get { return attr_RoomID; } set { attr_RoomID = value; stateof_RoomID = true; } }
+
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassLaundromatRoom instance, IDictionary<string, object> conditionPropertyValues)
@@ -101,15 +100,13 @@ namespace LaundromatInHotel
             }
             return result;
         }
-
         protected LinkedInstance relR1Hotel;
-
         public DomainClassHotel LinkedR1()
         {
             if (relR1Hotel == null)
             {
-                var candidates = instanceRepository.GetDomainInstances("Hotel").Where(inst=>(this.Attr_HotelID==((DomainClassHotel)inst).Attr_HotelID));
-                relR1Hotel = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R1", Phrase = "" };
+           var candidates = instanceRepository.GetDomainInstances("Hotel").Where(inst=>(this.Attr_HotelID==((DomainClassHotel)inst).Attr_HotelID));
+           relR1Hotel = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R1", Phrase = "" };
 
             }
             return relR1Hotel.GetDestination<DomainClassHotel>();
@@ -139,7 +136,7 @@ namespace LaundromatInHotel
             if (relR1Hotel != null && ( this.Attr_HotelID==instance.Attr_HotelID ))
             {
                 if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR1Hotel });
-
+        
                 this.attr_HotelID = null;
                 relR1Hotel = null;
 
@@ -161,6 +158,9 @@ namespace LaundromatInHotel
             }
             return result;
         }
+
+
+
         
         public bool Validate()
         {

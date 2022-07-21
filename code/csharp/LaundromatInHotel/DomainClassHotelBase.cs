@@ -42,16 +42,15 @@ namespace LaundromatInHotel
             this.logger = logger;
             attr_HotelID = Guid.NewGuid().ToString();
         }
-
         protected string attr_HotelID;
         protected bool stateof_HotelID = false;
 
         protected string attr_Name;
         protected bool stateof_Name = false;
 
-
         public string Attr_HotelID { get { return attr_HotelID; } set { attr_HotelID = value; stateof_HotelID = true; } }
         public string Attr_Name { get { return attr_Name; } set { attr_Name = value; stateof_Name = true; } }
+
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassHotel instance, IDictionary<string, object> conditionPropertyValues)
@@ -92,6 +91,8 @@ namespace LaundromatInHotel
             }
             return result;
         }
+
+
         public IEnumerable<DomainClassGuestRoom> LinkedR3ProvideAsGuestStayingService()
         {
             var result = new List<DomainClassGuestRoom>();
@@ -102,11 +103,14 @@ namespace LaundromatInHotel
             }
             return result;
         }
+
         public DomainClassWashingMachineAssigner LinkedR10ResponsibleForAssignment()
         {
             var candidates = instanceRepository.GetDomainInstances("WashingMachineAssigner").Where(inst=>(this.Attr_HotelID==((DomainClassWashingMachineAssigner)inst).Attr_HotelID));
             return (DomainClassWashingMachineAssigner)candidates.First();
         }
+
+
         
         public bool Validate()
         {

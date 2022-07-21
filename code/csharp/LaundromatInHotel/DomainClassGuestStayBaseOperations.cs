@@ -20,14 +20,14 @@ namespace LaundromatInHotel
             // TODO : Let's write code!
             // Action Description on Model as a reference
 
-
             var changedStates = new List<ChangedState>();
             // Please record changing states by using changedStates;
-
+        
             instanceRepository.SyncChangedStates(changedStates);
             throw new NotImplementedException();
             // Please delete above throw exception statement after implement this method.
         }
+
 
     }
 }

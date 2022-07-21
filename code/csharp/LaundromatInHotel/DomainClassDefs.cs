@@ -17,76 +17,124 @@ namespace LaundromatInHotel
 
     public interface DomainClassAvailableWorkingSpec : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         string Attr_HotelID { get; }
         string Attr_MachineID { get; }
         string Attr_WorkingSpecID { get; }
         int Attr_PreAlarmSec { get; set; }
 
-        bool LinkR11(DomainClassWashingMachineAssigner instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR11(DomainClassWashingMachineAssigner instance, IList<ChangedState> changedStates=null);
-        DomainClassWashingMachineAssigner LinkedR11();
 
-        bool LinkR8(DomainClassWashingMachine oneInstance, DomainClassWorkingSpec otherInstanceAvailableSpec, IList<ChangedState> changedStates=null);
-        bool UnlinkR8(DomainClassWashingMachine oneInstance, DomainClassWorkingSpec otherInstanceAvailableSpec, IList<ChangedState> changedStates=null);
-        DomainClassWashingMachine LinkedR8One();
-        DomainClassWorkingSpec LinkedR8OtherAvailableSpec();
+        // Relationships 
 
-        DomainClassWashingMachineinUse LinkedR9();
+        public DomainClassWashingMachineAssigner LinkedR11();
 
-        IEnumerable<DomainClassWashingMachineReservation> LinkedR13();
+        public bool LinkR11(DomainClassWashingMachineAssigner instance, IList<ChangedState> changedStates=null);
+
+        public bool UnlinkR11(DomainClassWashingMachineAssigner instance, IList<ChangedState> changedStates=null);
+        public bool LinkR8(DomainClassWashingMachine oneInstance, DomainClassWorkingSpec otherInstanceAvailableSpec, IList<ChangedState> changedStates=null);
+        public bool UnlinkR8(DomainClassWashingMachine oneInstance, DomainClassWorkingSpec otherInstanceAvailableSpec, IList<ChangedState> changedStates=null);
+        public DomainClassWashingMachine LinkedR8One();
+        public DomainClassWorkingSpec LinkedR8OtherAvailableSpec();
+        public DomainClassWashingMachineinUse LinkedR9();
+
+        public IEnumerable<DomainClassWashingMachineReservation> LinkedR13();
+
+
+        // Conceptual Information Class's Operations
+
+
 
     }
 
     public interface DomainClassCardKey : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         string Attr_CardKeyID { get; }
         string Attr_GuestStayID { get; }
 
-        bool LinkR6IsAssignedAsKeyFor(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR6IsAssignedAsKeyFor(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
-        DomainClassGuestStay LinkedR6IsAssignedAsKeyFor();
+
+        // Relationships 
+
+        public DomainClassGuestStay LinkedR6IsAssignedAsKeyFor();
+
+        public bool LinkR6IsAssignedAsKeyFor(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
+
+        public bool UnlinkR6IsAssignedAsKeyFor(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
+
+
+        // Conceptual Information Class's Operations
+
+
 
     }
 
     public interface DomainClassDoorwithLock : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         string Attr_DoorID { get; }
         string Attr_PIN_Number { get; set; }
         int Attr_NumberOfDigits { get; set; }
         DomainTypeDoorStatus Attr_Status { get; set; }
         int Attr_current_state { get; }
 
-        void TakeEvent(EventData domainEvent);
 
-        DomainClassWashingMachine LinkedR14();
+        // State Machine
 
-        void Unlock();
+        void TakeEvent(EventData domainEvent, bool selfEvent=false);
 
-        void Close();
+        // Relationships 
 
-        void Lock();
+        public DomainClassWashingMachine LinkedR14();
 
-        void RequestPINCode();
 
-        void RequestCardKey();
+        // Conceptual Information Class's Operations
+
+        public void Unlock();
+
+        public void Close();
+
+        public void Lock();
+
+        public void RequestPINCode();
+
+        public void RequestCardKey();
+
+
 
     }
 
     public interface DomainClassGuest : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         string Attr_Name { get; set; }
         string Attr_GuestID { get; }
         string Attr_GuestStayId { get; }
         string Attr_MailAddress { get; set; }
 
-        bool LinkR5HaveTheRightToUse(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR5HaveTheRightToUse(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
-        DomainClassGuestStay LinkedR5HaveTheRightToUse();
+
+        // Relationships 
+
+        public DomainClassGuestStay LinkedR5HaveTheRightToUse();
+
+        public bool LinkR5HaveTheRightToUse(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
+
+        public bool UnlinkR5HaveTheRightToUse(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
+
+
+        // Conceptual Information Class's Operations
+
+
 
     }
 
     public interface DomainClassGuestRoom : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         int Attr_Floor { get; set; }
         int Attr_RoomNumber { get; set; }
         string Attr_Name { get; set; }
@@ -94,98 +142,164 @@ namespace LaundromatInHotel
         int Attr_Capacity { get; set; }
         string Attr_HotelID { get; }
 
-        bool LinkR3(DomainClassHotel instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR3(DomainClassHotel instance, IList<ChangedState> changedStates=null);
-        DomainClassHotel LinkedR3();
 
-        DomainClassGuestStay LinkedR4();
+        // Relationships 
+
+        public DomainClassHotel LinkedR3();
+
+        public bool LinkR3(DomainClassHotel instance, IList<ChangedState> changedStates=null);
+
+        public bool UnlinkR3(DomainClassHotel instance, IList<ChangedState> changedStates=null);
+        public DomainClassGuestStay LinkedR4();
+
+
+        // Conceptual Information Class's Operations
+
+
 
     }
 
     public interface DomainClassGuestStay : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         string Attr_GuestStayID { get; }
         DateTime Attr_StartTime { get; set; }
         DateTime Attr_EndTimeOfValidity { get; set; }
         string Attr_RoomID { get; }
         int Attr_Charge { get; set; }
 
-        bool LinkR4IsAssignedFor(DomainClassGuestRoom instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR4IsAssignedFor(DomainClassGuestRoom instance, IList<ChangedState> changedStates=null);
-        DomainClassGuestRoom LinkedR4IsAssignedFor();
 
-        IEnumerable<DomainClassGuest> LinkedR5();
+        // Relationships 
 
-        DomainClassCardKey LinkedR6();
+        public DomainClassGuestRoom LinkedR4IsAssignedFor();
 
-        DomainClassWashingMachineReservation LinkedR12RequestOfReservation();
+        public bool LinkR4IsAssignedFor(DomainClassGuestRoom instance, IList<ChangedState> changedStates=null);
 
-        IEnumerable<DomainClassWashingMachineinUse> LinkedR18OneIsUsing();
+        public bool UnlinkR4IsAssignedFor(DomainClassGuestRoom instance, IList<ChangedState> changedStates=null);
 
-        void Notify(DomainTypeNotificationForGuestStay topic);
+        public IEnumerable<DomainClassGuest> LinkedR5();
+        public DomainClassCardKey LinkedR6();
+        public DomainClassWashingMachineReservation LinkedR12RequestOfReservation();
+
+        public IEnumerable<DomainClassWashingMachineinUse> LinkedR18OneIsUsing();
+
+
+        // Conceptual Information Class's Operations
+
+        public void Notify(DomainTypeNotificationForGuestStay topic);
+
+
 
     }
 
     public interface DomainClassHotel : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         string Attr_HotelID { get; }
         string Attr_Name { get; set; }
 
-        IEnumerable<DomainClassLaundromatRoom> LinkedR1ProvideLaundromantService();
 
-        IEnumerable<DomainClassGuestRoom> LinkedR3ProvideAsGuestStayingService();
+        // Relationships 
 
-        DomainClassWashingMachineAssigner LinkedR10ResponsibleForAssignment();
 
-        void Support(string message);
+        public IEnumerable<DomainClassLaundromatRoom> LinkedR1ProvideLaundromantService();
+
+        public IEnumerable<DomainClassGuestRoom> LinkedR3ProvideAsGuestStayingService();
+        public DomainClassWashingMachineAssigner LinkedR10ResponsibleForAssignment();
+
+
+        // Conceptual Information Class's Operations
+
+        public void Support(string message);
+
+
 
     }
 
     public interface DomainClassLaundromatRoom : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         int Attr_Floor { get; set; }
         int Attr_RoomNumber { get; set; }
         string Attr_HotelID { get; }
         string Attr_RoomID { get; }
 
-        bool LinkR1(DomainClassHotel instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR1(DomainClassHotel instance, IList<ChangedState> changedStates=null);
-        DomainClassHotel LinkedR1();
 
-        IEnumerable<DomainClassWashingMachine> LinkedR2();
+        // Relationships 
+
+        public DomainClassHotel LinkedR1();
+
+        public bool LinkR1(DomainClassHotel instance, IList<ChangedState> changedStates=null);
+
+        public bool UnlinkR1(DomainClassHotel instance, IList<ChangedState> changedStates=null);
+
+        public IEnumerable<DomainClassWashingMachine> LinkedR2();
+
+
+        // Conceptual Information Class's Operations
+
+
 
     }
 
     public interface DomainClassNonReservationWashingMachine : DomainClassDef, SubClassR15
     {
+        // Conceptual Information Class's Properties
+
         string Attr_MachineID { get; }
 
-//        DomainClassWashingMachine GetSuperTypeR15WashingMachine();
-        bool LinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null);
+
+        // Relationships 
+
+        public DomainClassWashingMachine GetSuperClassR15();
+        public bool LinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null);
+        public bool UnlinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null);
+
+
+        // Conceptual Information Class's Operations
+
+
 
     }
 
     public interface DomainClassReservableWashingMachine : DomainClassDef, SubClassR15
     {
+        // Conceptual Information Class's Properties
+
         string Attr_MachineID { get; }
         int Attr_current_state { get; }
         string Attr_Next_ReservationID { get; }
 
-        void TakeEvent(EventData domainEvent);
 
-//        DomainClassWashingMachine GetSuperTypeR15WashingMachine();
-        bool LinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null);
+        // State Machine
 
-        bool LinkR19NextReservation(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR19NextReservation(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null);
-        DomainClassWashingMachineReservation LinkedR19NextReservation();
+        void TakeEvent(EventData domainEvent, bool selfEvent=false);
+
+        // Relationships 
+
+        public DomainClassWashingMachine GetSuperClassR15();
+        public bool LinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null);
+        public bool UnlinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null);
+        public DomainClassWashingMachineReservation LinkedR19NextReservation();
+
+        public bool LinkR19NextReservation(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null);
+
+        public bool UnlinkR19NextReservation(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null);
+
+
+        // Conceptual Information Class's Operations
+
+
 
     }
 
     public interface DomainClassWashingMachine : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         string Attr_MachineID { get; }
         string Attr_FriendryName { get; set; }
         bool Attr_IsBusy { get; set; }
@@ -194,72 +308,112 @@ namespace LaundromatInHotel
         DomainTypeWashingMachineStatus Attr_Status { get; set; }
         int Attr_current_state { get; }
 
-        void TakeEvent(EventData domainEvent);
 
-        bool LinkR2IsSetUpAt(DomainClassLaundromatRoom instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR2IsSetUpAt(DomainClassLaundromatRoom instance, IList<ChangedState> changedStates=null);
-        DomainClassLaundromatRoom LinkedR2IsSetUpAt();
+        // State Machine
 
-        bool LinkR14FrontDoor(DomainClassDoorwithLock instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR14FrontDoor(DomainClassDoorwithLock instance, IList<ChangedState> changedStates=null);
-        DomainClassDoorwithLock LinkedR14FrontDoor();
+        void TakeEvent(EventData domainEvent, bool selfEvent=false);
 
-        IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8OneAvailableSpec();
+        // Relationships 
 
-        SubClassR15 GetSubR15();
+        public DomainClassLaundromatRoom LinkedR2IsSetUpAt();
 
-        DomainClassNonReservationWashingMachine LinkedR15NonReservationWashingMachine();
+        public bool LinkR2IsSetUpAt(DomainClassLaundromatRoom instance, IList<ChangedState> changedStates=null);
 
-        DomainClassReservableWashingMachine LinkedR15ReservableWashingMachine();
+        public bool UnlinkR2IsSetUpAt(DomainClassLaundromatRoom instance, IList<ChangedState> changedStates=null);
+        public DomainClassDoorwithLock LinkedR14FrontDoor();
 
-        DomainClassWashingMachineinUse LinkedR18OtherIsUsedBy();
+        public bool LinkR14FrontDoor(DomainClassDoorwithLock instance, IList<ChangedState> changedStates=null);
 
-        bool IsAvailable();
+        public bool UnlinkR14FrontDoor(DomainClassDoorwithLock instance, IList<ChangedState> changedStates=null);
 
-        void StopExecution();
+        public IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8OneAvailableSpec();
 
-        void StartWashing(int timeInMinutes);
+        public SubClassR15 GetSubR15();
 
-        void StartDrying(int timeInMinutes);
+        public DomainClassNonReservationWashingMachine LinkedR15NonReservationWashingMachine();
+
+        public DomainClassReservableWashingMachine LinkedR15ReservableWashingMachine();
+
+        public DomainClassWashingMachineinUse LinkedR18OtherIsUsedBy();
+
+
+        // Conceptual Information Class's Operations
+
+        public bool IsAvailable();
+
+        public void StopExecution();
+
+        public void StartWashing(int timeInMinutes);
+
+        public void StartDrying(int timeInMinutes);
+
+
 
     }
 
     public interface DomainClassWashingMachineAssigner : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         string Attr_HotelID { get; }
         int Attr_current_state { get; }
         DomainTypeComplexDataType Attr_Test { get; set; }
 
-        void TakeEvent(EventData domainEvent);
 
-        bool LinkR10(DomainClassHotel instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR10(DomainClassHotel instance, IList<ChangedState> changedStates=null);
-        DomainClassHotel LinkedR10();
+        // State Machine
 
-        IEnumerable<DomainClassAvailableWorkingSpec> LinkedR11AssigningTarget();
+        void TakeEvent(EventData domainEvent, bool selfEvent=false);
+
+        // Relationships 
+
+        public DomainClassHotel LinkedR10();
+
+        public bool LinkR10(DomainClassHotel instance, IList<ChangedState> changedStates=null);
+
+        public bool UnlinkR10(DomainClassHotel instance, IList<ChangedState> changedStates=null);
+
+        public IEnumerable<DomainClassAvailableWorkingSpec> LinkedR11AssigningTarget();
+
+
+        // Conceptual Information Class's Operations
+
+
 
     }
 
     public interface DomainClassWashingMachineinUse : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         string Attr_UseId { get; }
         string Attr_WorkingSpecID { get; }
         string Attr_GuestStayID { get; }
         string Attr_MachineID { get; }
 
-        bool LinkR9CurrentSpec(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR9CurrentSpec(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null);
-        DomainClassAvailableWorkingSpec LinkedR9CurrentSpec();
 
-        bool LinkR18(DomainClassGuestStay oneInstanceIsUsedBy, DomainClassWashingMachine otherInstanceIsUsing, IList<ChangedState> changedStates=null);
-        bool UnlinkR18(DomainClassGuestStay oneInstanceIsUsedBy, DomainClassWashingMachine otherInstanceIsUsing, IList<ChangedState> changedStates=null);
-        DomainClassGuestStay LinkedR18OneIsUsedBy();
-        DomainClassWashingMachine LinkedR18OtherIsUsing();
+        // Relationships 
+
+        public DomainClassAvailableWorkingSpec LinkedR9CurrentSpec();
+
+        public bool LinkR9CurrentSpec(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null);
+
+        public bool UnlinkR9CurrentSpec(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null);
+        public bool LinkR18(DomainClassGuestStay oneInstanceIsUsedBy, DomainClassWashingMachine otherInstanceIsUsing, IList<ChangedState> changedStates=null);
+        public bool UnlinkR18(DomainClassGuestStay oneInstanceIsUsedBy, DomainClassWashingMachine otherInstanceIsUsing, IList<ChangedState> changedStates=null);
+        public DomainClassGuestStay LinkedR18OneIsUsedBy();
+        public DomainClassWashingMachine LinkedR18OtherIsUsing();
+
+
+        // Conceptual Information Class's Operations
+
+
 
     }
 
     public interface DomainClassWashingMachineReservation : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         string Attr_ReservationID { get; }
         DateTime Attr_ReservationTime { get; set; }
         DateTime Attr_EstimatedEndTime { get; set; }
@@ -271,35 +425,58 @@ namespace LaundromatInHotel
         string Attr_MachineID { get; }
         string Attr_AlarmTimer { get; set; }
 
-        void TakeEvent(EventData domainEvent);
 
-        bool LinkR12ReservationOwner(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR12ReservationOwner(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
-        DomainClassGuestStay LinkedR12ReservationOwner();
+        // State Machine
 
-        bool LinkR13Target(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR13Target(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null);
-        DomainClassAvailableWorkingSpec LinkedR13Target();
+        void TakeEvent(EventData domainEvent, bool selfEvent=false);
 
-        bool LinkR17Successor(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null);
-        bool UnlinkR17Successor(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null);
-        DomainClassWashingMachineReservation LinkedR17Successor();
+        // Relationships 
 
-        DomainClassWashingMachineReservation LinkedR17Predecessor();
+        public DomainClassGuestStay LinkedR12ReservationOwner();
 
-        DomainClassReservableWashingMachine LinkedR19();
+        public bool LinkR12ReservationOwner(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
+
+        public bool UnlinkR12ReservationOwner(DomainClassGuestStay instance, IList<ChangedState> changedStates=null);
+        public DomainClassAvailableWorkingSpec LinkedR13Target();
+
+        public bool LinkR13Target(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null);
+
+        public bool UnlinkR13Target(DomainClassAvailableWorkingSpec instance, IList<ChangedState> changedStates=null);
+        public DomainClassWashingMachineReservation LinkedR17Successor();
+
+        public bool LinkR17Successor(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null);
+
+        public bool UnlinkR17Successor(DomainClassWashingMachineReservation instance, IList<ChangedState> changedStates=null);
+        public DomainClassWashingMachineReservation LinkedR17Predecessor();
+        public DomainClassReservableWashingMachine LinkedR19();
+
+
+        // Conceptual Information Class's Operations
+
+
 
     }
 
     public interface DomainClassWorkingSpec : DomainClassDef
     {
+        // Conceptual Information Class's Properties
+
         string Attr_WorkingSpecID { get; }
         int Attr_WashingTime { get; set; }
         int Attr_DryingTime { get; set; }
         int Attr_StandardWeight { get; set; }
         int Attr_Price { get; set; }
 
-        IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8Other();
+
+        // Relationships 
+
+
+        public IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8Other();
+
+
+        // Conceptual Information Class's Operations
+
+
 
     }
 }

@@ -41,12 +41,11 @@ namespace LaundromatInHotel
             this.instanceRepository = instanceRepository;
             this.logger = logger;
         }
-
         protected string attr_MachineID;
         protected bool stateof_MachineID = false;
 
-
         public string Attr_MachineID { get { return attr_MachineID; } }
+
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassNonReservationWashingMachine instance, IDictionary<string, object> conditionPropertyValues)
@@ -70,9 +69,7 @@ namespace LaundromatInHotel
             }
             return result;
         }
-
         protected LinkedInstance relR15WashingMachine;
-
         public DomainClassWashingMachine GetSuperClassR15()
         {
             if (relR15WashingMachine == null)
@@ -82,6 +79,7 @@ namespace LaundromatInHotel
             }
             return relR15WashingMachine.GetDestination<DomainClassWashingMachine>();
         }
+
         public bool LinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
@@ -99,13 +97,14 @@ namespace LaundromatInHotel
             }
             return result;
         }
+        
         public bool UnlinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR15WashingMachine != null && ( this.Attr_MachineID==instance.Attr_MachineID ))
             {
                 if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR15WashingMachine });
-
+        
                 this.attr_MachineID = null;
                 relR15WashingMachine = null;
 
@@ -115,6 +114,8 @@ namespace LaundromatInHotel
             }
             return result;
         }
+
+
 
         
         public bool Validate()

@@ -42,7 +42,6 @@ namespace LaundromatInHotel
             this.logger = logger;
             stateMachine = new DomainClassReservableWashingMachineStateMachine(this, instanceRepository, logger);
         }
-
         protected string attr_MachineID;
         protected bool stateof_MachineID = false;
 
@@ -52,10 +51,10 @@ namespace LaundromatInHotel
         protected string attr_Next_ReservationID;
         protected bool stateof_Next_ReservationID = false;
 
-
         public string Attr_MachineID { get { return attr_MachineID; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
         public string Attr_Next_ReservationID { get { return attr_Next_ReservationID; } }
+
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassReservableWashingMachine instance, IDictionary<string, object> conditionPropertyValues)
@@ -85,10 +84,8 @@ namespace LaundromatInHotel
             }
             return result;
         }
-
         protected LinkedInstance relR15WashingMachine;
         protected LinkedInstance relR19WashingMachineReservationNextReservation;
-
         public DomainClassWashingMachine GetSuperClassR15()
         {
             if (relR15WashingMachine == null)
@@ -98,6 +95,7 @@ namespace LaundromatInHotel
             }
             return relR15WashingMachine.GetDestination<DomainClassWashingMachine>();
         }
+
         public bool LinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
@@ -115,13 +113,14 @@ namespace LaundromatInHotel
             }
             return result;
         }
+        
         public bool UnlinkR15(DomainClassWashingMachine instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
             if (relR15WashingMachine != null && ( this.Attr_MachineID==instance.Attr_MachineID ))
             {
                 if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR15WashingMachine });
-
+        
                 this.attr_MachineID = null;
                 relR15WashingMachine = null;
 
@@ -136,8 +135,8 @@ namespace LaundromatInHotel
         {
             if (relR19WashingMachineReservationNextReservation == null)
             {
-                var candidates = instanceRepository.GetDomainInstances("WashingMachineReservation").Where(inst=>(this.Attr_Next_ReservationID==((DomainClassWashingMachineReservation)inst).Attr_ReservationID));
-                relR19WashingMachineReservationNextReservation = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R19", Phrase = "NextReservation" };
+           var candidates = instanceRepository.GetDomainInstances("WashingMachineReservation").Where(inst=>(this.Attr_Next_ReservationID==((DomainClassWashingMachineReservation)inst).Attr_ReservationID));
+           relR19WashingMachineReservationNextReservation = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R19", Phrase = "NextReservation" };
 
             }
             return relR19WashingMachineReservationNextReservation.GetDestination<DomainClassWashingMachineReservation>();
@@ -167,7 +166,7 @@ namespace LaundromatInHotel
             if (relR19WashingMachineReservationNextReservation != null && ( this.Attr_Next_ReservationID==instance.Attr_ReservationID ))
             {
                 if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR19WashingMachineReservationNextReservation });
-
+        
                 this.attr_Next_ReservationID = null;
                 relR19WashingMachineReservationNextReservation = null;
 
@@ -178,9 +177,18 @@ namespace LaundromatInHotel
             }
             return result;
         }
-        public void TakeEvent(EventData domainEvent)
+
+
+        public void TakeEvent(EventData domainEvent, bool selfEvent=false)
         {
-            stateMachine.ReceivedEvent(domainEvent).Wait();
+            if (selfEvent)
+            {
+                stateMachine.ReceivedSelfEvent(domainEvent).Wait();
+            }
+            else
+            {
+                stateMachine.ReceivedEvent(domainEvent).Wait();
+            }
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:ReservableWashingMachine(MachineID={this.Attr_MachineID}):takeEvent({domainEvent.EventNumber})");
         }
 

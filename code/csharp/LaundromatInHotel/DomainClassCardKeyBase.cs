@@ -42,16 +42,15 @@ namespace LaundromatInHotel
             this.logger = logger;
             attr_CardKeyID = Guid.NewGuid().ToString();
         }
-
         protected string attr_CardKeyID;
         protected bool stateof_CardKeyID = false;
 
         protected string attr_GuestStayID;
         protected bool stateof_GuestStayID = false;
 
-
         public string Attr_CardKeyID { get { return attr_CardKeyID; } set { attr_CardKeyID = value; stateof_CardKeyID = true; } }
         public string Attr_GuestStayID { get { return attr_GuestStayID; } }
+
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassCardKey instance, IDictionary<string, object> conditionPropertyValues)
@@ -81,15 +80,13 @@ namespace LaundromatInHotel
             }
             return result;
         }
-
         protected LinkedInstance relR6GuestStayIsAssignedAsKeyFor;
-
         public DomainClassGuestStay LinkedR6IsAssignedAsKeyFor()
         {
             if (relR6GuestStayIsAssignedAsKeyFor == null)
             {
-                var candidates = instanceRepository.GetDomainInstances("GuestStay").Where(inst=>(this.Attr_GuestStayID==((DomainClassGuestStay)inst).Attr_GuestStayID));
-                relR6GuestStayIsAssignedAsKeyFor = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R6", Phrase = "IsAssignedAsKeyFor" };
+           var candidates = instanceRepository.GetDomainInstances("GuestStay").Where(inst=>(this.Attr_GuestStayID==((DomainClassGuestStay)inst).Attr_GuestStayID));
+           relR6GuestStayIsAssignedAsKeyFor = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R6", Phrase = "IsAssignedAsKeyFor" };
 
             }
             return relR6GuestStayIsAssignedAsKeyFor.GetDestination<DomainClassGuestStay>();
@@ -119,7 +116,7 @@ namespace LaundromatInHotel
             if (relR6GuestStayIsAssignedAsKeyFor != null && ( this.Attr_GuestStayID==instance.Attr_GuestStayID ))
             {
                 if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR6GuestStayIsAssignedAsKeyFor });
-
+        
                 this.attr_GuestStayID = null;
                 relR6GuestStayIsAssignedAsKeyFor = null;
 
@@ -130,6 +127,8 @@ namespace LaundromatInHotel
             }
             return result;
         }
+
+
         
         public bool Validate()
         {

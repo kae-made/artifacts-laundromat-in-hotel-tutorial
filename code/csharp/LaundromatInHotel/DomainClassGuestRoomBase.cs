@@ -42,7 +42,6 @@ namespace LaundromatInHotel
             this.logger = logger;
             attr_RoomID = Guid.NewGuid().ToString();
         }
-
         protected int attr_Floor;
         protected bool stateof_Floor = false;
 
@@ -61,13 +60,13 @@ namespace LaundromatInHotel
         protected string attr_HotelID;
         protected bool stateof_HotelID = false;
 
-
         public int Attr_Floor { get { return attr_Floor; } set { attr_Floor = value; stateof_Floor = true; } }
         public int Attr_RoomNumber { get { return attr_RoomNumber; } set { attr_RoomNumber = value; stateof_RoomNumber = true; } }
         public string Attr_Name { get { return attr_Name; } set { attr_Name = value; stateof_Name = true; } }
         public string Attr_RoomID { get { return attr_RoomID; } set { attr_RoomID = value; stateof_RoomID = true; } }
         public int Attr_Capacity { get { return attr_Capacity; } set { attr_Capacity = value; stateof_Capacity = true; } }
         public string Attr_HotelID { get { return attr_HotelID; } }
+
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassGuestRoom instance, IDictionary<string, object> conditionPropertyValues)
@@ -121,15 +120,13 @@ namespace LaundromatInHotel
             }
             return result;
         }
-
         protected LinkedInstance relR3Hotel;
-
         public DomainClassHotel LinkedR3()
         {
             if (relR3Hotel == null)
             {
-                var candidates = instanceRepository.GetDomainInstances("Hotel").Where(inst=>(this.Attr_HotelID==((DomainClassHotel)inst).Attr_HotelID));
-                relR3Hotel = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R3", Phrase = "" };
+           var candidates = instanceRepository.GetDomainInstances("Hotel").Where(inst=>(this.Attr_HotelID==((DomainClassHotel)inst).Attr_HotelID));
+           relR3Hotel = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R3", Phrase = "" };
 
             }
             return relR3Hotel.GetDestination<DomainClassHotel>();
@@ -159,7 +156,7 @@ namespace LaundromatInHotel
             if (relR3Hotel != null && ( this.Attr_HotelID==instance.Attr_HotelID ))
             {
                 if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR3Hotel });
-
+        
                 this.attr_HotelID = null;
                 relR3Hotel = null;
 
@@ -170,12 +167,13 @@ namespace LaundromatInHotel
             }
             return result;
         }
-
         public DomainClassGuestStay LinkedR4()
         {
             var candidates = instanceRepository.GetDomainInstances("GuestStay").Where(inst=>(this.Attr_RoomID==((DomainClassGuestStay)inst).Attr_RoomID));
             return (DomainClassGuestStay)candidates.First();
         }
+
+
         
         public bool Validate()
         {

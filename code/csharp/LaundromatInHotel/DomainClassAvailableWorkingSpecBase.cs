@@ -41,7 +41,6 @@ namespace LaundromatInHotel
             this.instanceRepository = instanceRepository;
             this.logger = logger;
         }
-
         protected string attr_HotelID;
         protected bool stateof_HotelID = false;
 
@@ -54,11 +53,11 @@ namespace LaundromatInHotel
         protected int attr_PreAlarmSec;
         protected bool stateof_PreAlarmSec = false;
 
-
         public string Attr_HotelID { get { return attr_HotelID; } }
         public string Attr_MachineID { get { return attr_MachineID; } }
         public string Attr_WorkingSpecID { get { return attr_WorkingSpecID; } }
         public int Attr_PreAlarmSec { get { return attr_PreAlarmSec; } set { attr_PreAlarmSec = value; stateof_PreAlarmSec = true; } }
+
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassAvailableWorkingSpec instance, IDictionary<string, object> conditionPropertyValues)
@@ -100,19 +99,17 @@ namespace LaundromatInHotel
             }
             return result;
         }
-
         protected LinkedInstance relR11WashingMachineAssigner;
         protected LinkedInstance relR8WashingMachine;
         // private DomainClassWashingMachine relR8WashingMachine;
         protected LinkedInstance relR8WorkingSpecAvailableSpec;
         // private DomainClassWorkingSpec relR8WorkingSpecAvailableSpec;
-
         public DomainClassWashingMachineAssigner LinkedR11()
         {
             if (relR11WashingMachineAssigner == null)
             {
-                var candidates = instanceRepository.GetDomainInstances("WashingMachineAssigner").Where(inst=>(this.Attr_HotelID==((DomainClassWashingMachineAssigner)inst).Attr_HotelID));
-                relR11WashingMachineAssigner = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R11", Phrase = "" };
+           var candidates = instanceRepository.GetDomainInstances("WashingMachineAssigner").Where(inst=>(this.Attr_HotelID==((DomainClassWashingMachineAssigner)inst).Attr_HotelID));
+           relR11WashingMachineAssigner = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R11", Phrase = "" };
 
             }
             return relR11WashingMachineAssigner.GetDestination<DomainClassWashingMachineAssigner>();
@@ -142,7 +139,7 @@ namespace LaundromatInHotel
             if (relR11WashingMachineAssigner != null && ( this.Attr_HotelID==instance.Attr_HotelID ))
             {
                 if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR11WashingMachineAssigner });
-
+        
                 this.attr_HotelID = null;
                 relR11WashingMachineAssigner = null;
 
@@ -175,6 +172,7 @@ namespace LaundromatInHotel
             }
             return result;
         }
+        
         public bool UnlinkR8(DomainClassWashingMachine oneInstance, DomainClassWorkingSpec otherInstanceAvailableSpec, IList<ChangedState> changedStates=null)
         {
             bool result = false;
@@ -187,7 +185,7 @@ namespace LaundromatInHotel
                         changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR8WashingMachine });
                         changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR8WorkingSpecAvailableSpec });
                     }
-
+        
                     this.attr_MachineID = null;
                     this.attr_WorkingSpecID = null;
                     relR8WashingMachine = null;
@@ -200,6 +198,7 @@ namespace LaundromatInHotel
             }
             return result;
         }
+        
         public DomainClassWashingMachine LinkedR8One()
         {
             if (relR8WashingMachine == null)
@@ -210,6 +209,7 @@ namespace LaundromatInHotel
             }
             return relR8WashingMachine.GetDestination<DomainClassWashingMachine>();
         }
+        
         public DomainClassWorkingSpec LinkedR8OtherAvailableSpec()
         {
             if (relR8WorkingSpecAvailableSpec == null)
@@ -221,12 +221,12 @@ namespace LaundromatInHotel
             return relR8WorkingSpecAvailableSpec.GetDestination<DomainClassWorkingSpec>();
         }
 
-
         public DomainClassWashingMachineinUse LinkedR9()
         {
             var candidates = instanceRepository.GetDomainInstances("WashingMachineinUse").Where(inst=>(this.Attr_WorkingSpecID==((DomainClassWashingMachineinUse)inst).Attr_WorkingSpecID && this.Attr_MachineID==((DomainClassWashingMachineinUse)inst).Attr_MachineID));
             return (DomainClassWashingMachineinUse)candidates.First();
         }
+
         public IEnumerable<DomainClassWashingMachineReservation> LinkedR13()
         {
             var result = new List<DomainClassWashingMachineReservation>();
@@ -237,6 +237,9 @@ namespace LaundromatInHotel
             }
             return result;
         }
+
+
+
         
         public bool Validate()
         {

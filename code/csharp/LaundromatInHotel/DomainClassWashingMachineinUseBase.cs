@@ -42,7 +42,6 @@ namespace LaundromatInHotel
             this.logger = logger;
             attr_UseId = Guid.NewGuid().ToString();
         }
-
         protected string attr_UseId;
         protected bool stateof_UseId = false;
 
@@ -55,11 +54,11 @@ namespace LaundromatInHotel
         protected string attr_MachineID;
         protected bool stateof_MachineID = false;
 
-
         public string Attr_UseId { get { return attr_UseId; } set { attr_UseId = value; stateof_UseId = true; } }
         public string Attr_WorkingSpecID { get { return attr_WorkingSpecID; } }
         public string Attr_GuestStayID { get { return attr_GuestStayID; } }
         public string Attr_MachineID { get { return attr_MachineID; } }
+
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassWashingMachineinUse instance, IDictionary<string, object> conditionPropertyValues)
@@ -101,19 +100,17 @@ namespace LaundromatInHotel
             }
             return result;
         }
-
         protected LinkedInstance relR9AvailableWorkingSpecCurrentSpec;
         protected LinkedInstance relR18GuestStayIsUsedBy;
         // private DomainClassGuestStay relR18GuestStayIsUsedBy;
         protected LinkedInstance relR18WashingMachineIsUsing;
         // private DomainClassWashingMachine relR18WashingMachineIsUsing;
-
         public DomainClassAvailableWorkingSpec LinkedR9CurrentSpec()
         {
             if (relR9AvailableWorkingSpecCurrentSpec == null)
             {
-                var candidates = instanceRepository.GetDomainInstances("AvailableWorkingSpec").Where(inst=>(this.Attr_WorkingSpecID==((DomainClassAvailableWorkingSpec)inst).Attr_WorkingSpecID && this.Attr_MachineID==((DomainClassAvailableWorkingSpec)inst).Attr_MachineID));
-                relR9AvailableWorkingSpecCurrentSpec = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R9", Phrase = "CurrentSpec" };
+           var candidates = instanceRepository.GetDomainInstances("AvailableWorkingSpec").Where(inst=>(this.Attr_WorkingSpecID==((DomainClassAvailableWorkingSpec)inst).Attr_WorkingSpecID && this.Attr_MachineID==((DomainClassAvailableWorkingSpec)inst).Attr_MachineID));
+           relR9AvailableWorkingSpecCurrentSpec = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R9", Phrase = "CurrentSpec" };
 
             }
             return relR9AvailableWorkingSpecCurrentSpec.GetDestination<DomainClassAvailableWorkingSpec>();
@@ -144,7 +141,7 @@ namespace LaundromatInHotel
             if (relR9AvailableWorkingSpecCurrentSpec != null && ( this.Attr_WorkingSpecID==instance.Attr_WorkingSpecID && this.Attr_MachineID==instance.Attr_MachineID ))
             {
                 if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR9AvailableWorkingSpecCurrentSpec });
-
+        
                 this.attr_WorkingSpecID = null;
                 this.attr_MachineID = null;
                 relR9AvailableWorkingSpecCurrentSpec = null;
@@ -178,6 +175,7 @@ namespace LaundromatInHotel
             }
             return result;
         }
+        
         public bool UnlinkR18(DomainClassGuestStay oneInstanceIsUsedBy, DomainClassWashingMachine otherInstanceIsUsing, IList<ChangedState> changedStates=null)
         {
             bool result = false;
@@ -190,7 +188,7 @@ namespace LaundromatInHotel
                         changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR18GuestStayIsUsedBy });
                         changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR18WashingMachineIsUsing });
                     }
-
+        
                     this.attr_GuestStayID = null;
                     this.attr_MachineID = null;
                     relR18GuestStayIsUsedBy = null;
@@ -203,6 +201,7 @@ namespace LaundromatInHotel
             }
             return result;
         }
+        
         public DomainClassGuestStay LinkedR18OneIsUsedBy()
         {
             if (relR18GuestStayIsUsedBy == null)
@@ -213,6 +212,7 @@ namespace LaundromatInHotel
             }
             return relR18GuestStayIsUsedBy.GetDestination<DomainClassGuestStay>();
         }
+        
         public DomainClassWashingMachine LinkedR18OtherIsUsing()
         {
             if (relR18WashingMachineIsUsing == null)
@@ -223,6 +223,8 @@ namespace LaundromatInHotel
             }
             return relR18WashingMachineIsUsing.GetDestination<DomainClassWashingMachine>();
         }
+
+
 
         
         public bool Validate()

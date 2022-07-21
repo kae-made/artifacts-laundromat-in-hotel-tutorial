@@ -43,7 +43,6 @@ namespace LaundromatInHotel
             attr_MachineID = Guid.NewGuid().ToString();
             stateMachine = new DomainClassWashingMachineStateMachine(this, instanceRepository, logger);
         }
-
         protected string attr_MachineID;
         protected bool stateof_MachineID = false;
 
@@ -65,7 +64,6 @@ namespace LaundromatInHotel
         protected DomainClassWashingMachineStateMachine stateMachine;
         protected bool stateof_current_state = false;
 
-
         public string Attr_MachineID { get { return attr_MachineID; } set { attr_MachineID = value; stateof_MachineID = true; } }
         public string Attr_FriendryName { get { return attr_FriendryName; } set { attr_FriendryName = value; stateof_FriendryName = true; } }
         public bool Attr_IsBusy { get { return attr_IsBusy; } set { attr_IsBusy = value; stateof_IsBusy = true; } }
@@ -73,6 +71,7 @@ namespace LaundromatInHotel
         public string Attr_DoorID { get { return attr_DoorID; } }
         public DomainTypeWashingMachineStatus Attr_Status { get { return attr_Status; } set { attr_Status = value; stateof_Status = true; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
+
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassWashingMachine instance, IDictionary<string, object> conditionPropertyValues)
@@ -126,16 +125,14 @@ namespace LaundromatInHotel
             }
             return result;
         }
-
         protected LinkedInstance relR2LaundromatRoomIsSetUpAt;
         protected LinkedInstance relR14DoorwithLockFrontDoor;
-
         public DomainClassLaundromatRoom LinkedR2IsSetUpAt()
         {
             if (relR2LaundromatRoomIsSetUpAt == null)
             {
-                var candidates = instanceRepository.GetDomainInstances("LaundromatRoom").Where(inst=>(this.Attr_RoomID==((DomainClassLaundromatRoom)inst).Attr_RoomID));
-                relR2LaundromatRoomIsSetUpAt = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R2", Phrase = "IsSetUpAt" };
+           var candidates = instanceRepository.GetDomainInstances("LaundromatRoom").Where(inst=>(this.Attr_RoomID==((DomainClassLaundromatRoom)inst).Attr_RoomID));
+           relR2LaundromatRoomIsSetUpAt = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R2", Phrase = "IsSetUpAt" };
 
             }
             return relR2LaundromatRoomIsSetUpAt.GetDestination<DomainClassLaundromatRoom>();
@@ -165,7 +162,7 @@ namespace LaundromatInHotel
             if (relR2LaundromatRoomIsSetUpAt != null && ( this.Attr_RoomID==instance.Attr_RoomID ))
             {
                 if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR2LaundromatRoomIsSetUpAt });
-
+        
                 this.attr_RoomID = null;
                 relR2LaundromatRoomIsSetUpAt = null;
 
@@ -180,8 +177,8 @@ namespace LaundromatInHotel
         {
             if (relR14DoorwithLockFrontDoor == null)
             {
-                var candidates = instanceRepository.GetDomainInstances("DoorwithLock").Where(inst=>(this.Attr_DoorID==((DomainClassDoorwithLock)inst).Attr_DoorID));
-                relR14DoorwithLockFrontDoor = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R14", Phrase = "FrontDoor" };
+           var candidates = instanceRepository.GetDomainInstances("DoorwithLock").Where(inst=>(this.Attr_DoorID==((DomainClassDoorwithLock)inst).Attr_DoorID));
+           relR14DoorwithLockFrontDoor = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R14", Phrase = "FrontDoor" };
 
             }
             return relR14DoorwithLockFrontDoor.GetDestination<DomainClassDoorwithLock>();
@@ -211,7 +208,7 @@ namespace LaundromatInHotel
             if (relR14DoorwithLockFrontDoor != null && ( this.Attr_DoorID==instance.Attr_DoorID ))
             {
                 if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR14DoorwithLockFrontDoor });
-
+        
                 this.attr_DoorID = null;
                 relR14DoorwithLockFrontDoor = null;
 
@@ -233,6 +230,8 @@ namespace LaundromatInHotel
             }
             return result;
         }
+
+
         public SubClassR15 GetSubR15()
         {
             SubClassR15 result = null;
@@ -248,24 +247,38 @@ namespace LaundromatInHotel
             }
             return result;
         }
+
+
         public DomainClassNonReservationWashingMachine LinkedR15NonReservationWashingMachine()
         {
             return (DomainClassNonReservationWashingMachine)GetSubR15();
         }
+
 
         public DomainClassReservableWashingMachine LinkedR15ReservableWashingMachine()
         {
             return (DomainClassReservableWashingMachine)GetSubR15();
         }
 
+
         public DomainClassWashingMachineinUse LinkedR18OtherIsUsedBy()
         {
             var candidates = instanceRepository.GetDomainInstances("WashingMachineinUse").Where(inst=>(this.Attr_MachineID==((DomainClassWashingMachineinUse)inst).Attr_MachineID));
             return (DomainClassWashingMachineinUse)candidates.First();
         }
-        public void TakeEvent(EventData domainEvent)
+
+
+
+        public void TakeEvent(EventData domainEvent, bool selfEvent=false)
         {
-            stateMachine.ReceivedEvent(domainEvent).Wait();
+            if (selfEvent)
+            {
+                stateMachine.ReceivedSelfEvent(domainEvent).Wait();
+            }
+            else
+            {
+                stateMachine.ReceivedEvent(domainEvent).Wait();
+            }
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:WashingMachine(MachineID={this.Attr_MachineID}):takeEvent({domainEvent.EventNumber})");
         }
 

@@ -42,7 +42,6 @@ namespace LaundromatInHotel
             this.logger = logger;
             attr_WorkingSpecID = Guid.NewGuid().ToString();
         }
-
         protected string attr_WorkingSpecID;
         protected bool stateof_WorkingSpecID = false;
 
@@ -58,12 +57,12 @@ namespace LaundromatInHotel
         protected int attr_Price;
         protected bool stateof_Price = false;
 
-
         public string Attr_WorkingSpecID { get { return attr_WorkingSpecID; } set { attr_WorkingSpecID = value; stateof_WorkingSpecID = true; } }
         public int Attr_WashingTime { get { return attr_WashingTime; } set { attr_WashingTime = value; stateof_WashingTime = true; } }
         public int Attr_DryingTime { get { return attr_DryingTime; } set { attr_DryingTime = value; stateof_DryingTime = true; } }
         public int Attr_StandardWeight { get { return attr_StandardWeight; } set { attr_StandardWeight = value; stateof_StandardWeight = true; } }
         public int Attr_Price { get { return attr_Price; } set { attr_Price = value; stateof_Price = true; } }
+
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassWorkingSpec instance, IDictionary<string, object> conditionPropertyValues)
@@ -122,6 +121,9 @@ namespace LaundromatInHotel
             }
             return result;
         }
+
+
+
         
         public bool Validate()
         {

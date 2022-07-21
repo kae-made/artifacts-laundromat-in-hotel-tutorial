@@ -42,7 +42,6 @@ namespace LaundromatInHotel
             this.logger = logger;
             attr_GuestID = Guid.NewGuid().ToString();
         }
-
         protected string attr_Name;
         protected bool stateof_Name = false;
 
@@ -55,11 +54,11 @@ namespace LaundromatInHotel
         protected string attr_MailAddress;
         protected bool stateof_MailAddress = false;
 
-
         public string Attr_Name { get { return attr_Name; } set { attr_Name = value; stateof_Name = true; } }
         public string Attr_GuestID { get { return attr_GuestID; } set { attr_GuestID = value; stateof_GuestID = true; } }
         public string Attr_GuestStayId { get { return attr_GuestStayId; } }
         public string Attr_MailAddress { get { return attr_MailAddress; } set { attr_MailAddress = value; stateof_MailAddress = true; } }
+
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassGuest instance, IDictionary<string, object> conditionPropertyValues)
@@ -101,15 +100,13 @@ namespace LaundromatInHotel
             }
             return result;
         }
-
         protected LinkedInstance relR5GuestStayHaveTheRightToUse;
-
         public DomainClassGuestStay LinkedR5HaveTheRightToUse()
         {
             if (relR5GuestStayHaveTheRightToUse == null)
             {
-                var candidates = instanceRepository.GetDomainInstances("GuestStay").Where(inst=>(this.Attr_GuestStayId==((DomainClassGuestStay)inst).Attr_GuestStayID));
-                relR5GuestStayHaveTheRightToUse = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R5", Phrase = "HaveTheRightToUse" };
+           var candidates = instanceRepository.GetDomainInstances("GuestStay").Where(inst=>(this.Attr_GuestStayId==((DomainClassGuestStay)inst).Attr_GuestStayID));
+           relR5GuestStayHaveTheRightToUse = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R5", Phrase = "HaveTheRightToUse" };
 
             }
             return relR5GuestStayHaveTheRightToUse.GetDestination<DomainClassGuestStay>();
@@ -139,7 +136,7 @@ namespace LaundromatInHotel
             if (relR5GuestStayHaveTheRightToUse != null && ( this.Attr_GuestStayId==instance.Attr_GuestStayID ))
             {
                 if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR5GuestStayHaveTheRightToUse });
-
+        
                 this.attr_GuestStayId = null;
                 relR5GuestStayHaveTheRightToUse = null;
 
@@ -150,6 +147,8 @@ namespace LaundromatInHotel
             }
             return result;
         }
+
+
         
         public bool Validate()
         {

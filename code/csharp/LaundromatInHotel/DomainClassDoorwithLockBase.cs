@@ -43,7 +43,6 @@ namespace LaundromatInHotel
             attr_DoorID = Guid.NewGuid().ToString();
             stateMachine = new DomainClassDoorwithLockStateMachine(this, instanceRepository, logger);
         }
-
         protected string attr_DoorID;
         protected bool stateof_DoorID = false;
 
@@ -59,12 +58,12 @@ namespace LaundromatInHotel
         protected DomainClassDoorwithLockStateMachine stateMachine;
         protected bool stateof_current_state = false;
 
-
         public string Attr_DoorID { get { return attr_DoorID; } set { attr_DoorID = value; stateof_DoorID = true; } }
         public string Attr_PIN_Number { get { return attr_PIN_Number; } set { attr_PIN_Number = value; stateof_PIN_Number = true; } }
         public int Attr_NumberOfDigits { get { return attr_NumberOfDigits; } set { attr_NumberOfDigits = value; stateof_NumberOfDigits = true; } }
         public DomainTypeDoorStatus Attr_Status { get { return attr_Status; } set { attr_Status = value; stateof_Status = true; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
+
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
         public static bool Compare(DomainClassDoorwithLock instance, IDictionary<string, object> conditionPropertyValues)
@@ -106,15 +105,23 @@ namespace LaundromatInHotel
             }
             return result;
         }
-
         public DomainClassWashingMachine LinkedR14()
         {
             var candidates = instanceRepository.GetDomainInstances("WashingMachine").Where(inst=>(this.Attr_DoorID==((DomainClassWashingMachine)inst).Attr_DoorID));
             return (DomainClassWashingMachine)candidates.First();
         }
-        public void TakeEvent(EventData domainEvent)
+
+
+        public void TakeEvent(EventData domainEvent, bool selfEvent=false)
         {
-            stateMachine.ReceivedEvent(domainEvent).Wait();
+            if (selfEvent)
+            {
+                stateMachine.ReceivedSelfEvent(domainEvent).Wait();
+            }
+            else
+            {
+                stateMachine.ReceivedEvent(domainEvent).Wait();
+            }
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:DoorwithLock(DoorID={this.Attr_DoorID}):takeEvent({domainEvent.EventNumber})");
         }
 
