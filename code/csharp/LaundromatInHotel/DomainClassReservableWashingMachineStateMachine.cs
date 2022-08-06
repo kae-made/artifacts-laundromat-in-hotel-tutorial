@@ -33,17 +33,27 @@ namespace LaundromatInHotel
 
         public class ReservableWashingMachine1_Check : EventData
         {
-            public ReservableWashingMachine1_Check() : base((int)Events.ReservableWashingMachine1)
+            DomainClassReservableWashingMachine reciever;
+
+            public ReservableWashingMachine1_Check(DomainClassReservableWashingMachine reciever) : base((int)Events.ReservableWashingMachine1)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static ReservableWashingMachine1_Check Create(DomainClassReservableWashingMachine receiver)
+            public override void Send()
             {
-                var newEvent = new ReservableWashingMachine1_Check();
+                reciever.TakeEvent(this);
+            }
+
+            public static ReservableWashingMachine1_Check Create(DomainClassReservableWashingMachine receiver, bool sendNow)
+            {
+                var newEvent = new ReservableWashingMachine1_Check(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -52,17 +62,27 @@ namespace LaundromatInHotel
 
         public class ReservableWashingMachine2_Reserved : EventData
         {
-            public ReservableWashingMachine2_Reserved() : base((int)Events.ReservableWashingMachine2)
+            DomainClassReservableWashingMachine reciever;
+
+            public ReservableWashingMachine2_Reserved(DomainClassReservableWashingMachine reciever) : base((int)Events.ReservableWashingMachine2)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static ReservableWashingMachine2_Reserved Create(DomainClassReservableWashingMachine receiver)
+            public override void Send()
             {
-                var newEvent = new ReservableWashingMachine2_Reserved();
+                reciever.TakeEvent(this);
+            }
+
+            public static ReservableWashingMachine2_Reserved Create(DomainClassReservableWashingMachine receiver, bool sendNow)
+            {
+                var newEvent = new ReservableWashingMachine2_Reserved(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;

@@ -17,98 +17,266 @@ namespace LaundromatInHotel
     {
         protected void ActionWaitForReservationRequest(string guestStayId, string specId)
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Check if the requested time slot is available,
-            // add it to the reservation list if it is available,
-            // and notify you if it is not available.
-            // Then waiting for new request.
-            // SELECT ANY guestStay FROM INSTANCES OF GuestStay WHERE selected.GuestStayID == rcvd_evt.guestStayId;
-            // SELECT ANY workingSpec FROM INSTANCES OF AvailableWorkingSpec WHERE selected.WorkingSpecID == rcvd_evt.specId;
-            // 
-            // SELECT ONE requestingReservation RELATED BY guestStay->WashingMachineReservation[R12.'request of reservation'];
-            // 
-            // SELECT MANY existingReservations FROM INSTANCES OF WashingMachineReservation
-            //   WHERE ( selected.ReservationTime >= requestingReservation.ReservationTime AND selected.ReservationTime <= requestingReservation.EstimatedEndTime )
-            //     OR ( selected.EstimatedEndTime <= requestingReservation.ReservationTime AND selected.EstimatedEndTime <= requestingReservation.EstimatedEndTime );
-            // 
-            // IF ( NOT_EMPTY existingReservations )
-            // 	GENERATE WashingMachineReservation6:Rejected TO requestingReservation;
-            // ELSE
-            // 	SELECT ONE washingMachine RELATED BY workingSpec->WashingMachine[R8]->ReservableWashingMachine[R15];
-            // 	SELECT ONE nextReservation RELATED by washingMachine->WashingMachineReservation[R19.'next reservation'];
-            // 	IF ( empty nextReservation )
-            // 		RELATE requestingReservation TO washingMachine ACROSS R19;
-            // 	ELSE
-            // 		IF ( nextReservation.ReservationTime >= requestingReservation.ReservationTime )
-            // 			UNRELATE nextReservation FROM washingMachine ACROSS R19;
-            // 			RELATE requestingReservation TO washingMachine ACROSS R19;
-            // 			RELATE requestingReservation TO nextReservation ACROSS R17.'predecessor';
-            // 		ELSE
-            // 			ASSIGN unlinked = TRUE;
-            // 			ASSIGN prevReservation = nextReservation;
-            // 			WHILE ( unlinked )
-            // 				SELECT ONE nextReservation RELATED BY prevReservation->WashingMachineReservation[R17.'predecessor'];
-            // 				IF ( NOT_EMPTY nextReservation )
-            // 					IF ( nextReservation.ReservationTime >= requestingReservation.ReservationTime )
-            // 						UNRELATE prevReservation FROM nextReservation ACROSS R17.'predecessor';
-            // 						RELATE prevReservation TO requestingReservation ACROSS R17.'predecessor';
-            // 						RELATE nextReservation TO requestingReservation ACROSS R17.'successor';
-            // 						unlinked = FALSE;
-            // 						BREAK;
-            // 					END IF;
-            // 				END IF;	
-            // 				ASSIGN prevReservation = nextReservation;
-            // 			END WHILE;
-            // 			IF ( unlinked )
-            // 				RELATE requestingReservation TO prevReservation ACROSS R17.'successor';
-            // 			END IF;
-            // 		END IF;
-            // 		GENERATE WashingMachineReservation2:Assigned TO requestingReservation;
-            // 	END IF;
-            // END IF;
+
+            //   1 : // Check if the requested time slot is available,
+            //   2 : // add it to the reservation list if it is available,
+            //   3 : // and notify you if it is not available.
+            //   4 : // Then waiting for new request.
+            //   5 : SELECT ANY guestStay FROM INSTANCES OF GuestStay WHERE selected.GuestStayID == rcvd_evt.guestStayId;
+            //   6 : SELECT ANY workingSpec FROM INSTANCES OF AvailableWorkingSpec WHERE selected.WorkingSpecID == rcvd_evt.specId;
+            //   7 : 
+            //   8 : SELECT ONE requestingReservation RELATED BY guestStay->WashingMachineReservation[R12.'request of reservation'];
+            //   9 : 
+            //  10 : SELECT MANY existingReservations FROM INSTANCES OF WashingMachineReservation
+            //  11 :   WHERE ( selected.ReservationTime >= requestingReservation.ReservationTime AND selected.ReservationTime <= requestingReservation.EstimatedEndTime )
+            //  12 :     OR ( selected.EstimatedEndTime <= requestingReservation.ReservationTime AND selected.EstimatedEndTime <= requestingReservation.EstimatedEndTime );
+            //  13 : 
+            //  14 : IF ( NOT_EMPTY existingReservations )
+            //  15 : 	GENERATE WashingMachineReservation6:Rejected TO requestingReservation;
+            //  16 : ELSE
+            //  17 : 	SELECT ONE washingMachine RELATED BY workingSpec->WashingMachine[R8]->ReservableWashingMachine[R15];
+            //  18 : 	SELECT ONE nextReservation RELATED by washingMachine->WashingMachineReservation[R19.'next reservation'];
+            //  19 : 	IF ( empty nextReservation )
+            //  20 : 		RELATE requestingReservation TO washingMachine ACROSS R19;
+            //  21 : 	ELSE
+            //  22 : 		IF ( nextReservation.ReservationTime >= requestingReservation.ReservationTime )
+            //  23 : 			UNRELATE nextReservation FROM washingMachine ACROSS R19;
+            //  24 : 			RELATE requestingReservation TO washingMachine ACROSS R19;
+            //  25 : 			RELATE requestingReservation TO nextReservation ACROSS R17.'predecessor';
+            //  26 : 		ELSE
+            //  27 : 			ASSIGN unlinked = TRUE;
+            //  28 : 			ASSIGN prevReservation = nextReservation;
+            //  29 : 			WHILE ( unlinked )
+            //  30 : 				SELECT ONE nextReservation RELATED BY prevReservation->WashingMachineReservation[R17.'predecessor'];
+            //  31 : 				IF ( NOT_EMPTY nextReservation )
+            //  32 : 					IF ( nextReservation.ReservationTime >= requestingReservation.ReservationTime )
+            //  33 : 						UNRELATE prevReservation FROM nextReservation ACROSS R17.'predecessor';
+            //  34 : 						RELATE prevReservation TO requestingReservation ACROSS R17.'predecessor';
+            //  35 : 						RELATE nextReservation TO requestingReservation ACROSS R17.'successor';
+            //  36 : 						unlinked = FALSE;
+            //  37 : 						BREAK;
+            //  38 : 					END IF;
+            //  39 : 				END IF;	
+            //  40 : 				ASSIGN prevReservation = nextReservation;
+            //  41 : 			END WHILE;
+            //  42 : 			IF ( unlinked )
+            //  43 : 				RELATE requestingReservation TO prevReservation ACROSS R17.'successor';
+            //  44 : 			END IF;
+            //  45 : 		END IF;
+            //  46 : 		GENERATE WashingMachineReservation2:Assigned TO requestingReservation;
+            //  47 : 	END IF;
+            //  48 : END IF;
+
+            // Line : 5
+            var guestStay = (DomainClassGuestStay)(instanceRepository.GetDomainInstances("GuestStay").Where(selected => ((((DomainClassGuestStay)selected).Attr_GuestStayID == guestStayId))).First());
+
+            // Line : 6
+            var workingSpec = (DomainClassAvailableWorkingSpec)(instanceRepository.GetDomainInstances("AvailableWorkingSpec").Where(selected => ((((DomainClassAvailableWorkingSpec)selected).Attr_WorkingSpecID == specId))).First());
+
+            // Line : 8
+            var requestingReservation = guestStay.LinkedR12RequestOfReservation();
+
+            // Line : 10
+            var candidatesOfexistingReservations = instanceRepository.GetDomainInstances("WashingMachineReservation").Where(selected => ((((((DomainClassWashingMachineReservation)selected).Attr_ReservationTime >= ((DomainClassWashingMachineReservation)requestingReservation).Attr_ReservationTime) && (((DomainClassWashingMachineReservation)selected).Attr_ReservationTime <= ((DomainClassWashingMachineReservation)requestingReservation).Attr_EstimatedEndTime)) || ((((DomainClassWashingMachineReservation)selected).Attr_EstimatedEndTime <= ((DomainClassWashingMachineReservation)requestingReservation).Attr_ReservationTime) && (((DomainClassWashingMachineReservation)selected).Attr_EstimatedEndTime <= ((DomainClassWashingMachineReservation)requestingReservation).Attr_EstimatedEndTime)))));
+            var existingReservations = new List<DomainClassWashingMachineReservation>();
+            foreach (var instance in candidatesOfexistingReservations)
+            {
+                existingReservations.Add((DomainClassWashingMachineReservation)instance);
+            }
+
+            // Line : 14
+            if (existingReservations.Count() > 0)
+            {
+                // Line : 15
+                DomainClassWashingMachineReservationStateMachine.WashingMachineReservation6_Rejected.Create(receiver:requestingReservation, sendNow:true);
+
+            }
+            else
+            {
+                // Line : 17
+                var washingMachine = workingSpec.LinkedR8One().LinkedR15ReservableWashingMachine();
+
+                // Line : 18
+                var nextReservation = washingMachine.LinkedR19NextReservation();
+
+                // Line : 19
+                if (nextReservation == null)
+                {
+                    // Line : 20
+                    // requestingReservation - R19 -> washingMachine;
+                    washingMachine.LinkR19NextReservation(requestingReservation, changedStates);;
+
+                }
+                else
+                {
+                    // Line : 22
+                    if ((nextReservation.Attr_ReservationTime >= requestingReservation.Attr_ReservationTime))
+                    {
+                        // Line : 23
+                        // Unrelate nextReservation From washingMachine Across R19
+                        washingMachine.UnlinkR19NextReservation(nextReservation, changedStates);;
+
+                        // Line : 24
+                        // requestingReservation - R19 -> washingMachine;
+                        washingMachine.LinkR19NextReservation(requestingReservation, changedStates);;
+
+                        // Line : 25
+                        // requestingReservation - R17 -> nextReservation;
+                        nextReservation.LinkR17Successor(requestingReservation, changedStates);;
+
+                    }
+                    else
+                    {
+                        // Line : 27
+                        var unlinked = true;
+                        // Line : 28
+                        var prevReservation = nextReservation;
+                        // Line : 29
+                        while (unlinked)
+                        {
+                            // Line : 30
+                            nextReservation = prevReservation.LinkedR17Predecessor();
+
+                            // Line : 31
+                            if (nextReservation != null)
+                            {
+                                // Line : 32
+                                if ((nextReservation.Attr_ReservationTime >= requestingReservation.Attr_ReservationTime))
+                                {
+                                    // Line : 33
+                                    // Unrelate prevReservation From nextReservation Across R17
+                                    nextReservation.UnlinkR17Successor(prevReservation, changedStates);;
+
+                                    // Line : 34
+                                    // prevReservation - R17 -> requestingReservation;
+                                    requestingReservation.LinkR17Successor(prevReservation, changedStates);;
+
+                                    // Line : 35
+                                    // nextReservation - R17 -> requestingReservation;
+                                    nextReservation.LinkR17Successor(requestingReservation, changedStates);;
+
+                                    // Line : 36
+                                    unlinked = false;
+                                    // Line : 37
+                                    break;
+                                }
+
+                            }
+
+                            // Line : 40
+                            prevReservation = nextReservation;
+                        }
+
+                        // Line : 42
+                        if (unlinked)
+                        {
+                            // Line : 43
+                            // requestingReservation - R17 -> prevReservation;
+                            requestingReservation.LinkR17Successor(prevReservation, changedStates);;
+
+                        }
+
+                    }
+
+                    // Line : 46
+                    DomainClassWashingMachineReservationStateMachine.WashingMachineReservation2_Assigned.Create(receiver:requestingReservation, sendNow:true);
+
+                }
+
+            }
 
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         protected void ActionCanceledReservation(string reservationId)
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // When a cancellation request comes,
-            // remove the reservation from the chain.
-            // Then wait for new request.
-            // SELECT ANY cancelingReservation FROM INSTANCES OF WashingMachineReservation WHERE SELECTED.ReservationID == rcvd_evt.reservationId;
-            // SELECT ONE prevReservation RELATED BY cancelingReservation->WashingMachineReservation[R17.'successor'];
-            // SELECT ONE nextReservation RELATED BY cancelingReservation->WashingMachineReservation[R17.'predecessor'];
-            // 
-            // IF ( EMPTY prevReservation )
-            // 	SELECT ONE washingMachine RELATED BY cancelingReservation->ReservableWashingMachine[R19];
-            // 	UNRELATE cancelingReservation FROM washingMachine ACROSS R19;
-            // 	IF ( NOT_EMPTY nextReservation )
-            // 		RELATE nextReservation TO washingMachine ACROSS R19;
-            // 	END IF;
-            // ELSE
-            // 	UNRELATE cancelingReservation FROM prevReservation ACROSS R17.'successor';
-            // END IF;
-            // IF ( NOT_EMPTY nextReservation )
-            // 	UNRELATE cancelingReservation FROM nextReservation ACROSS R17.'predecessor';
-            // 	IF ( NOT_EMPTY prevReservation )
-            // 		RELATE prevReservation TO nextReservation ACROSS R17.'predecessor';
-            // 	END IF;
-            // END IF;
-            // 
-            // GENERATE WashingMachineReservation5:Canceled TO cancelingReservation;
+
+            //   1 : // When a cancellation request comes,
+            //   2 : // remove the reservation from the chain.
+            //   3 : // Then wait for new request.
+            //   4 : SELECT ANY cancelingReservation FROM INSTANCES OF WashingMachineReservation WHERE SELECTED.ReservationID == rcvd_evt.reservationId;
+            //   5 : SELECT ONE prevReservation RELATED BY cancelingReservation->WashingMachineReservation[R17.'successor'];
+            //   6 : SELECT ONE nextReservation RELATED BY cancelingReservation->WashingMachineReservation[R17.'predecessor'];
+            //   7 : 
+            //   8 : IF ( EMPTY prevReservation )
+            //   9 : 	SELECT ONE washingMachine RELATED BY cancelingReservation->ReservableWashingMachine[R19];
+            //  10 : 	UNRELATE cancelingReservation FROM washingMachine ACROSS R19;
+            //  11 : 	IF ( NOT_EMPTY nextReservation )
+            //  12 : 		RELATE nextReservation TO washingMachine ACROSS R19;
+            //  13 : 	END IF;
+            //  14 : ELSE
+            //  15 : 	UNRELATE cancelingReservation FROM prevReservation ACROSS R17.'successor';
+            //  16 : END IF;
+            //  17 : IF ( NOT_EMPTY nextReservation )
+            //  18 : 	UNRELATE cancelingReservation FROM nextReservation ACROSS R17.'predecessor';
+            //  19 : 	IF ( NOT_EMPTY prevReservation )
+            //  20 : 		RELATE prevReservation TO nextReservation ACROSS R17.'predecessor';
+            //  21 : 	END IF;
+            //  22 : END IF;
+            //  23 : 
+            //  24 : GENERATE WashingMachineReservation5:Canceled TO cancelingReservation;
+
+            // Line : 4
+            var cancelingReservation = (DomainClassWashingMachineReservation)(instanceRepository.GetDomainInstances("WashingMachineReservation").Where(selected => ((((DomainClassWashingMachineReservation)selected).Attr_ReservationID == reservationId))).First());
+
+            // Line : 5
+            var prevReservation = cancelingReservation.LinkedR17Successor();
+
+            // Line : 6
+            var nextReservation = cancelingReservation.LinkedR17Predecessor();
+
+            // Line : 8
+            if (prevReservation == null)
+            {
+                // Line : 9
+                var washingMachine = cancelingReservation.LinkedR19();
+
+                // Line : 10
+                // Unrelate cancelingReservation From washingMachine Across R19
+                washingMachine.UnlinkR19NextReservation(cancelingReservation, changedStates);;
+
+                // Line : 11
+                if (nextReservation != null)
+                {
+                    // Line : 12
+                    // nextReservation - R19 -> washingMachine;
+                    washingMachine.LinkR19NextReservation(nextReservation, changedStates);;
+
+                }
+
+            }
+            else
+            {
+                // Line : 15
+                // Unrelate cancelingReservation From prevReservation Across R17
+                cancelingReservation.UnlinkR17Successor(prevReservation, changedStates);;
+
+            }
+
+            // Line : 17
+            if (nextReservation != null)
+            {
+                // Line : 18
+                // Unrelate cancelingReservation From nextReservation Across R17
+                nextReservation.UnlinkR17Successor(cancelingReservation, changedStates);;
+
+                // Line : 19
+                if (prevReservation != null)
+                {
+                    // Line : 20
+                    // prevReservation - R17 -> nextReservation;
+                    nextReservation.LinkR17Successor(prevReservation, changedStates);;
+
+                }
+
+            }
+
+            // Line : 24
+            DomainClassWashingMachineReservationStateMachine.WashingMachineReservation5_Canceled.Create(receiver:cancelingReservation, sendNow:true);
 
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
     }

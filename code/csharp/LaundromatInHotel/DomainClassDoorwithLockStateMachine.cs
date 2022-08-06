@@ -62,18 +62,28 @@ namespace LaundromatInHotel
         }
         public class DoorwithLock1_TouchCardKey : EventData, IEventArgsCardKeyIdDef
         {
-            public DoorwithLock1_TouchCardKey() : base((int)Events.DoorwithLock1)
+            DomainClassDoorwithLock reciever;
+
+            public DoorwithLock1_TouchCardKey(DomainClassDoorwithLock reciever) : base((int)Events.DoorwithLock1)
             {
-                ;
+                this.reciever = reciever;
+            }
+
+            public override void Send()
+            {
+                reciever.TakeEvent(this);
             }
 
             public string cardKeyId { get; set; }
-            public static DoorwithLock1_TouchCardKey Create(DomainClassDoorwithLock receiver, string cardKeyId)
+            public static DoorwithLock1_TouchCardKey Create(DomainClassDoorwithLock receiver, string cardKeyId, bool sendNow)
             {
-                var newEvent = new DoorwithLock1_TouchCardKey() { cardKeyId = cardKeyId };
+                var newEvent = new DoorwithLock1_TouchCardKey(receiver) { cardKeyId = cardKeyId };
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -82,17 +92,27 @@ namespace LaundromatInHotel
 
         public class DoorwithLock2_DoorClosed : EventData
         {
-            public DoorwithLock2_DoorClosed() : base((int)Events.DoorwithLock2)
+            DomainClassDoorwithLock reciever;
+
+            public DoorwithLock2_DoorClosed(DomainClassDoorwithLock reciever) : base((int)Events.DoorwithLock2)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static DoorwithLock2_DoorClosed Create(DomainClassDoorwithLock receiver)
+            public override void Send()
             {
-                var newEvent = new DoorwithLock2_DoorClosed();
+                reciever.TakeEvent(this);
+            }
+
+            public static DoorwithLock2_DoorClosed Create(DomainClassDoorwithLock receiver, bool sendNow)
+            {
+                var newEvent = new DoorwithLock2_DoorClosed(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -101,17 +121,27 @@ namespace LaundromatInHotel
 
         public class DoorwithLock3_DoorOpened : EventData
         {
-            public DoorwithLock3_DoorOpened() : base((int)Events.DoorwithLock3)
+            DomainClassDoorwithLock reciever;
+
+            public DoorwithLock3_DoorOpened(DomainClassDoorwithLock reciever) : base((int)Events.DoorwithLock3)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static DoorwithLock3_DoorOpened Create(DomainClassDoorwithLock receiver)
+            public override void Send()
             {
-                var newEvent = new DoorwithLock3_DoorOpened();
+                reciever.TakeEvent(this);
+            }
+
+            public static DoorwithLock3_DoorOpened Create(DomainClassDoorwithLock receiver, bool sendNow)
+            {
+                var newEvent = new DoorwithLock3_DoorOpened(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -120,18 +150,28 @@ namespace LaundromatInHotel
 
         public class DoorwithLock4_SetPINCode : EventData, IEventArgsPinCodeDef
         {
-            public DoorwithLock4_SetPINCode() : base((int)Events.DoorwithLock4)
+            DomainClassDoorwithLock reciever;
+
+            public DoorwithLock4_SetPINCode(DomainClassDoorwithLock reciever) : base((int)Events.DoorwithLock4)
             {
-                ;
+                this.reciever = reciever;
+            }
+
+            public override void Send()
+            {
+                reciever.TakeEvent(this);
             }
 
             public string pinCode { get; set; }
-            public static DoorwithLock4_SetPINCode Create(DomainClassDoorwithLock receiver, string pinCode)
+            public static DoorwithLock4_SetPINCode Create(DomainClassDoorwithLock receiver, string pinCode, bool sendNow)
             {
-                var newEvent = new DoorwithLock4_SetPINCode() { pinCode = pinCode };
+                var newEvent = new DoorwithLock4_SetPINCode(receiver) { pinCode = pinCode };
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -140,17 +180,27 @@ namespace LaundromatInHotel
 
         public class DoorwithLock5_ValidatedUser : EventData
         {
-            public DoorwithLock5_ValidatedUser() : base((int)Events.DoorwithLock5)
+            DomainClassDoorwithLock reciever;
+
+            public DoorwithLock5_ValidatedUser(DomainClassDoorwithLock reciever) : base((int)Events.DoorwithLock5)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static DoorwithLock5_ValidatedUser Create(DomainClassDoorwithLock receiver)
+            public override void Send()
             {
-                var newEvent = new DoorwithLock5_ValidatedUser();
+                reciever.TakeEvent(this);
+            }
+
+            public static DoorwithLock5_ValidatedUser Create(DomainClassDoorwithLock receiver, bool sendNow)
+            {
+                var newEvent = new DoorwithLock5_ValidatedUser(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -159,17 +209,27 @@ namespace LaundromatInHotel
 
         public class DoorwithLock6_JudgedAsImproper : EventData
         {
-            public DoorwithLock6_JudgedAsImproper() : base((int)Events.DoorwithLock6)
+            DomainClassDoorwithLock reciever;
+
+            public DoorwithLock6_JudgedAsImproper(DomainClassDoorwithLock reciever) : base((int)Events.DoorwithLock6)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static DoorwithLock6_JudgedAsImproper Create(DomainClassDoorwithLock receiver)
+            public override void Send()
             {
-                var newEvent = new DoorwithLock6_JudgedAsImproper();
+                reciever.TakeEvent(this);
+            }
+
+            public static DoorwithLock6_JudgedAsImproper Create(DomainClassDoorwithLock receiver, bool sendNow)
+            {
+                var newEvent = new DoorwithLock6_JudgedAsImproper(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -178,19 +238,29 @@ namespace LaundromatInHotel
 
         public class DoorwithLock7_EnterSpec : EventData, IEventArgsSpecIdGuestStayIdDef
         {
-            public DoorwithLock7_EnterSpec() : base((int)Events.DoorwithLock7)
+            DomainClassDoorwithLock reciever;
+
+            public DoorwithLock7_EnterSpec(DomainClassDoorwithLock reciever) : base((int)Events.DoorwithLock7)
             {
-                ;
+                this.reciever = reciever;
+            }
+
+            public override void Send()
+            {
+                reciever.TakeEvent(this);
             }
 
             public string specId { get; set; }
             public string guestStayId { get; set; }
-            public static DoorwithLock7_EnterSpec Create(DomainClassDoorwithLock receiver, string specId, string guestStayId)
+            public static DoorwithLock7_EnterSpec Create(DomainClassDoorwithLock receiver, string specId, string guestStayId, bool sendNow)
             {
-                var newEvent = new DoorwithLock7_EnterSpec() { specId = specId, guestStayId = guestStayId };
+                var newEvent = new DoorwithLock7_EnterSpec(receiver) { specId = specId, guestStayId = guestStayId };
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -199,17 +269,27 @@ namespace LaundromatInHotel
 
         public class DoorwithLock8_UnlockedAllowed : EventData
         {
-            public DoorwithLock8_UnlockedAllowed() : base((int)Events.DoorwithLock8)
+            DomainClassDoorwithLock reciever;
+
+            public DoorwithLock8_UnlockedAllowed(DomainClassDoorwithLock reciever) : base((int)Events.DoorwithLock8)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static DoorwithLock8_UnlockedAllowed Create(DomainClassDoorwithLock receiver)
+            public override void Send()
             {
-                var newEvent = new DoorwithLock8_UnlockedAllowed();
+                reciever.TakeEvent(this);
+            }
+
+            public static DoorwithLock8_UnlockedAllowed Create(DomainClassDoorwithLock receiver, bool sendNow)
+            {
+                var newEvent = new DoorwithLock8_UnlockedAllowed(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;

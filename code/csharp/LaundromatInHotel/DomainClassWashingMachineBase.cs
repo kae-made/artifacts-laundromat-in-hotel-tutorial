@@ -220,7 +220,7 @@ namespace LaundromatInHotel
             return result;
         }
 
-        public IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8OneAvailableSpec()
+        public IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8OtherAvailableSpec()
         {
             var result = new List<DomainClassAvailableWorkingSpec>();
             var candidates = instanceRepository.GetDomainInstances("AvailableWorkingSpec").Where(inst=>(this.Attr_MachineID==((DomainClassAvailableWorkingSpec)inst).Attr_MachineID));
@@ -261,7 +261,7 @@ namespace LaundromatInHotel
         }
 
 
-        public DomainClassWashingMachineinUse LinkedR18OtherIsUsedBy()
+        public DomainClassWashingMachineinUse LinkedR18OneIsUsedBy()
         {
             var candidates = instanceRepository.GetDomainInstances("WashingMachineinUse").Where(inst=>(this.Attr_MachineID==((DomainClassWashingMachineinUse)inst).Attr_MachineID));
             return (DomainClassWashingMachineinUse)candidates.First();
@@ -294,7 +294,7 @@ namespace LaundromatInHotel
             {
                 isValid = false;
             }
-            if (this.LinkedR8OneAvailableSpec().Count() == 0)
+            if (this.LinkedR8OtherAvailableSpec().Count() == 0)
             {
                 isValid = false;
             }

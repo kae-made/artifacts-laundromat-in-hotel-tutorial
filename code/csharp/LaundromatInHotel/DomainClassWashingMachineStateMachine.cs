@@ -43,17 +43,27 @@ namespace LaundromatInHotel
 
         public class WashingMachine1_AssignedGuest : EventData
         {
-            public WashingMachine1_AssignedGuest() : base((int)Events.WashingMachine1)
+            DomainClassWashingMachine reciever;
+
+            public WashingMachine1_AssignedGuest(DomainClassWashingMachine reciever) : base((int)Events.WashingMachine1)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static WashingMachine1_AssignedGuest Create(DomainClassWashingMachine receiver)
+            public override void Send()
             {
-                var newEvent = new WashingMachine1_AssignedGuest();
+                reciever.TakeEvent(this);
+            }
+
+            public static WashingMachine1_AssignedGuest Create(DomainClassWashingMachine receiver, bool sendNow)
+            {
+                var newEvent = new WashingMachine1_AssignedGuest(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -62,17 +72,27 @@ namespace LaundromatInHotel
 
         public class WashingMachine3_DoneWashing : EventData
         {
-            public WashingMachine3_DoneWashing() : base((int)Events.WashingMachine3)
+            DomainClassWashingMachine reciever;
+
+            public WashingMachine3_DoneWashing(DomainClassWashingMachine reciever) : base((int)Events.WashingMachine3)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static WashingMachine3_DoneWashing Create(DomainClassWashingMachine receiver)
+            public override void Send()
             {
-                var newEvent = new WashingMachine3_DoneWashing();
+                reciever.TakeEvent(this);
+            }
+
+            public static WashingMachine3_DoneWashing Create(DomainClassWashingMachine receiver, bool sendNow)
+            {
+                var newEvent = new WashingMachine3_DoneWashing(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -81,17 +101,27 @@ namespace LaundromatInHotel
 
         public class WashingMachine5_DoneDrying : EventData
         {
-            public WashingMachine5_DoneDrying() : base((int)Events.WashingMachine5)
+            DomainClassWashingMachine reciever;
+
+            public WashingMachine5_DoneDrying(DomainClassWashingMachine reciever) : base((int)Events.WashingMachine5)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static WashingMachine5_DoneDrying Create(DomainClassWashingMachine receiver)
+            public override void Send()
             {
-                var newEvent = new WashingMachine5_DoneDrying();
+                reciever.TakeEvent(this);
+            }
+
+            public static WashingMachine5_DoneDrying Create(DomainClassWashingMachine receiver, bool sendNow)
+            {
+                var newEvent = new WashingMachine5_DoneDrying(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -100,17 +130,27 @@ namespace LaundromatInHotel
 
         public class WashingMachine6_StartTaking : EventData
         {
-            public WashingMachine6_StartTaking() : base((int)Events.WashingMachine6)
+            DomainClassWashingMachine reciever;
+
+            public WashingMachine6_StartTaking(DomainClassWashingMachine reciever) : base((int)Events.WashingMachine6)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static WashingMachine6_StartTaking Create(DomainClassWashingMachine receiver)
+            public override void Send()
             {
-                var newEvent = new WashingMachine6_StartTaking();
+                reciever.TakeEvent(this);
+            }
+
+            public static WashingMachine6_StartTaking Create(DomainClassWashingMachine receiver, bool sendNow)
+            {
+                var newEvent = new WashingMachine6_StartTaking(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -119,17 +159,27 @@ namespace LaundromatInHotel
 
         public class WashingMachine7_TakenOut : EventData
         {
-            public WashingMachine7_TakenOut() : base((int)Events.WashingMachine7)
+            DomainClassWashingMachine reciever;
+
+            public WashingMachine7_TakenOut(DomainClassWashingMachine reciever) : base((int)Events.WashingMachine7)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static WashingMachine7_TakenOut Create(DomainClassWashingMachine receiver)
+            public override void Send()
             {
-                var newEvent = new WashingMachine7_TakenOut();
+                reciever.TakeEvent(this);
+            }
+
+            public static WashingMachine7_TakenOut Create(DomainClassWashingMachine receiver, bool sendNow)
+            {
+                var newEvent = new WashingMachine7_TakenOut(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -138,17 +188,27 @@ namespace LaundromatInHotel
 
         public class WashingMachine8_Interupted : EventData
         {
-            public WashingMachine8_Interupted() : base((int)Events.WashingMachine8)
+            DomainClassWashingMachine reciever;
+
+            public WashingMachine8_Interupted(DomainClassWashingMachine reciever) : base((int)Events.WashingMachine8)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static WashingMachine8_Interupted Create(DomainClassWashingMachine receiver)
+            public override void Send()
             {
-                var newEvent = new WashingMachine8_Interupted();
+                reciever.TakeEvent(this);
+            }
+
+            public static WashingMachine8_Interupted Create(DomainClassWashingMachine receiver, bool sendNow)
+            {
+                var newEvent = new WashingMachine8_Interupted(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -157,17 +217,27 @@ namespace LaundromatInHotel
 
         public class WashingMachine9_InteruptActionCompleted : EventData
         {
-            public WashingMachine9_InteruptActionCompleted() : base((int)Events.WashingMachine9)
+            DomainClassWashingMachine reciever;
+
+            public WashingMachine9_InteruptActionCompleted(DomainClassWashingMachine reciever) : base((int)Events.WashingMachine9)
             {
-                ;
+                this.reciever = reciever;
             }
 
-            public static WashingMachine9_InteruptActionCompleted Create(DomainClassWashingMachine receiver)
+            public override void Send()
             {
-                var newEvent = new WashingMachine9_InteruptActionCompleted();
+                reciever.TakeEvent(this);
+            }
+
+            public static WashingMachine9_InteruptActionCompleted Create(DomainClassWashingMachine receiver, bool sendNow)
+            {
+                var newEvent = new WashingMachine9_InteruptActionCompleted(receiver);
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;

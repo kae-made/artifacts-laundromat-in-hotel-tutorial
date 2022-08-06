@@ -111,7 +111,7 @@ namespace LaundromatInHotel
             return result;
         }
 
-        public IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8Other()
+        public IEnumerable<DomainClassAvailableWorkingSpec> LinkedR8One()
         {
             var result = new List<DomainClassAvailableWorkingSpec>();
             var candidates = instanceRepository.GetDomainInstances("AvailableWorkingSpec").Where(inst=>(this.Attr_WorkingSpecID==((DomainClassAvailableWorkingSpec)inst).Attr_WorkingSpecID));
@@ -128,7 +128,7 @@ namespace LaundromatInHotel
         public bool Validate()
         {
             bool isValid = true;
-            if (this.LinkedR8Other().Count() == 0)
+            if (this.LinkedR8One().Count() == 0)
             {
                 isValid = false;
             }

@@ -19,13 +19,32 @@ namespace LaundromatInHotel
         {
             // TODO : Let's write code!
             // Action Description on Model as a reference
+            //  1 : isAvailable = true;
+            //  2 : SELECT ONE isUsing RELATED BY SELF->WashingMachineinUse[R18];
+            //  3 : IF NOT_EMPTY isUsing
+            //  4 : 	isAvailable = false;
+            //  5 : END IF;
+            //  6 : RETURN isAvailable;
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
-        
+           // Generated from action description
+            // Line : 1
+            var isAvailable = true;
+            // Line : 2
+            var isUsing = this.LinkedR18OneIsUsedBy();
+
+            // Line : 3
+            if (isUsing != null)
+            {
+                // Line : 4
+                isAvailable = false;
+            }
+
+            // Line : 6
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            return isAvailable;
+
+
         }
 
         public void StopExecution()
@@ -34,11 +53,10 @@ namespace LaundromatInHotel
             // Action Description on Model as a reference
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+           // Generated from action description
+
         
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         public void StartWashing(int timeInMinutes)
@@ -47,11 +65,10 @@ namespace LaundromatInHotel
             // Action Description on Model as a reference
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+           // Generated from action description
+
         
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         public void StartDrying(int timeInMinutes)
@@ -60,11 +77,10 @@ namespace LaundromatInHotel
             // Action Description on Model as a reference
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+           // Generated from action description
+
         
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
 

@@ -21,11 +21,10 @@ namespace LaundromatInHotel
             // Action Description on Model as a reference
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+           // Generated from action description
+
         
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         public void Close()
@@ -34,11 +33,10 @@ namespace LaundromatInHotel
             // Action Description on Model as a reference
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+           // Generated from action description
+
         
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         public void Lock()
@@ -47,11 +45,10 @@ namespace LaundromatInHotel
             // Action Description on Model as a reference
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+           // Generated from action description
+
         
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         public void RequestPINCode()
@@ -60,11 +57,10 @@ namespace LaundromatInHotel
             // Action Description on Model as a reference
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+           // Generated from action description
+
         
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         public void RequestCardKey()
@@ -73,11 +69,10 @@ namespace LaundromatInHotel
             // Action Description on Model as a reference
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+           // Generated from action description
+
         
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
 

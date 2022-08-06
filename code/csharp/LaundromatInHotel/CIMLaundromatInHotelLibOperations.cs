@@ -22,384 +22,592 @@ namespace LaundromatInHotel
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // CREATE OBJECT INSTANCE hotel OF Hotel;
-            // hotel.Name = param.name;
-            // 
-            // CREATE OBJECT INSTANCE machineAssigner OF WashingMachineAssigner;
-            // RELATE hotel TO machineAssigner ACROSS R10;
-
+            //  1 : CREATE OBJECT INSTANCE hotel OF Hotel;
+            //  2 : hotel.Name = param.name;
+            //  3 : 
+            //  4 : CREATE OBJECT INSTANCE machineAssigner OF WashingMachineAssigner;
+            //  5 : RELATE hotel TO machineAssigner ACROSS R10;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var hotel = DomainClassHotelBase.CreateInstance(instanceRepository, logger, changedStates);
+            // Line : 2
+            hotel.Attr_Name = name;
+            // Line : 4
+            var machineAssigner = DomainClassWashingMachineAssignerBase.CreateInstance(instanceRepository, logger, changedStates);
+            // Line : 5
+            // hotel - R10 -> machineAssigner;
+            machineAssigner.LinkR10(hotel, changedStates);;
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public void CreateLaundromantRoom(int floor, int roomNumber, string hotelId)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // CREATE OBJECT INSTANCE room OF LaundromatRoom;
-            // room.Floor = param.floor;
-            // room.RoomNumber = param.roomNumber;
-            // 
-            // SELECT ANY hotel FROM INSTANCES OF Hotel WHERE SELECTED.HotelID == param.hotelId;
-            // RELATE room TO hotel ACROSS R1;
-
+            //  1 : CREATE OBJECT INSTANCE room OF LaundromatRoom;
+            //  2 : room.Floor = param.floor;
+            //  3 : room.RoomNumber = param.roomNumber;
+            //  4 : 
+            //  5 : SELECT ANY hotel FROM INSTANCES OF Hotel WHERE SELECTED.HotelID == param.hotelId;
+            //  6 : RELATE room TO hotel ACROSS R1;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var room = DomainClassLaundromatRoomBase.CreateInstance(instanceRepository, logger, changedStates);
+            // Line : 2
+            room.Attr_Floor = floor;
+            // Line : 3
+            room.Attr_RoomNumber = roomNumber;
+            // Line : 5
+            var hotel = (DomainClassHotel)(instanceRepository.GetDomainInstances("Hotel").Where(selected => ((((DomainClassHotel)selected).Attr_HotelID == hotelId))).First());
+
+            // Line : 6
+            // room - R1 -> hotel;
+            room.LinkR1(hotel, changedStates);;
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public void CreateWashingMachine(string roomId, bool isReservable)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // CREATE OBJECT INSTANCE machine OF WashingMachine;
-            // SELECT ANY room FROM INSTANCES OF LaundromatRoom WHERE SELECTED.RoomID == PARAM.roomId;
-            // RELATE machine TO room ACROSS R2;
-            // 
-            // CREATE OBJECT INSTANCE door OF DoorwithLock;
-            // RELATE machine TO door ACROSS R14;
-            // 
-            // IF ( PARAM.isReservable )
-            // 	CREATE OBJECT INSTANCE reservable OF ReservableWashingMachine;
-            // 	RELATE reservable TO machine ACROSS R15;
-            // ELSE
-            // 	CREATE OBJECT INSTANCE nonReservable OF NonReservationWashingMachine;
-            // 	RELATE nonReservable TO machine ACROSS R15;
-            // END IF;
-
+            //   1 : CREATE OBJECT INSTANCE machine OF WashingMachine;
+            //   2 : SELECT ANY room FROM INSTANCES OF LaundromatRoom WHERE SELECTED.RoomID == PARAM.roomId;
+            //   3 : RELATE machine TO room ACROSS R2;
+            //   4 : 
+            //   5 : CREATE OBJECT INSTANCE door OF DoorwithLock;
+            //   6 : RELATE machine TO door ACROSS R14;
+            //   7 : 
+            //   8 : IF ( PARAM.isReservable )
+            //   9 : 	CREATE OBJECT INSTANCE reservable OF ReservableWashingMachine;
+            //  10 : 	RELATE reservable TO machine ACROSS R15;
+            //  11 : ELSE
+            //  12 : 	CREATE OBJECT INSTANCE nonReservable OF NonReservationWashingMachine;
+            //  13 : 	RELATE nonReservable TO machine ACROSS R15;
+            //  14 : END IF;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var machine = DomainClassWashingMachineBase.CreateInstance(instanceRepository, logger, changedStates);
+            // Line : 2
+            var room = (DomainClassLaundromatRoom)(instanceRepository.GetDomainInstances("LaundromatRoom").Where(selected => ((((DomainClassLaundromatRoom)selected).Attr_RoomID == roomId))).First());
+
+            // Line : 3
+            // machine - R2 -> room;
+            machine.LinkR2IsSetUpAt(room, changedStates);;
+
+            // Line : 5
+            var door = DomainClassDoorwithLockBase.CreateInstance(instanceRepository, logger, changedStates);
+            // Line : 6
+            // machine - R14 -> door;
+            machine.LinkR14FrontDoor(door, changedStates);;
+
+            // Line : 8
+            if (isReservable)
+            {
+                // Line : 9
+                var reservable = DomainClassReservableWashingMachineBase.CreateInstance(instanceRepository, logger, changedStates);
+                // Line : 10
+                // reservable - R15 -> machine;
+                reservable.LinkR15(machine, changedStates);;
+
+            }
+            else
+            {
+                // Line : 12
+                var nonReservable = DomainClassNonReservationWashingMachineBase.CreateInstance(instanceRepository, logger, changedStates);
+                // Line : 13
+                // nonReservable - R15 -> machine;
+                nonReservable.LinkR15(machine, changedStates);;
+
+            }
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public bool CreateWorkingSpec(int washingTime, int dryingTime, int standardWaight, int price)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // ASSIGN created = FALSE;
-            // SELECT ANY specs FROM INSTANCES OF WorkingSpec
-            //   WHERE SELECTED.WashingTime == PARAM.washingTime AND SELECTED.DryingTime == PARAM.dryingTime
-            //     AND SELECTED.StandardWeight == PARAM.standardWaight AND SELECTED.Price == PARAM.price;
-            // IF ( EMPTY specs )
-            // 	CREATE OBJECT INSTANCE newSpec OF WorkingSpec;
-            // 	newSpec.WashingTime = PARAM.washingTime;
-            // 	newSpec.DryingTime = PARAM.dryingTime;
-            // 	newSpec.StandardWeight = PARAM.standardWaight;
-            // 	newSpec.Price = PARAM.price;
-            // 	created = TRUE;
-            // END IF;
-            // RETURN created;
-
+            //   1 : ASSIGN created = FALSE;
+            //   2 : SELECT ANY specs FROM INSTANCES OF WorkingSpec
+            //   3 :   WHERE SELECTED.WashingTime == PARAM.washingTime AND SELECTED.DryingTime == PARAM.dryingTime
+            //   4 :     AND SELECTED.StandardWeight == PARAM.standardWaight AND SELECTED.Price == PARAM.price;
+            //   5 : IF ( EMPTY specs )
+            //   6 : 	CREATE OBJECT INSTANCE newSpec OF WorkingSpec;
+            //   7 : 	newSpec.WashingTime = PARAM.washingTime;
+            //   8 : 	newSpec.DryingTime = PARAM.dryingTime;
+            //   9 : 	newSpec.StandardWeight = PARAM.standardWaight;
+            //  10 : 	newSpec.Price = PARAM.price;
+            //  11 : 	created = TRUE;
+            //  12 : END IF;
+            //  13 : RETURN created;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var created = false;
+            // Line : 2
+            var specs = (DomainClassWorkingSpec)(instanceRepository.GetDomainInstances("WorkingSpec").Where(selected => (((((((DomainClassWorkingSpec)selected).Attr_WashingTime == washingTime) && (((DomainClassWorkingSpec)selected).Attr_DryingTime == dryingTime)) && (((DomainClassWorkingSpec)selected).Attr_StandardWeight == standardWaight)) && (((DomainClassWorkingSpec)selected).Attr_Price == price)))).First());
 
+            // Line : 5
+            if (specs == null)
+            {
+                // Line : 6
+                var newSpec = DomainClassWorkingSpecBase.CreateInstance(instanceRepository, logger, changedStates);
+                // Line : 7
+                newSpec.Attr_WashingTime = washingTime;
+                // Line : 8
+                newSpec.Attr_DryingTime = dryingTime;
+                // Line : 9
+                newSpec.Attr_StandardWeight = standardWaight;
+                // Line : 10
+                newSpec.Attr_Price = price;
+                // Line : 11
+                created = true;
+            }
+
+            // Line : 13
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            return created;
+
+
         }
         public void AssignAvailableWorkingSpec(string machineId, string specId)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
-            // SELECT ANY spec FROM INSTANCES OF WorkingSpec WHERE SELECTED.WorkingSpecID == PARAM.specId;
-            // CREATE OBJECT INSTANCE availableSpec OF AvailableWorkingSpec;
-            // RELATE machine TO spec ACROSS R8 USING availableSpec;
-
+            //  1 : SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+            //  2 : SELECT ANY spec FROM INSTANCES OF WorkingSpec WHERE SELECTED.WorkingSpecID == PARAM.specId;
+            //  3 : CREATE OBJECT INSTANCE availableSpec OF AvailableWorkingSpec;
+            //  4 : RELATE machine TO spec ACROSS R8 USING availableSpec;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var machine = (DomainClassWashingMachine)(instanceRepository.GetDomainInstances("WashingMachine").Where(selected => ((((DomainClassWashingMachine)selected).Attr_MachineID == machineId))).First());
+
+            // Line : 2
+            var spec = (DomainClassWorkingSpec)(instanceRepository.GetDomainInstances("WorkingSpec").Where(selected => ((((DomainClassWorkingSpec)selected).Attr_WorkingSpecID == specId))).First());
+
+            // Line : 3
+            var availableSpec = DomainClassAvailableWorkingSpecBase.CreateInstance(instanceRepository, logger, changedStates);
+            // Line : 4
+            // Relate machine - R8 -> spec USING availableSpec
+            availableSpec.LinkR8(machine,spec);
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public void CreateGuestRoom(string hotelId, int floor, int roomNumber, string name, int capacity)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // SELECT ANY hotel FROM INSTANCES OF Hotel WHERE SELECTED.HotelID == PARAM.hotelId;
-            // CREATE OBJECT INSTANCE room OF GuestRoom;
-            // RELATE room TO hotel ACROSS R3;
-            // room.Floor = PARAM.floor;
-            // room.RoomNumber = PARAM.roomNumber;
-            // room.Name = PARAM.name;
-            // room.Capacity = PARAM.capacity;
-
+            //  1 : SELECT ANY hotel FROM INSTANCES OF Hotel WHERE SELECTED.HotelID == PARAM.hotelId;
+            //  2 : CREATE OBJECT INSTANCE room OF GuestRoom;
+            //  3 : RELATE room TO hotel ACROSS R3;
+            //  4 : room.Floor = PARAM.floor;
+            //  5 : room.RoomNumber = PARAM.roomNumber;
+            //  6 : room.Name = PARAM.name;
+            //  7 : room.Capacity = PARAM.capacity;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var hotel = (DomainClassHotel)(instanceRepository.GetDomainInstances("Hotel").Where(selected => ((((DomainClassHotel)selected).Attr_HotelID == hotelId))).First());
+
+            // Line : 2
+            var room = DomainClassGuestRoomBase.CreateInstance(instanceRepository, logger, changedStates);
+            // Line : 3
+            // room - R3 -> hotel;
+            room.LinkR3(hotel, changedStates);;
+
+            // Line : 4
+            room.Attr_Floor = floor;
+            // Line : 5
+            room.Attr_RoomNumber = roomNumber;
+            // Line : 6
+            room.Attr_Name = name;
+            // Line : 7
+            room.Attr_Capacity = capacity;
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public void CreateGuestStay(string roomId, DateTime startTime, DateTime endTime)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // SELECT ANY room FROM INSTANCES OF GuestRoom WHERE SELECTED.RoomID == PARAM.roomId;
-            // CREATE OBJECT INSTANCE stay OF GuestStay;
-            // RELATE stay TO room ACROSS R4;
-            // stay.StartTime = PARAM.startTime;
-            // stay.EndTimeOfValidity = PARAM.endTime;
-
+            //  1 : SELECT ANY room FROM INSTANCES OF GuestRoom WHERE SELECTED.RoomID == PARAM.roomId;
+            //  2 : CREATE OBJECT INSTANCE stay OF GuestStay;
+            //  3 : RELATE stay TO room ACROSS R4;
+            //  4 : stay.StartTime = PARAM.startTime;
+            //  5 : stay.EndTimeOfValidity = PARAM.endTime;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var room = (DomainClassGuestRoom)(instanceRepository.GetDomainInstances("GuestRoom").Where(selected => ((((DomainClassGuestRoom)selected).Attr_RoomID == roomId))).First());
+
+            // Line : 2
+            var stay = DomainClassGuestStayBase.CreateInstance(instanceRepository, logger, changedStates);
+            // Line : 3
+            // stay - R4 -> room;
+            stay.LinkR4IsAssignedFor(room, changedStates);;
+
+            // Line : 4
+            stay.Attr_StartTime = startTime;
+            // Line : 5
+            stay.Attr_EndTimeOfValidity = endTime;
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public bool AssignGuest(string name, string mailAddress, string guestStayId)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // ASSIGN created = FALSE;
-            // SELECT ANY guestStay FROM INSTANCES OF GuestStay WHERE SELECTED.GuestStayID == PARAM.guestStayId;
-            // SELECT MANY guests RELATED BY guestStay->Guest[R5];
-            // SELECT ONE room RELATED BY guestStay->GuestRoom[R4.'is assigned for'];
-            // IF (CARDINALITY guests < room.Capacity )
-            // 	CREATE OBJECT INSTANCE guest OF Guest;
-            // 	guest.Name = PARAM.name;
-            // 	guest.MailAddress = PARAM.mailAddress;
-            // 	RELATE guest TO guestStay ACROSS R5;
-            // 	created = TRUE;
-            // END IF;
-            // 
-            // RETURN created;
-
+            //   1 : ASSIGN created = FALSE;
+            //   2 : SELECT ANY guestStay FROM INSTANCES OF GuestStay WHERE SELECTED.GuestStayID == PARAM.guestStayId;
+            //   3 : SELECT MANY guests RELATED BY guestStay->Guest[R5];
+            //   4 : SELECT ONE room RELATED BY guestStay->GuestRoom[R4.'is assigned for'];
+            //   5 : IF (CARDINALITY guests < room.Capacity )
+            //   6 : 	CREATE OBJECT INSTANCE guest OF Guest;
+            //   7 : 	guest.Name = PARAM.name;
+            //   8 : 	guest.MailAddress = PARAM.mailAddress;
+            //   9 : 	RELATE guest TO guestStay ACROSS R5;
+            //  10 : 	created = TRUE;
+            //  11 : END IF;
+            //  12 : 
+            //  13 : RETURN created;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var created = false;
+            // Line : 2
+            var guestStay = (DomainClassGuestStay)(instanceRepository.GetDomainInstances("GuestStay").Where(selected => ((((DomainClassGuestStay)selected).Attr_GuestStayID == guestStayId))).First());
 
+            // Line : 3
+            var guests = guestStay.LinkedR5() as List<DomainClassGuest>;
+
+            // Line : 4
+            var room = guestStay.LinkedR4IsAssignedFor();
+
+            // Line : 5
+            if ((guests.Count() < room.Attr_Capacity))
+            {
+                // Line : 6
+                var guest = DomainClassGuestBase.CreateInstance(instanceRepository, logger, changedStates);
+                // Line : 7
+                guest.Attr_Name = name;
+                // Line : 8
+                guest.Attr_MailAddress = mailAddress;
+                // Line : 9
+                // guest - R5 -> guestStay;
+                guest.LinkR5HaveTheRightToUse(guestStay, changedStates);;
+
+                // Line : 10
+                created = true;
+            }
+
+            // Line : 13
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            return created;
+
+
         }
         public void TouchCardKey(string machineId, string cardKeyId)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
-            // GENERATE WashingMachine7 TO machine;
-
+            //  1 : SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+            //  2 : GENERATE WashingMachine7 TO machine;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var machine = (DomainClassWashingMachine)(instanceRepository.GetDomainInstances("WashingMachine").Where(selected => ((((DomainClassWashingMachine)selected).Attr_MachineID == machineId))).First());
+
+            // Line : 2
+            DomainClassWashingMachineStateMachine.WashingMachine7_TakenOut.Create(receiver:machine, sendNow:true);
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public void EnterPINCode(string machineId, string pinCode)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
-            // SELECT ONE door RELATED BY machine->DoorwithLock[R14.'front door'];
-            // GENERATE DoorwithLock4(pinCode:PARAM.pinCode) TO door;
-
+            //  1 : SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+            //  2 : SELECT ONE door RELATED BY machine->DoorwithLock[R14.'front door'];
+            //  3 : GENERATE DoorwithLock4(pinCode:PARAM.pinCode) TO door;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var machine = (DomainClassWashingMachine)(instanceRepository.GetDomainInstances("WashingMachine").Where(selected => ((((DomainClassWashingMachine)selected).Attr_MachineID == machineId))).First());
+
+            // Line : 2
+            var door = machine.LinkedR14FrontDoor();
+
+            // Line : 3
+            DomainClassDoorwithLockStateMachine.DoorwithLock4_SetPINCode.Create(receiver:door, pinCode:pinCode, sendNow:true);
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public void DoorOpened(string machineId)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
-            // SELECT ONE door RELATED BY machine->DoorwithLock[R14.'front door'];
-            // GENERATE DoorwithLock3 TO door;
-
+            //  1 : SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+            //  2 : SELECT ONE door RELATED BY machine->DoorwithLock[R14.'front door'];
+            //  3 : GENERATE DoorwithLock3 TO door;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var machine = (DomainClassWashingMachine)(instanceRepository.GetDomainInstances("WashingMachine").Where(selected => ((((DomainClassWashingMachine)selected).Attr_MachineID == machineId))).First());
+
+            // Line : 2
+            var door = machine.LinkedR14FrontDoor();
+
+            // Line : 3
+            DomainClassDoorwithLockStateMachine.DoorwithLock3_DoorOpened.Create(receiver:door, sendNow:true);
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public void DoorClosed(string machineId)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
-            // SELECT ONE door RELATED BY machine->DoorwithLock[R14.'front door'];
-            // GENERATE DoorwithLock2 TO door;
-
+            //  1 : SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+            //  2 : SELECT ONE door RELATED BY machine->DoorwithLock[R14.'front door'];
+            //  3 : GENERATE DoorwithLock2 TO door;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var machine = (DomainClassWashingMachine)(instanceRepository.GetDomainInstances("WashingMachine").Where(selected => ((((DomainClassWashingMachine)selected).Attr_MachineID == machineId))).First());
+
+            // Line : 2
+            var door = machine.LinkedR14FrontDoor();
+
+            // Line : 3
+            DomainClassDoorwithLockStateMachine.DoorwithLock2_DoorClosed.Create(receiver:door, sendNow:true);
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public void TakenOut(string machineId)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
-            // GENERATE WashingMachine7 TO machine;
-
+            //  1 : SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+            //  2 : GENERATE WashingMachine7 TO machine;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var machine = (DomainClassWashingMachine)(instanceRepository.GetDomainInstances("WashingMachine").Where(selected => ((((DomainClassWashingMachine)selected).Attr_MachineID == machineId))).First());
+
+            // Line : 2
+            DomainClassWashingMachineStateMachine.WashingMachine7_TakenOut.Create(receiver:machine, sendNow:true);
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public bool CreateCardKey(string guestStayId)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // ASSIGN created = FALSE;
-            // SELECT ANY guestStay FROM INSTANCES OF GuestStay WHERE SELECTED.GuestStayID == PARAM.guestStayId;
-            // SELECT ONE cardKey RELATED BY guestStay->CardKey[R6];
-            // IF ( EMPTY cardKey )
-            // 	CREATE OBJECT INSTANCE cardKey OF CardKey;
-            // 	RELATE cardKey TO guestStay ACROSS R6;
-            // 	created = TRUE;
-            // END IF;
-            // 
-            // RETURN created;
-
+            //   1 : ASSIGN created = FALSE;
+            //   2 : SELECT ANY guestStay FROM INSTANCES OF GuestStay WHERE SELECTED.GuestStayID == PARAM.guestStayId;
+            //   3 : SELECT ONE cardKey RELATED BY guestStay->CardKey[R6];
+            //   4 : IF ( EMPTY cardKey )
+            //   5 : 	CREATE OBJECT INSTANCE cardKey OF CardKey;
+            //   6 : 	RELATE cardKey TO guestStay ACROSS R6;
+            //   7 : 	created = TRUE;
+            //   8 : END IF;
+            //   9 : 
+            //  10 : RETURN created;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var created = false;
+            // Line : 2
+            var guestStay = (DomainClassGuestStay)(instanceRepository.GetDomainInstances("GuestStay").Where(selected => ((((DomainClassGuestStay)selected).Attr_GuestStayID == guestStayId))).First());
 
+            // Line : 3
+            var cardKey = guestStay.LinkedR6();
+
+            // Line : 4
+            if (cardKey == null)
+            {
+                // Line : 5
+                cardKey = DomainClassCardKeyBase.CreateInstance(instanceRepository, logger, changedStates);
+                // Line : 6
+                // cardKey - R6 -> guestStay;
+                cardKey.LinkR6IsAssignedAsKeyFor(guestStay, changedStates);;
+
+                // Line : 7
+                created = true;
+            }
+
+            // Line : 10
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            return created;
+
+
         }
         public void WashingMachineDoneWashing(string machineId)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
-            // GENERATE WashingMachine3 TO machine;
-
+            //  1 : SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+            //  2 : GENERATE WashingMachine3 TO machine;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var machine = (DomainClassWashingMachine)(instanceRepository.GetDomainInstances("WashingMachine").Where(selected => ((((DomainClassWashingMachine)selected).Attr_MachineID == machineId))).First());
+
+            // Line : 2
+            DomainClassWashingMachineStateMachine.WashingMachine3_DoneWashing.Create(receiver:machine, sendNow:true);
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public void WashingMachineDoneDrying(string machineId)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
-            // GENERATE WashingMachine5 TO machine;
-
+            //  1 : SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+            //  2 : GENERATE WashingMachine5 TO machine;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var machine = (DomainClassWashingMachine)(instanceRepository.GetDomainInstances("WashingMachine").Where(selected => ((((DomainClassWashingMachine)selected).Attr_MachineID == machineId))).First());
+
+            // Line : 2
+            DomainClassWashingMachineStateMachine.WashingMachine5_DoneDrying.Create(receiver:machine, sendNow:true);
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public void WashingMachineDoneInterupt(string machineId)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
-            // GENERATE WashingMachine9 TO machine;
-
+            //  1 : SELECT ANY machine FROM INSTANCES OF WashingMachine WHERE SELECTED.MachineID == PARAM.machineId;
+            //  2 : GENERATE WashingMachine9 TO machine;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var machine = (DomainClassWashingMachine)(instanceRepository.GetDomainInstances("WashingMachine").Where(selected => ((((DomainClassWashingMachine)selected).Attr_MachineID == machineId))).First());
+
+            // Line : 2
+            DomainClassWashingMachineStateMachine.WashingMachine9_InteruptActionCompleted.Create(receiver:machine, sendNow:true);
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public void ReservationCreate(string specId, string guestStayId, DateTime reservationTime)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // GENERATE WashingMachineReservation1:'Try to reserve'(specId:PARAM.specId, guestStayId:PARAM.guestStayId, reservationTime:PARAM.reservationTime) TO WashingMachineReservation Creator;
-
+            //  1 : GENERATE WashingMachineReservation1:'Try to reserve'(specId:PARAM.specId, guestStayId:PARAM.guestStayId, reservationTime:PARAM.reservationTime) TO WashingMachineReservation Creator;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            DomainClassWashingMachineReservationStateMachine.WashingMachineReservation1_TryToReserve.Create(receiver:null, specId:specId, guestStayId:guestStayId, reservationTime:reservationTime, sendNow:true, instanceRepository:instanceRepository, logger:logger);
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
         public void ReservationCancel(string reservationId)
         {
             // TODO: Let's write action code!
             // Action Description on Model as a reference.
 
-            // SELECT ANY reservation FROM INSTANCES OF WashingMachineReservation WHERE SELECTED.ReservationID == PARAM.reservationId;
-            // GENERATE WashingMachineReservation5:Canceled TO reservation;
-
+            //  1 : SELECT ANY reservation FROM INSTANCES OF WashingMachineReservation WHERE SELECTED.ReservationID == PARAM.reservationId;
+            //  2 : GENERATE WashingMachineReservation5:Canceled TO reservation;
 
 
             var changedStates = new List<ChangedState>();
-            // Please record changing states by using changedStates;
+            
+            // Generated from action description
+            // Line : 1
+            var reservation = (DomainClassWashingMachineReservation)(instanceRepository.GetDomainInstances("WashingMachineReservation").Where(selected => ((((DomainClassWashingMachineReservation)selected).Attr_ReservationID == reservationId))).First());
+
+            // Line : 2
+            DomainClassWashingMachineReservationStateMachine.WashingMachineReservation5_Canceled.Create(receiver:reservation, sendNow:true);
+
 
             instanceRepository.SyncChangedStates(changedStates);
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
     }
 }

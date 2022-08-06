@@ -161,7 +161,7 @@ namespace LaundromatInHotel
         public IEnumerable<DomainClassGuest> LinkedR5()
         {
             var result = new List<DomainClassGuest>();
-            var candidates = instanceRepository.GetDomainInstances("Guest").Where(inst=>(this.Attr_GuestStayID==((DomainClassGuest)inst).Attr_GuestStayId));
+            var candidates = instanceRepository.GetDomainInstances("Guest").Where(inst=>(this.Attr_GuestStayID==((DomainClassGuest)inst).Attr_GuestStayID));
             foreach (var c in candidates)
             {
                 result.Add((DomainClassGuest)c);
@@ -180,7 +180,7 @@ namespace LaundromatInHotel
             return (DomainClassWashingMachineReservation)candidates.First();
         }
 
-        public IEnumerable<DomainClassWashingMachineinUse> LinkedR18OneIsUsing()
+        public IEnumerable<DomainClassWashingMachineinUse> LinkedR18OtherIsUsing()
         {
             var result = new List<DomainClassWashingMachineinUse>();
             var candidates = instanceRepository.GetDomainInstances("WashingMachineinUse").Where(inst=>(this.Attr_GuestStayID==((DomainClassWashingMachineinUse)inst).Attr_GuestStayID));

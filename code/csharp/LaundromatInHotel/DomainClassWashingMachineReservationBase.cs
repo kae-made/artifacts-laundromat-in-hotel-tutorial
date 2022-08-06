@@ -70,7 +70,7 @@ namespace LaundromatInHotel
         protected string attr_MachineID;
         protected bool stateof_MachineID = false;
 
-        protected string attr_AlarmTimer;
+        protected Kae.DomainModel.Csharp.Framework.ExternalEntities.TIM.Timer attr_AlarmTimer;
         protected bool stateof_AlarmTimer = false;
 
         public string Attr_ReservationID { get { return attr_ReservationID; } set { attr_ReservationID = value; stateof_ReservationID = true; } }
@@ -82,7 +82,7 @@ namespace LaundromatInHotel
         public string Attr_successor_ReservationID { get { return attr_successor_ReservationID; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
         public string Attr_MachineID { get { return attr_MachineID; } }
-        public string Attr_AlarmTimer { get { return attr_AlarmTimer; } set { attr_AlarmTimer = value; stateof_AlarmTimer = true; } }
+        public Kae.DomainModel.Csharp.Framework.ExternalEntities.TIM.Timer Attr_AlarmTimer { get { return attr_AlarmTimer; } set { attr_AlarmTimer = value; stateof_AlarmTimer = true; } }
 
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
@@ -142,7 +142,7 @@ namespace LaundromatInHotel
                         }
                         break;
                     case "AlarmTimer":
-                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_AlarmTimer)
+                        if ((Kae.DomainModel.Csharp.Framework.ExternalEntities.TIM.Timer)conditionPropertyValues[propertyName] != instance.Attr_AlarmTimer)
                         {
                             result = false;
                         }
@@ -367,7 +367,7 @@ namespace LaundromatInHotel
             stateMachine.ForceUpdateState((int)propertyValues["current_state"]);
             attr_MachineID = (string)propertyValues["MachineID"];
             stateof_MachineID = false;
-            attr_AlarmTimer = (string)propertyValues["AlarmTimer"];
+            attr_AlarmTimer = (Kae.DomainModel.Csharp.Framework.ExternalEntities.TIM.Timer)propertyValues["AlarmTimer"];
             stateof_AlarmTimer = false;
         }
         

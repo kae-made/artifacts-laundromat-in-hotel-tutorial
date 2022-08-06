@@ -17,126 +17,171 @@ namespace LaundromatInHotel
     {
         protected void ActionStandby()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // No one is using the washing machine.
-            // SELECT ONE inUse RELATED BY SELF->WashingMachineinUse[R18];
-            // SELECT ONE guestStay RELATED BY inUse->GuestStay[R18.'is used by'];
-            // UNRELATE guestStay FROM SELF ACROSS R18 USING inUse;
-            // DELETE OBJECT INSTANCE inUse;
-            // 
-            // SELF.Status = WashingMachineStatus::Ready;
 
+            //  1 : // No one is using the washing machine.
+            //  2 : SELECT ONE inUse RELATED BY SELF->WashingMachineinUse[R18];
+            //  3 : SELECT ONE guestStay RELATED BY inUse->GuestStay[R18.'is used by'];
+            //  4 : UNRELATE guestStay FROM SELF ACROSS R18 USING inUse;
+            //  5 : DELETE OBJECT INSTANCE inUse;
+            //  6 : 
+            //  7 : SELF.Status = WashingMachineStatus::Ready;
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 2
+            var inUse = target.LinkedR18OneIsUsedBy();
+
+            // Line : 3
+            var guestStay = inUse.LinkedR18OneIsUsedBy();
+
+            // Line : 4
+            // Unrelate guestStay From SELF Across R18 Using inUse
+            inUse.UnlinkR18(guestStay,target);
+
+            // Line : 5
+            inUse.DeleteInstance(changedStates);
+            // Line : 7
+            target.Attr_Status = DomainTypeWashingMachineStatus.Ready;
+
         }
 
         protected void ActionWashing()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Guest user is assigned.
-            // If there is a washing instruction, transition to start washing.
-            // If there is no washing instruction and there is drying instruction, transition to start drying.
-            // SELECT ONE inUse RELATED BY SELF->WashingMachineinUse[R18];
-            // SELECT ONE workingSpec RELATED BY inUse->AvailableWorkingSpec[R9.'current spec']->WorkingSpec[R8.'available spec'];
-            // IF ( workingSpec.WashingTime > 0 )
-            // 	SELF.StartWashing( timeInMinutes: workingSpec.WashingTime );
-            // 	SELF.Status = WashingMachineStatus::Washing;
-            // ELSE
-            // 	GENERATE WashingMachine3 TO SELF;
-            // END IF;
+
+            //   1 : // Guest user is assigned.
+            //   2 : // If there is a washing instruction, transition to start washing.
+            //   3 : // If there is no washing instruction and there is drying instruction, transition to start drying.
+            //   4 : SELECT ONE inUse RELATED BY SELF->WashingMachineinUse[R18];
+            //   5 : SELECT ONE workingSpec RELATED BY inUse->AvailableWorkingSpec[R9.'current spec']->WorkingSpec[R8.'available spec'];
+            //   6 : IF ( workingSpec.WashingTime > 0 )
+            //   7 : 	SELF.StartWashing( timeInMinutes: workingSpec.WashingTime );
+            //   8 : 	SELF.Status = WashingMachineStatus::Washing;
+            //   9 : ELSE
+            //  10 : 	GENERATE WashingMachine3 TO SELF;
+            //  11 : END IF;
+
+            // Line : 4
+            var inUse = target.LinkedR18OneIsUsedBy();
+
+            // Line : 5
+            var workingSpec = inUse.LinkedR9CurrentSpec().LinkedR8OtherAvailableSpec();
+
+            // Line : 6
+            if ((workingSpec.Attr_WashingTime > 0))
+            {
+                // Line : 7
+                target.StartWashing(timeInMinutes:workingSpec.Attr_WashingTime);
+                // Line : 8
+                target.Attr_Status = DomainTypeWashingMachineStatus.Washing;
+            }
+            else
+            {
+                // Line : 10
+                DomainClassWashingMachineStateMachine.WashingMachine3_DoneWashing.Create(receiver:target, sendNow:true);
+
+            }
 
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         protected void ActionWashingCompletedAndDrying()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Start drying...
-            // SELECT ONE inUse RELATED BY SELF->WashingMachineinUse[R18];
-            // SELECT ONE workingSpec RELATED BY inUse->AvailableWorkingSpec[R9.'current spec']->WorkingSpec[R8.'available spec'];
-            // IF ( workingSpec.DryingTime > 0 )
-            // 	SELF.StartDrying( timeInMinutes: workingSpec.WashingTime );
-            // 	SELF.Status = WashingMachineStatus::Drying;
-            // ELSE
-            // 	GENERATE WashingMachine6 TO SELF;
-            // END IF;
+
+            //  1 : // Start drying...
+            //  2 : SELECT ONE inUse RELATED BY SELF->WashingMachineinUse[R18];
+            //  3 : SELECT ONE workingSpec RELATED BY inUse->AvailableWorkingSpec[R9.'current spec']->WorkingSpec[R8.'available spec'];
+            //  4 : IF ( workingSpec.DryingTime > 0 )
+            //  5 : 	SELF.StartDrying( timeInMinutes: workingSpec.WashingTime );
+            //  6 : 	SELF.Status = WashingMachineStatus::Drying;
+            //  7 : ELSE
+            //  8 : 	GENERATE WashingMachine6 TO SELF;
+            //  9 : END IF;
+
+            // Line : 2
+            var inUse = target.LinkedR18OneIsUsedBy();
+
+            // Line : 3
+            var workingSpec = inUse.LinkedR9CurrentSpec().LinkedR8OtherAvailableSpec();
+
+            // Line : 4
+            if ((workingSpec.Attr_DryingTime > 0))
+            {
+                // Line : 5
+                target.StartDrying(timeInMinutes:workingSpec.Attr_WashingTime);
+                // Line : 6
+                target.Attr_Status = DomainTypeWashingMachineStatus.Drying;
+            }
+            else
+            {
+                // Line : 8
+                DomainClassWashingMachineStateMachine.WashingMachine6_StartTaking.Create(receiver:target, sendNow:true);
+
+            }
 
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         protected void ActionDryingCompleted()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Notify now is that door unlock become available.
-            // SELECT ONE door RELATED BY SELF->DoorwithLock[R14.'front door'];
-            // GENERATE DoorwithLock8 TO door;
-            // 
-            // SELF.Status = WashingMachineStatus::WaitForTaking;
 
+            //  1 : // Notify now is that door unlock become available.
+            //  2 : SELECT ONE door RELATED BY SELF->DoorwithLock[R14.'front door'];
+            //  3 : GENERATE DoorwithLock8 TO door;
+            //  4 : 
+            //  5 : SELF.Status = WashingMachineStatus::WaitForTaking;
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 2
+            var door = target.LinkedR14FrontDoor();
+
+            // Line : 3
+            DomainClassDoorwithLockStateMachine.DoorwithLock8_UnlockedAllowed.Create(receiver:door, sendNow:true);
+
+            // Line : 5
+            target.Attr_Status = DomainTypeWashingMachineStatus.WaitForTaking;
+
         }
 
         protected void ActionWaitForTaking()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Tell the guest to take out and wait.
 
+            //  1 : // Tell the guest to take out and wait.
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         protected void ActionInterupting()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // By some reason, try to stop working.
-            // SELF.StopExecution();
 
+            //  1 : // By some reason, try to stop working.
+            //  2 : SELF.StopExecution();
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 2
+            target.StopExecution();
+
         }
 
         protected void ActionInterupted()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Notify now is that door unlock become available.
-            // SELECT ONE door RELATED BY SELF->DoorwithLock[R14.'front door'];
-            // GENERATE DoorwithLock8 TO door;
-            // 
-            // SELF.Status = WashingMachineStatus::Interupted;
 
+            //  1 : // Notify now is that door unlock become available.
+            //  2 : SELECT ONE door RELATED BY SELF->DoorwithLock[R14.'front door'];
+            //  3 : GENERATE DoorwithLock8 TO door;
+            //  4 : 
+            //  5 : SELF.Status = WashingMachineStatus::Interupted;
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 2
+            var door = target.LinkedR14FrontDoor();
+
+            // Line : 3
+            DomainClassDoorwithLockStateMachine.DoorwithLock8_UnlockedAllowed.Create(receiver:door, sendNow:true);
+
+            // Line : 5
+            target.Attr_Status = DomainTypeWashingMachineStatus.Interupted;
+
         }
 
     }

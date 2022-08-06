@@ -48,15 +48,15 @@ namespace LaundromatInHotel
         protected string attr_GuestID;
         protected bool stateof_GuestID = false;
 
-        protected string attr_GuestStayId;
-        protected bool stateof_GuestStayId = false;
+        protected string attr_GuestStayID;
+        protected bool stateof_GuestStayID = false;
 
         protected string attr_MailAddress;
         protected bool stateof_MailAddress = false;
 
         public string Attr_Name { get { return attr_Name; } set { attr_Name = value; stateof_Name = true; } }
         public string Attr_GuestID { get { return attr_GuestID; } set { attr_GuestID = value; stateof_GuestID = true; } }
-        public string Attr_GuestStayId { get { return attr_GuestStayId; } }
+        public string Attr_GuestStayID { get { return attr_GuestStayID; } }
         public string Attr_MailAddress { get { return attr_MailAddress; } set { attr_MailAddress = value; stateof_MailAddress = true; } }
 
 
@@ -80,8 +80,8 @@ namespace LaundromatInHotel
                             result = false;
                         }
                         break;
-                    case "GuestStayId":
-                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_GuestStayId)
+                    case "GuestStayID":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_GuestStayID)
                         {
                             result = false;
                         }
@@ -105,7 +105,7 @@ namespace LaundromatInHotel
         {
             if (relR5GuestStayHaveTheRightToUse == null)
             {
-           var candidates = instanceRepository.GetDomainInstances("GuestStay").Where(inst=>(this.Attr_GuestStayId==((DomainClassGuestStay)inst).Attr_GuestStayID));
+           var candidates = instanceRepository.GetDomainInstances("GuestStay").Where(inst=>(this.Attr_GuestStayID==((DomainClassGuestStay)inst).Attr_GuestStayID));
            relR5GuestStayHaveTheRightToUse = new LinkedInstance() { Source = this, Destination = candidates.First(), RelationshipID = "R5", Phrase = "HaveTheRightToUse" };
 
             }
@@ -117,7 +117,7 @@ namespace LaundromatInHotel
             bool result = false;
             if (relR5GuestStayHaveTheRightToUse == null)
             {
-                this.attr_GuestStayId = instance.Attr_GuestStayID;
+                this.attr_GuestStayID = instance.Attr_GuestStayID;
 
                 if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Guest(GuestID={this.Attr_GuestID}):link[GuestStay(GuestStayID={instance.Attr_GuestStayID})]");
 
@@ -133,11 +133,11 @@ namespace LaundromatInHotel
         public bool UnlinkR5HaveTheRightToUse(DomainClassGuestStay instance, IList<ChangedState> changedStates=null)
         {
             bool result = false;
-            if (relR5GuestStayHaveTheRightToUse != null && ( this.Attr_GuestStayId==instance.Attr_GuestStayID ))
+            if (relR5GuestStayHaveTheRightToUse != null && ( this.Attr_GuestStayID==instance.Attr_GuestStayID ))
             {
                 if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR5GuestStayHaveTheRightToUse });
         
-                this.attr_GuestStayId = null;
+                this.attr_GuestStayID = null;
                 relR5GuestStayHaveTheRightToUse = null;
 
                 if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:Guest(GuestID={this.Attr_GuestID}):unlink[GuestStay(GuestStayID={instance.Attr_GuestStayID})]");
@@ -176,8 +176,8 @@ namespace LaundromatInHotel
             stateof_Name = false;
             attr_GuestID = (string)propertyValues["GuestID"];
             stateof_GuestID = false;
-            attr_GuestStayId = (string)propertyValues["GuestStayId"];
-            stateof_GuestStayId = false;
+            attr_GuestStayID = (string)propertyValues["GuestStayID"];
+            stateof_GuestStayID = false;
             attr_MailAddress = (string)propertyValues["MailAddress"];
             stateof_MailAddress = false;
         }
@@ -195,10 +195,10 @@ namespace LaundromatInHotel
                 results.Add("GuestID", attr_GuestID);
                 stateof_GuestID = false;
             }
-            if (stateof_GuestStayId)
+            if (stateof_GuestStayID)
             {
-                results.Add("GuestStayId", attr_GuestStayId);
-                stateof_GuestStayId = false;
+                results.Add("GuestStayID", attr_GuestStayID);
+                stateof_GuestStayID = false;
             }
             if (stateof_MailAddress)
             {
@@ -215,7 +215,7 @@ namespace LaundromatInHotel
 
             if (!onlyIdentity) results.Add("Name", attr_Name);
             results.Add("GuestID", attr_GuestID);
-            if (!onlyIdentity) results.Add("GuestStayId", attr_GuestStayId);
+            if (!onlyIdentity) results.Add("GuestStayID", attr_GuestStayID);
             if (!onlyIdentity) results.Add("MailAddress", attr_MailAddress);
 
             return results;

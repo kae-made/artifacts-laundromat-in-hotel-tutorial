@@ -38,23 +38,14 @@ namespace LaundromatInHotel
                     DomainClassDef newInstance = null;
                     switch (className)
                     {
-                        case "AvailableWorkingSpec":
-                            newInstance = DomainClassAvailableWorkingSpecBase.CreateInstance(this, logger);
-                            break;
-                        case "CardKey":
-                            newInstance = DomainClassCardKeyBase.CreateInstance(this, logger);
-                            break;
                         case "DoorwithLock":
                             newInstance = DomainClassDoorwithLockBase.CreateInstance(this, logger);
                             break;
-                        case "Guest":
-                            newInstance = DomainClassGuestBase.CreateInstance(this, logger);
-                            break;
-                        case "GuestRoom":
-                            newInstance = DomainClassGuestRoomBase.CreateInstance(this, logger);
-                            break;
                         case "GuestStay":
                             newInstance = DomainClassGuestStayBase.CreateInstance(this, logger);
+                            break;
+                        case "Guest":
+                            newInstance = DomainClassGuestBase.CreateInstance(this, logger);
                             break;
                         case "Hotel":
                             newInstance = DomainClassHotelBase.CreateInstance(this, logger);
@@ -62,17 +53,14 @@ namespace LaundromatInHotel
                         case "LaundromatRoom":
                             newInstance = DomainClassLaundromatRoomBase.CreateInstance(this, logger);
                             break;
-                        case "NonReservationWashingMachine":
-                            newInstance = DomainClassNonReservationWashingMachineBase.CreateInstance(this, logger);
-                            break;
-                        case "ReservableWashingMachine":
-                            newInstance = DomainClassReservableWashingMachineBase.CreateInstance(this, logger);
+                        case "WashingMachineAssigner":
+                            newInstance = DomainClassWashingMachineAssignerBase.CreateInstance(this, logger);
                             break;
                         case "WashingMachine":
                             newInstance = DomainClassWashingMachineBase.CreateInstance(this, logger);
                             break;
-                        case "WashingMachineAssigner":
-                            newInstance = DomainClassWashingMachineAssignerBase.CreateInstance(this, logger);
+                        case "WorkingSpec":
+                            newInstance = DomainClassWorkingSpecBase.CreateInstance(this, logger);
                             break;
                         case "WashingMachineinUse":
                             newInstance = DomainClassWashingMachineinUseBase.CreateInstance(this, logger);
@@ -80,8 +68,20 @@ namespace LaundromatInHotel
                         case "WashingMachineReservation":
                             newInstance = DomainClassWashingMachineReservationBase.CreateInstance(this, logger);
                             break;
-                        case "WorkingSpec":
-                            newInstance = DomainClassWorkingSpecBase.CreateInstance(this, logger);
+                        case "ReservableWashingMachine":
+                            newInstance = DomainClassReservableWashingMachineBase.CreateInstance(this, logger);
+                            break;
+                        case "NonReservationWashingMachine":
+                            newInstance = DomainClassNonReservationWashingMachineBase.CreateInstance(this, logger);
+                            break;
+                        case "GuestRoom":
+                            newInstance = DomainClassGuestRoomBase.CreateInstance(this, logger);
+                            break;
+                        case "CardKey":
+                            newInstance = DomainClassCardKeyBase.CreateInstance(this, logger);
+                            break;
+                        case "AvailableWorkingSpec":
+                            newInstance = DomainClassAvailableWorkingSpecBase.CreateInstance(this, logger);
                             break;
                         default:
                             if (logger != null) logger.LogError($"{className} is not right domain class.");

@@ -17,35 +17,46 @@ namespace LaundromatInHotel
     {
         protected void ActionCheckedSituation()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // If there is an applicable reservation in the current time slot,
-            // it will transition to the reserved state.
-            // SELECT ONE reservation RELATED BY SELF->WashingMachineReservation[R19.'next reservation'];
-            // IF ( reservation.ReservationTime <= TIM::current_clock() )
-            // 	GENERATE ReservableWashingMachine2:Reserved TO SELF;
-            // END IF;
+
+            //  1 : // If there is an applicable reservation in the current time slot,
+            //  2 : // it will transition to the reserved state.
+            //  3 : SELECT ONE reservation RELATED BY SELF->WashingMachineReservation[R19.'next reservation'];
+            //  4 : IF ( reservation.ReservationTime <= TIM::current_clock() )
+            //  5 : 	GENERATE ReservableWashingMachine2:Reserved TO SELF;
+            //  6 : END IF;
+
+            // External Entities Reference Declarations.
+            var _eeTIMRef_ = (Kae.DomainModel.Csharp.Framework.ExternalEntities.TIM.TIMWrapper)instanceRepository.GetExternalEntity("TIM");
+
+            // Line : 3
+            var reservation = target.LinkedR19NextReservation();
+
+            // Line : 4
+            if ((reservation.Attr_ReservationTime <= _eeTIMRef_.current_clock()))
+            {
+                // Line : 5
+                DomainClassReservableWashingMachineStateMachine.ReservableWashingMachine2_Reserved.Create(receiver:target, sendNow:true);
+
+            }
 
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         protected void ActionResevingForGuest()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Current state is reserved for specific guest stay.
-            // SELECT ONE machine RELATED BY SELF->WashingMachine[R15];
-            // machine.Status = WashingMachineStatus::Reserved;
 
+            //  1 : // Current state is reserved for specific guest stay.
+            //  2 : SELECT ONE machine RELATED BY SELF->WashingMachine[R15];
+            //  3 : machine.Status = WashingMachineStatus::Reserved;
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 2
+            var machine = target.GetSuperClassR15();
+
+            // Line : 3
+            machine.Attr_Status = DomainTypeWashingMachineStatus.Reserved;
+
         }
 
     }

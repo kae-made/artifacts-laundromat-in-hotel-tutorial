@@ -42,19 +42,29 @@ namespace LaundromatInHotel
         }
         public class WashingMachineAssigner1_RequestReservation : EventData, IEventArgsGuestStayIdSpecIdDef
         {
-            public WashingMachineAssigner1_RequestReservation() : base((int)Events.WashingMachineAssigner1)
+            DomainClassWashingMachineAssigner reciever;
+
+            public WashingMachineAssigner1_RequestReservation(DomainClassWashingMachineAssigner reciever) : base((int)Events.WashingMachineAssigner1)
             {
-                ;
+                this.reciever = reciever;
+            }
+
+            public override void Send()
+            {
+                reciever.TakeEvent(this);
             }
 
             public string guestStayId { get; set; }
             public string specId { get; set; }
-            public static WashingMachineAssigner1_RequestReservation Create(DomainClassWashingMachineAssigner receiver, string guestStayId, string specId)
+            public static WashingMachineAssigner1_RequestReservation Create(DomainClassWashingMachineAssigner receiver, string guestStayId, string specId, bool sendNow)
             {
-                var newEvent = new WashingMachineAssigner1_RequestReservation() { guestStayId = guestStayId, specId = specId };
+                var newEvent = new WashingMachineAssigner1_RequestReservation(receiver) { guestStayId = guestStayId, specId = specId };
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;
@@ -63,18 +73,28 @@ namespace LaundromatInHotel
 
         public class WashingMachineAssigner2_CancelReservation : EventData, IEventArgsReservationIdDef
         {
-            public WashingMachineAssigner2_CancelReservation() : base((int)Events.WashingMachineAssigner2)
+            DomainClassWashingMachineAssigner reciever;
+
+            public WashingMachineAssigner2_CancelReservation(DomainClassWashingMachineAssigner reciever) : base((int)Events.WashingMachineAssigner2)
             {
-                ;
+                this.reciever = reciever;
+            }
+
+            public override void Send()
+            {
+                reciever.TakeEvent(this);
             }
 
             public string reservationId { get; set; }
-            public static WashingMachineAssigner2_CancelReservation Create(DomainClassWashingMachineAssigner receiver, string reservationId)
+            public static WashingMachineAssigner2_CancelReservation Create(DomainClassWashingMachineAssigner receiver, string reservationId, bool sendNow)
             {
-                var newEvent = new WashingMachineAssigner2_CancelReservation() { reservationId = reservationId };
+                var newEvent = new WashingMachineAssigner2_CancelReservation(receiver) { reservationId = reservationId };
                 if (receiver != null)
                 {
-                    receiver.TakeEvent(newEvent);
+                    if (sendNow)
+                    {
+                        receiver.TakeEvent(newEvent);
+                    }
                 }
 
                 return newEvent;

@@ -17,228 +17,329 @@ namespace LaundromatInHotel
     {
         protected void ActionLocked()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Door is locked in unused situation.
-            // Waiting for a card key to be touched.
-            // SELF.RequestCardKey();
-            // SELF.Status = DoorStatus::Locked;
 
+            //  1 : // Door is locked in unused situation.
+            //  2 : // Waiting for a card key to be touched.
+            //  3 : SELF.RequestCardKey();
+            //  4 : SELF.Status = DoorStatus::Locked;
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 3
+            target.RequestCardKey();
+            // Line : 4
+            target.Attr_Status = DomainTypeDoorStatus.Locked;
+
         }
 
         protected void ActionCheckingSituationForUse(string cardKeyId)
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Check the user touched the card key is valid or not.
-            // If the user is valid then open the door. 
-            // SELECT ANY cardKey FROM INSTANCES OF CardKey WHERE SELECTED.CardKeyID == RCVD_EVT.cardKeyId;
-            // SELECT ONE machine RELATED BY SELF->WashingMachine[R14];
-            // SELECT ONE reservableMachine RELATED BY machine->ReservableWashingMachine[R15];
-            // ASSIGN isValid = FALSE;
-            // IF ( NOT_EMPTY reservableMachine )
-            // 	SELECT ONE nextReservation RELATED BY reservableMachine->WashingMachineReservation[R19.'next reservation'];
-            // 	IF ( NOT_EMPTY nextReservation )
-            // 		SELECT ONE guestStay RELATED BY nextReservation->GuestStay[R12.'reservation owner'];
-            // 		IF ( guestStay.GuestStayID == cardKey.GuestStayID )
-            // 			SELF.Unlock();
-            // 			SELF.Status = DoorStatus::Unlocked;
-            // 			SELECT ONE workingSpec RELATED BY nextReservation->AvailableWorkingSpec[R13.'target'];
-            // 			GENERATE DoorwithLock7(specId:workingSpec.WorkingSpecID, guestStayId:guestStay.GuestStayID) TO SELF;
-            // 			isValid = TRUE;
-            // 		END IF;
-            // 	END IF;
-            // ELSE
-            // 	isValid = TRUE;
-            // END IF;
-            // 
-            // IF ( NOT isValid )
-            // 	GENERATE DoorwithLock6 TO SELF;
-            // END IF;
+
+            //   1 : // Check the user touched the card key is valid or not.
+            //   2 : // If the user is valid then open the door. 
+            //   3 : SELECT ANY cardKey FROM INSTANCES OF CardKey WHERE SELECTED.CardKeyID == RCVD_EVT.cardKeyId;
+            //   4 : SELECT ONE machine RELATED BY SELF->WashingMachine[R14];
+            //   5 : SELECT ONE reservableMachine RELATED BY machine->ReservableWashingMachine[R15];
+            //   6 : ASSIGN isValid = FALSE;
+            //   7 : IF ( NOT_EMPTY reservableMachine )
+            //   8 : 	SELECT ONE nextReservation RELATED BY reservableMachine->WashingMachineReservation[R19.'next reservation'];
+            //   9 : 	IF ( NOT_EMPTY nextReservation )
+            //  10 : 		SELECT ONE guestStay RELATED BY nextReservation->GuestStay[R12.'reservation owner'];
+            //  11 : 		IF ( guestStay.GuestStayID == cardKey.GuestStayID )
+            //  12 : 			SELF.Unlock();
+            //  13 : 			SELF.Status = DoorStatus::Unlocked;
+            //  14 : 			SELECT ONE workingSpec RELATED BY nextReservation->AvailableWorkingSpec[R13.'target'];
+            //  15 : 			GENERATE DoorwithLock7(specId:workingSpec.WorkingSpecID, guestStayId:guestStay.GuestStayID) TO SELF;
+            //  16 : 			isValid = TRUE;
+            //  17 : 		END IF;
+            //  18 : 	END IF;
+            //  19 : ELSE
+            //  20 : 	isValid = TRUE;
+            //  21 : END IF;
+            //  22 : 
+            //  23 : IF ( NOT isValid )
+            //  24 : 	GENERATE DoorwithLock6 TO SELF;
+            //  25 : END IF;
+
+            // Line : 3
+            var cardKey = (DomainClassCardKey)(instanceRepository.GetDomainInstances("CardKey").Where(selected => ((((DomainClassCardKey)selected).Attr_CardKeyID == cardKeyId))).First());
+
+            // Line : 4
+            var machine = target.LinkedR14();
+
+            // Line : 5
+            var reservableMachine = machine.LinkedR15ReservableWashingMachine();
+
+            // Line : 6
+            var isValid = false;
+            // Line : 7
+            if (reservableMachine != null)
+            {
+                // Line : 8
+                var nextReservation = reservableMachine.LinkedR19NextReservation();
+
+                // Line : 9
+                if (nextReservation != null)
+                {
+                    // Line : 10
+                    var guestStay = nextReservation.LinkedR12ReservationOwner();
+
+                    // Line : 11
+                    if ((guestStay.Attr_GuestStayID == cardKey.Attr_GuestStayID))
+                    {
+                        // Line : 12
+                        target.Unlock();
+                        // Line : 13
+                        target.Attr_Status = DomainTypeDoorStatus.Unlocked;
+                        // Line : 14
+                        var workingSpec = nextReservation.LinkedR13Target();
+
+                        // Line : 15
+                        DomainClassDoorwithLockStateMachine.DoorwithLock7_EnterSpec.Create(receiver:target, specId:workingSpec.Attr_WorkingSpecID, guestStayId:guestStay.Attr_GuestStayID, sendNow:true);
+
+                        // Line : 16
+                        isValid = true;
+                    }
+
+                }
+
+            }
+            else
+            {
+                // Line : 20
+                isValid = true;
+            }
+
+            // Line : 23
+            if (! isValid)
+            {
+                // Line : 24
+                DomainClassDoorwithLockStateMachine.DoorwithLock6_JudgedAsImproper.Create(receiver:target, sendNow:true);
+
+            }
 
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         protected void ActionWaitForPINCodeToOpen()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // The door opened.
-            // Waiting for the PIN code to be unlocked.
 
+            //  1 : // The door opened.
+            //  2 : // Waiting for the PIN code to be unlocked.
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         protected void ActionLockedForWashing()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Now that the door is closed,
-            // lock the door and notify the washing machine
-            // that laundry can be started.
-            // Self.Lock();
-            // SELECT ONE machine RELATED BY SELF->WashingMachine[R14];
-            // GENERATE WashingMachine1:'Assigned guest' TO machine;
-            // 
-            // SELF.Status = DoorStatus::Locked;
 
+            //  1 : // Now that the door is closed,
+            //  2 : // lock the door and notify the washing machine
+            //  3 : // that laundry can be started.
+            //  4 : Self.Lock();
+            //  5 : SELECT ONE machine RELATED BY SELF->WashingMachine[R14];
+            //  6 : GENERATE WashingMachine1:'Assigned guest' TO machine;
+            //  7 : 
+            //  8 : SELF.Status = DoorStatus::Locked;
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 4
+            target.Lock();
+            // Line : 5
+            var machine = target.LinkedR14();
+
+            // Line : 6
+            DomainClassWashingMachineStateMachine.WashingMachine1_AssignedGuest.Create(receiver:machine, sendNow:true);
+
+            // Line : 8
+            target.Attr_Status = DomainTypeDoorStatus.Locked;
+
         }
 
         protected void ActionCheckingSituationForTake(string cardKeyId)
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Some card key is touched
-            // so check current situation is
-            // suitable for open the door.
-            // If it is valid then waiting for the PIN code.
-            // SELECT ANY cardKey FROM INSTANCES OF CardKey WHERE SELECTED.CardKeyID == RCVD_EVT.cardKeyId;
-            // SELECT ONE guestStayForCard RELATED BY cardKey->GuestStay[R6.'is assigned as key for'];
-            // SELECT ONE guestStayInUse RELATED BY SELF->WashingMachine[R14]->WashingMachineinUse[R18]->GuestStay[R18.'is used by'];
-            // IF ( guestStayForCard.GuestStayID == guestStayInUse.GuestStayID )
-            // 	GENERATE DoorwithLock5 TO SELF;
-            // END IF;
+
+            //   1 : // Some card key is touched
+            //   2 : // so check current situation is
+            //   3 : // suitable for open the door.
+            //   4 : // If it is valid then waiting for the PIN code.
+            //   5 : SELECT ANY cardKey FROM INSTANCES OF CardKey WHERE SELECTED.CardKeyID == RCVD_EVT.cardKeyId;
+            //   6 : SELECT ONE guestStayForCard RELATED BY cardKey->GuestStay[R6.'is assigned as key for'];
+            //   7 : SELECT ONE guestStayInUse RELATED BY SELF->WashingMachine[R14]->WashingMachineinUse[R18]->GuestStay[R18.'is used by'];
+            //   8 : IF ( guestStayForCard.GuestStayID == guestStayInUse.GuestStayID )
+            //   9 : 	GENERATE DoorwithLock5 TO SELF;
+            //  10 : END IF;
+
+            // Line : 5
+            var cardKey = (DomainClassCardKey)(instanceRepository.GetDomainInstances("CardKey").Where(selected => ((((DomainClassCardKey)selected).Attr_CardKeyID == cardKeyId))).First());
+
+            // Line : 6
+            var guestStayForCard = cardKey.LinkedR6IsAssignedAsKeyFor();
+
+            // Line : 7
+            DomainClassGuestStay guestStayInUse = null;
+            var targetIn0RL1 = target.LinkedR14().LinkedR18OneIsUsedBy();
+            if (targetIn0RL1 != null)
+            {
+                guestStayInUse = targetIn0RL1.LinkedR18OneIsUsedBy();
+            }
+
+            // Line : 8
+            if ((guestStayForCard.Attr_GuestStayID == guestStayInUse.Attr_GuestStayID))
+            {
+                // Line : 9
+                DomainClassDoorwithLockStateMachine.DoorwithLock5_ValidatedUser.Create(receiver:target, sendNow:true);
+
+            }
 
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         protected void ActionCheckingPINCodeForOpen(string pinCode)
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Wait for valid PIN code.
-            // When valid PIN code is entered,
-            // try to open the door.
-            // IF ( SELF.PIN_Number == RCVD_EVT.pinCode )
-            // 	GENERATE DoorwithLock5 TO SELF;
-            // END IF;
+
+            //  1 : // Wait for valid PIN code.
+            //  2 : // When valid PIN code is entered,
+            //  3 : // try to open the door.
+            //  4 : IF ( SELF.PIN_Number == RCVD_EVT.pinCode )
+            //  5 : 	GENERATE DoorwithLock5 TO SELF;
+            //  6 : END IF;
+
+            // Line : 4
+            if ((target.Attr_PIN_Number == pinCode))
+            {
+                // Line : 5
+                DomainClassDoorwithLockStateMachine.DoorwithLock5_ValidatedUser.Create(receiver:target, sendNow:true);
+
+            }
 
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
         }
 
         protected void ActionDoorOpened()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // The door opened actually.
-            // Wait for the door to close.
-            // SELECT ONE machine RELATED BY SELF->WashingMachine[R14];
-            // GENERATE WashingMachine6:'Start taking' TO machine;
-            // 
-            // SELF.Status = DoorStatus::Unlocked;
 
+            //  1 : // The door opened actually.
+            //  2 : // Wait for the door to close.
+            //  3 : SELECT ONE machine RELATED BY SELF->WashingMachine[R14];
+            //  4 : GENERATE WashingMachine6:'Start taking' TO machine;
+            //  5 : 
+            //  6 : SELF.Status = DoorStatus::Unlocked;
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 3
+            var machine = target.LinkedR14();
+
+            // Line : 4
+            DomainClassWashingMachineStateMachine.WashingMachine6_StartTaking.Create(receiver:machine, sendNow:true);
+
+            // Line : 6
+            target.Attr_Status = DomainTypeDoorStatus.Unlocked;
+
         }
 
         protected void ActionWaitForClose(string pinCode)
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Waiting for Door closed.
-            // SELF.PIN_Number = RCVD_EVT.pinCode;
-            // 
 
+            //  1 : // Waiting for Door closed.
+            //  2 : SELF.PIN_Number = RCVD_EVT.pinCode;
+            //  3 : 
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 2
+            target.Attr_PIN_Number = pinCode;
+
         }
 
         protected void ActionWaitForDoorOpen()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Wait for the door actually to open. 
-            // SELF.Unlock();
 
+            //  1 : // Wait for the door actually to open. 
+            //  2 : SELF.Unlock();
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 2
+            target.Unlock();
+
         }
 
         protected void ActionWaitForSpec(string specId, string guestStayId)
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Confirm Spec and open the door.
-            // SELECT ANY workingSpec FROM INSTANCES OF AvailableWorkingSpec WHERE SELECTED.WorkingSpecID == RCVD_EVT.specId;
-            // SELECT ONE washingMachine RELATED BY workingSpec->WashingMachine[R8];
-            // SELECT ANY guestStay FROM INSTANCES OF GuestStay WHERE SELECTED.GuestStayID == RCVD_EVT.guestStayId;
-            // CREATE OBJECT INSTANCE inUse OF WashingMachineinUse;
-            // RELATE guestStay TO washingMachine ACROSS R18 USING inUse;
-            // RELATE inUse TO workingSpec ACROSS R9;
-            // 
-            // SELF.Unlock();
-            // SELF.Status = DoorStatus::Unlocked;
 
+            //   1 : // Confirm Spec and open the door.
+            //   2 : SELECT ANY workingSpec FROM INSTANCES OF AvailableWorkingSpec WHERE SELECTED.WorkingSpecID == RCVD_EVT.specId;
+            //   3 : SELECT ONE washingMachine RELATED BY workingSpec->WashingMachine[R8];
+            //   4 : SELECT ANY guestStay FROM INSTANCES OF GuestStay WHERE SELECTED.GuestStayID == RCVD_EVT.guestStayId;
+            //   5 : CREATE OBJECT INSTANCE inUse OF WashingMachineinUse;
+            //   6 : RELATE guestStay TO washingMachine ACROSS R18 USING inUse;
+            //   7 : RELATE inUse TO workingSpec ACROSS R9;
+            //   8 : 
+            //   9 : SELF.Unlock();
+            //  10 : SELF.Status = DoorStatus::Unlocked;
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 2
+            var workingSpec = (DomainClassAvailableWorkingSpec)(instanceRepository.GetDomainInstances("AvailableWorkingSpec").Where(selected => ((((DomainClassAvailableWorkingSpec)selected).Attr_WorkingSpecID == specId))).First());
+
+            // Line : 3
+            var washingMachine = workingSpec.LinkedR8One();
+
+            // Line : 4
+            var guestStay = (DomainClassGuestStay)(instanceRepository.GetDomainInstances("GuestStay").Where(selected => ((((DomainClassGuestStay)selected).Attr_GuestStayID == guestStayId))).First());
+
+            // Line : 5
+            var inUse = DomainClassWashingMachineinUseBase.CreateInstance(instanceRepository, logger, changedStates);
+            // Line : 6
+            // Relate guestStay - R18 -> washingMachine USING inUse
+            inUse.LinkR18(guestStay,washingMachine);
+
+            // Line : 7
+            // inUse - R9 -> workingSpec;
+            inUse.LinkR9CurrentSpec(workingSpec, changedStates);;
+
+            // Line : 9
+            target.Unlock();
+            // Line : 10
+            target.Attr_Status = DomainTypeDoorStatus.Unlocked;
+
         }
 
         protected void ActionWaitForPINCodeForOpen()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Request PIN Code for opening...
-            // SELF.RequestPINCode();
 
+            //  1 : // Request PIN Code for opening...
+            //  2 : SELF.RequestPINCode();
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 2
+            target.RequestPINCode();
+
         }
 
         protected void ActionUnlockAvailabled()
         {
-            // TODO: Let's write action code!
             // Action Description on Model as a reference.
-            // Notify the user that the laundry is done.
-            // SELECT ONE guestStay RELATED BY SELF->WashingMachine[R14]->WashingMachineinUse[R18]->GuestStay[R18.'is used by'];
-            // guestStay.Notify( topic:NotificationForGuestStay::LaundryCompleted );
-            // SELF.RequestCardKey();
 
+            //  1 : // Notify the user that the laundry is done.
+            //  2 : SELECT ONE guestStay RELATED BY SELF->WashingMachine[R14]->WashingMachineinUse[R18]->GuestStay[R18.'is used by'];
+            //  3 : guestStay.Notify( topic:NotificationForGuestStay::LaundryCompleted );
+            //  4 : SELF.RequestCardKey();
 
-            // Please record changing states by using changedStates;
-            
-            throw new NotImplementedException();
-            // Please delete above throw exception statement after implement this method.
+            // Line : 2
+            DomainClassGuestStay guestStay = null;
+            var targetIn0RL0 = target.LinkedR14().LinkedR18OneIsUsedBy();
+            if (targetIn0RL0 != null)
+            {
+                guestStay = targetIn0RL0.LinkedR18OneIsUsedBy();
+            }
+
+            // Line : 3
+            guestStay.Notify(topic:DomainTypeNotificationForGuestStay.LaundryCompleted);
+            // Line : 4
+            target.RequestCardKey();
+
         }
 
     }

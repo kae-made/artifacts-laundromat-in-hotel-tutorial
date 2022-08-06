@@ -26,7 +26,9 @@ namespace LaundromatInHotel
             this.instanceRepository = instanceRepository;
         }
 
-        public Logger Logger { get; set; }
+        protected Logger logger;
+
+        public Logger Logger { get { return logger; } set { logger = value; } }
 
         public InstanceRepository InstanceRepository { get { return instanceRepository; } }
 
